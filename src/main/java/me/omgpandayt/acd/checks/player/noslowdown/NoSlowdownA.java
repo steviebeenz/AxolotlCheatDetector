@@ -2,6 +2,8 @@ package me.omgpandayt.acd.checks.player.noslowdown;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
@@ -23,7 +25,15 @@ public class NoSlowdownA extends Check {
 		
 		double dis = ((Math.floor((distX + distZ * 100)) / 100));
 		
-		if(dis > 0.2153f && PlayerUtil.isUsingItem(p) && PlayerUtil.isValid(p) && p.getVelocity().getY() == FlyA.STILL) {
+		float tooFast = 0.2153f;
+		
+        PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
+        if ( effect != null )
+        {
+            tooFast += effect.getAmplifier() / (Math.PI * Math.PI);
+        }
+		
+		if(dis > tooFast && PlayerUtil.isUsingItem(p) && PlayerUtil.isValid(p) && p.getVelocity().getY() == FlyA.STILL) {
 			flag(p, "NoSlowdown (A)", "(VL" + Violations.getViolations(this, p) + ") (MOVE " + dis + ")");
 		}
 	}
