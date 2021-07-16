@@ -63,7 +63,7 @@ public class SpeedB extends Check implements Listener {
 		if (!lastOnGround && !onGround && !lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p)) {
 			double got = Math.floor(scaledEqualness * 100);
 			flag(p, "Speed (B)",
-					"(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + Violations.getViolations(this, p) + ")");
+					"(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
 			p.teleport(e.getFrom());
 		}
 

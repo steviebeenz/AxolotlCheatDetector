@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.ACD;
@@ -47,6 +48,10 @@ public class Check {
     }
     
     public void onMove(PlayerMoveEvent e) {
+    	
+    }
+    
+    public void onDamage(EntityDamageByEntityEvent e) {
     	
     }
 

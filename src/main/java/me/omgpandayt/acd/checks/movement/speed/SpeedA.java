@@ -46,7 +46,7 @@ public class SpeedA extends Check implements Listener {
 		double maxDistance = Math.floor(maxXZMove * 100);
 		
 		if(distance > maxDistance && PlayerUtil.isValid(p)) {
-			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ") (VL" + Violations.getViolations(this, p) + ")");
+			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ") (VL" + (Violations.getViolations(this, p)+1) + ")");
 			
 			p.teleport(e.getFrom());
 		}

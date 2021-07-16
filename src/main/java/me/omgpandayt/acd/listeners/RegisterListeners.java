@@ -2,6 +2,7 @@ package me.omgpandayt.acd.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +26,17 @@ public class RegisterListeners implements Listener {
 			Check check = (Check)obj;
 			
 			check.onMove(e);
+			
+		}
+	}
+	
+	@EventHandler
+	public void onDamage(EntityDamageByEntityEvent e) {
+		for (Object obj : CheckManager.getRegisteredChecks()) {
+			
+			Check check = (Check)obj;
+			
+			check.onDamage(e);
 			
 		}
 	}
