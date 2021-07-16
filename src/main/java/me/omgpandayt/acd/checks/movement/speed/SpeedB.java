@@ -1,12 +1,14 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
 
@@ -50,12 +52,20 @@ public class SpeedB extends Check implements Listener {
 		if (PlayerData.getPlayerData("theLastLOG", p) != null)
 			lastLastOnGround = (boolean) PlayerData.getPlayerData("theLastLOG", p);
 		PlayerData.setPlayerData("lastDist", p, dist);
+		
+		double tooFast = 0.46f;
+		
+		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
+			if (BlockUtils.isIce(b)) {
+				tooFast += 0.11f;
+			}
+		}
 
-		if (!lastOnGround && !onGround && !lastLastOnGround && scaledEqualness > 0.46f && !p.isFlying()
+		if (!lastOnGround && !onGround && !lastLastOnGround && scaledEqualness > tooFast && !p.isFlying()
 				&& (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL)) {
 			double got = Math.floor(scaledEqualness * 100);
 			flag(p, "Speed (B)",
-					"(EXP " + 0.46f + ") (GOT " + (got / 100) + "(VL" + Violations.getViolations(this, p) + ")");
+					"(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + Violations.getViolations(this, p) + ")");
 			p.teleport(e.getFrom());
 		}
 
