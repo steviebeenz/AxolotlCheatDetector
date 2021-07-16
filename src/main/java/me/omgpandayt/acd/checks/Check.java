@@ -53,6 +53,8 @@ public class Check {
 		
 		p.kickPlayer("ACD -> Suspicious activity");
 		
+		Violations.clearViolations(this, p);
+		
 	}
 
 }

@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 
 public class Violations {
@@ -13,6 +15,7 @@ public class Violations {
 	/**
 	 * 
 	 * @author JustDoom
+	 * @author Jxydev
 	 * 
 	 */
 	
@@ -35,6 +38,14 @@ public class Violations {
         if(getViolations(check, p) >= check.flagsToKick){
             check.punish(p);
         }
+        
+        BukkitRunnable task = new BukkitRunnable() {
+            @Override
+            public void run() {
+            	removeViolation(check,p,1);
+            }
+        };
+        task.runTaskLater(ACD.getInstance(), 20 * 30);
     }
     
     public static Integer getViolations(Check check, Player p) {
@@ -45,6 +56,22 @@ public class Violations {
         }
         return 0;
     }
+
+	public static void clearViolations(Check check, Player p) {
+		violations.get(p.getUniqueId()).remove(check);
+	}
+	
+	public static void removeViolation(Check check, Player p, int amount) {
+		int checkViolations = getViolations(check, p);
+		
+		if(checkViolations <= 0) return;
+		
+		Map<Check, Integer> vl = new HashMap<>();
+		
+		vl.put(check, checkViolations - 1);
+		
+		violations.put(p.getUniqueId(), vl);
+	}
 
     
 }

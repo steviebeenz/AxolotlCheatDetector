@@ -11,7 +11,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
 	
-	private static ACD instance;														// The plugins instance (Used for finding things in the plugin not static)
+	private static ACD instance; // The plugins instance (Used for finding things in the plugin not static)
 	
 	public static String prefix = "&7[&cACD&7]";
 
@@ -23,7 +23,7 @@ public class ACD extends JavaPlugin {
 	public void onEnable() {
 		log(startupMessage);
 		
-		instance = this;																	// Creating our instance
+		instance = this;  // Creating our instance
 		
 		RegisterListeners.register(instance);
 		
@@ -31,6 +31,7 @@ public class ACD extends JavaPlugin {
 		
 		new SpeedA();
 		new NoFallA();
+		new SpeedB();
 		
 	}
 	
@@ -45,7 +46,7 @@ public class ACD extends JavaPlugin {
 	}
 	
 	public static ACD getInstance() {
-		return instance;																	// Giving the instance
+		return instance;  // Giving the instance
 	}
 
 	public static void logPlayers(Object b) {

@@ -16,7 +16,7 @@ public class SpeedA extends Check implements Listener {
 		super("SpeedA", false, 12);
 	}
 	
-	public final double maxXZMove = 0.92;
+	public final double maxXZMove = 0.88;
 	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
@@ -34,13 +34,24 @@ public class SpeedA extends Check implements Listener {
 			}
 		}
 		
+		if(distZ < distX / 1.1 && Math.abs(distZ - distX) > 0.2f) {
+			maxXZMove -= (distX / 2f);
+			maxXZMove += 0.15f;
+		}else if(distX < distZ / 1.1 && Math.abs(distX - distZ) > 0.2f) {
+			maxXZMove -= (distZ / 2f);
+			maxXZMove += 0.15f;
+		}
+		
 		if(distX + distZ > maxXZMove && !p.isFlying() && (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL)) {
 			int playerPing = 0;
 			/*try {
 				playerPing = p.getPing();
 			} catch (Exception exc) {}*/
 			double distance = Math.floor((distX + distZ) * 100);
-			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + ") (P" + playerPing + ") (VL" + Violations.getViolations(this, p) + ")");
+			double maxDistance = Math.floor(maxXZMove * 100);
+			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ") (P" + playerPing + ") (VL" + Violations.getViolations(this, p) + ")");
+			
+			p.teleport(e.getFrom());
 		}
 		
 	}
