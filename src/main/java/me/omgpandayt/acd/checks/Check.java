@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.violation.Violations;
+import net.md_5.bungee.api.ChatColor;
 
 public class Check {
 	
@@ -51,7 +52,7 @@ public class Check {
 
 	public void punish(Player p) {
 		
-		p.kickPlayer("ACD -> Suspicious activity");
+		p.kickPlayer(ChatColor.translateAlternateColorCodes('&', ACD.prefix + "\n&7Suspicious activity"));
 		
 		Violations.clearViolations(this, p);
 		

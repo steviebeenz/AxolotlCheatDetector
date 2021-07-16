@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.omgpandayt.acd.checks.movement.speed.*;
-import me.omgpandayt.acd.checks.player.nofall.*;
+import me.omgpandayt.acd.checks.player.groundspoof.*;
 import me.omgpandayt.acd.listeners.RegisterListeners;
 import net.md_5.bungee.api.ChatColor;
 
@@ -30,7 +30,7 @@ public class ACD extends JavaPlugin {
 		//PacketEvents.get().registerListener(new ACD());
 		
 		new SpeedA();
-		new NoFallA();
+		new GroundSpoofA();
 		new SpeedB();
 		
 	}
