@@ -31,7 +31,7 @@ public class ElytraFlyA extends Check {
 					dontFlag = true;
 			}
 			
-			if(fallY <= 0 && fallY >= -0.03 && PlayerUtil.isValid(p) && !PlayerUtil.isOnGround(p.getLocation()) && p.isGliding() && PlayerUtil.getFallHeight(p) > 3 && !dontFlag) {
+			if(fallY == 0 && PlayerUtil.isValid(p) && !PlayerUtil.isOnGround(p.getLocation()) && p.isGliding() && PlayerUtil.getFallHeight(p) > 3 && !dontFlag) {
 				flag(p, "ElytraFly (A)", "(VL" + Violations.getViolations(this, p) + ") (FALL " + ((Math.floor(fallY * 100)) / 100) + ")");
 				ItemStack chestplate = p.getInventory().getChestplate();
 				p.getInventory().setChestplate(new ItemStack(Material.AIR));

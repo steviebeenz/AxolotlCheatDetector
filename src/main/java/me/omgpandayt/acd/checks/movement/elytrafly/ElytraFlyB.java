@@ -24,7 +24,7 @@ public class ElytraFlyB extends Check {
 			double deltaXZ = Math.abs(e.getTo().getX() - e.getFrom().getX()) + Math.abs(e.getTo().getZ() - e.getFrom().getZ());
 			
 			
-			if(deltaXZ == 0 && p.getLocation().getPitch() <= 85 && p.getLocation().getPitch() >= 5 && PlayerUtil.isValid(p) && !PlayerUtil.isOnGround(p.getLocation()) && p.isGliding() && PlayerUtil.getFallHeight(p) > 1.5) {
+			if(deltaXZ == 0 && p.getLocation().getPitch() <= 85 && p.getLocation().getPitch() >= 5 && PlayerUtil.isValid(p) && !PlayerUtil.isOnGround(p.getLocation()) && p.isGliding() && PlayerUtil.getFallHeight(p) > 3) {
 				flag(p, "ElytraFly (B)", "(VL" + Violations.getViolations(this, p) + ")");
 				ItemStack chestplate = p.getInventory().getChestplate();
 				p.getInventory().setChestplate(new ItemStack(Material.AIR));

@@ -59,6 +59,8 @@ public class GroundSpoofA extends Check {
 				dontFlag = true;
 			}
 		}
+		if(p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == Material.ELYTRA) 
+			dontFlag = true;
 		
 		if(p.isOnGround() && !onGround && !lastOnGround && p.isValid() && !p.isDead() && !dontFlag && PlayerUtil.getFallHeight(p) > 1) {
 			flag(p, "GroundSpoof (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
