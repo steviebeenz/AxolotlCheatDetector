@@ -6,9 +6,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.omgpandayt.acd.checks.combat.criticals.*;
 import me.omgpandayt.acd.checks.combat.reach.*;
+
 import me.omgpandayt.acd.checks.movement.fly.*;
 import me.omgpandayt.acd.checks.movement.speed.*;
-import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofA;
+
+import me.omgpandayt.acd.checks.player.groundspoof.*;
+import me.omgpandayt.acd.checks.player.noslowdown.*;
+
 import me.omgpandayt.acd.listeners.RegisterListeners;
 import net.md_5.bungee.api.ChatColor;
 
@@ -38,6 +42,7 @@ public class ACD extends JavaPlugin {
 		new FlyA();
 		new ReachA();
 		new CriticalsA();
+		new NoSlowdownA();
 		
 	}
 	

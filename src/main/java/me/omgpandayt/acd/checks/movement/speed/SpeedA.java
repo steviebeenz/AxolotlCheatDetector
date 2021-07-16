@@ -4,6 +4,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.util.BlockUtils;
@@ -33,6 +35,12 @@ public class SpeedA extends Check implements Listener {
 				maxXZMove += 0.3;
 			}
 		}
+		
+        PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
+        if ( effect != null )
+        {
+            maxXZMove += effect.getAmplifier() / (Math.PI * Math.PI);
+        }
 		
 		if(distZ < distX / 1.1 && Math.abs(distZ - distX) > 0.2f) {
 			maxXZMove -= (distX / 2f);

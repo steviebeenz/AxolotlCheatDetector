@@ -9,7 +9,7 @@ import me.omgpandayt.acd.violation.Violations;
 
 public class FlyA extends Check {
 
-	final double STILL = -0.0784000015258789;
+	public static final double STILL = -0.0784000015258789;
 	
 	public FlyA() {
 		super("FlyA", true, 8);

@@ -21,6 +21,9 @@ public class RegisterListeners implements Listener {
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
+		
+		if(e.getPlayer().hasPermission("acd.bypass")) return;
+		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
 			Check check = (Check)obj;
@@ -32,6 +35,9 @@ public class RegisterListeners implements Listener {
 	
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
+		
+		if(e.getDamager().hasPermission("acd.bypass")) return;
+		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
 			Check check = (Check)obj;

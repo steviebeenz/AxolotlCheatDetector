@@ -4,6 +4,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
@@ -36,6 +38,8 @@ public class SpeedB extends Check implements Listener {
 		double shiftedLastDist = lastDist * friction;
 		double equalness = dist - shiftedLastDist;
 		double scaledEqualness = equalness;
+		
+		
 
 		boolean
 		onGround = true,
@@ -53,6 +57,12 @@ public class SpeedB extends Check implements Listener {
 		PlayerData.setPlayerData("lastDist", p, dist);
 		
 		double tooFast = 0.51f;
+		
+        PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
+        if ( effect != null )
+        {
+            tooFast += effect.getAmplifier() / (Math.PI * Math.PI);
+        }
 		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
 			if (BlockUtils.isIce(b)) {

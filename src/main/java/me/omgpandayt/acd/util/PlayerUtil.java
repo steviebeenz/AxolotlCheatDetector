@@ -36,4 +36,8 @@ public class PlayerUtil {
 		return !p.isFlying() && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE);
 	}
 
+	public static boolean isUsingItem(Player p) {
+		return p.getItemInUse() != null;
+	}
+
 }
