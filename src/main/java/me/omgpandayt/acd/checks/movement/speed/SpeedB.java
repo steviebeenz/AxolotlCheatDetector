@@ -1,6 +1,5 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
-import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -61,8 +60,7 @@ public class SpeedB extends Check implements Listener {
 			}
 		}
 
-		if (!lastOnGround && !onGround && !lastLastOnGround && scaledEqualness > tooFast && !p.isFlying()
-				&& (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL)) {
+		if (!lastOnGround && !onGround && !lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p)) {
 			double got = Math.floor(scaledEqualness * 100);
 			flag(p, "Speed (B)",
 					"(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + Violations.getViolations(this, p) + ")");

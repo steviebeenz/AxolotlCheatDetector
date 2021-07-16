@@ -1,7 +1,5 @@
 package me.omgpandayt.acd.checks.movement.fly;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -22,22 +20,13 @@ public class FlyA extends Check {
 		
 		Player p = e.getPlayer();
 		
-		boolean sameY = e.getFrom().getY() == e.getTo().getY(),
-				dontFlag = false;
+		boolean sameY = e.getFrom().getY() == e.getTo().getY();
 		
-		int yHeight = (int) Math.floor(p.getPlayer().getLocation().getY());
-		Location loc = p.getLocation().clone();
-		loc.setY(yHeight);
-		int fallHeight = 0;
-		while(loc.getBlock().getType() == Material.AIR) {
-			yHeight--;
-			loc.setY(yHeight);
-			fallHeight++;
-		}
+		int fallHeight = PlayerUtil.getFallHeight(p);
 		
 		boolean isBouncing = p.getVelocity().getY() > STILL;
 		
-		if(sameY && !dontFlag && fallHeight >= 3 && !isBouncing) {
+		if(sameY && fallHeight >= 3 && !isBouncing && PlayerUtil.isValid(p)) {
 			if(!PlayerUtil.isOnGround(p.getLocation())) {
 				flag(p, "Fly (A)", "(VL" + Violations.getViolations(this, p) + ")");
 				p.teleport(e.getFrom());

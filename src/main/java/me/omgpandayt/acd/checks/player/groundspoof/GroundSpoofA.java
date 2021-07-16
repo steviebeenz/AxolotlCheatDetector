@@ -60,7 +60,7 @@ public class GroundSpoofA extends Check {
 			}
 		}
 		
-		if(p.isOnGround() && !onGround && !lastOnGround && p.isValid() && !p.isDead() && !dontFlag) {
+		if(p.isOnGround() && !onGround && !lastOnGround && p.isValid() && !p.isDead() && !dontFlag && PlayerUtil.getFallHeight(p) > 1) {
 			flag(p, "GroundSpoof (A)", "(VL" + Violations.getViolations(this, p) + ")");
 		}
 		

@@ -1,7 +1,9 @@
 package me.omgpandayt.acd.util;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 public class PlayerUtil {
 	
@@ -15,6 +17,23 @@ public class PlayerUtil {
 			}
 		}
 		return false;
+	}
+
+	public static int getFallHeight(Player p) {
+		int yHeight = (int) Math.floor(p.getPlayer().getLocation().getY());
+		Location loc = p.getLocation().clone();
+		loc.setY(yHeight);
+		int fallHeight = 0;
+		while(loc.getBlock().getType() == Material.AIR) {
+			yHeight--;
+			loc.setY(yHeight);
+			fallHeight++;
+		}
+		return fallHeight;
+	}
+
+	public static boolean isValid(Player p) {
+		return !p.isFlying() && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE);
 	}
 
 }

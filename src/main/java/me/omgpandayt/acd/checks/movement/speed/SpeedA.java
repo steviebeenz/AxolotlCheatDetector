@@ -1,6 +1,5 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
-import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -8,6 +7,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
 
 public class SpeedA extends Check implements Listener {
@@ -45,7 +45,7 @@ public class SpeedA extends Check implements Listener {
 		double distance = Math.floor((distX + distZ) * 100);
 		double maxDistance = Math.floor(maxXZMove * 100);
 		
-		if(distance > maxDistance && !p.isFlying() && (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL)) {
+		if(distance > maxDistance && PlayerUtil.isValid(p)) {
 			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ") (VL" + Violations.getViolations(this, p) + ")");
 			
 			p.teleport(e.getFrom());
