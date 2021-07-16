@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.player.nofall.NoFallA;
+import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
 
 public class SpeedB extends Check implements Listener {
@@ -26,7 +26,7 @@ public class SpeedB extends Check implements Listener {
 		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 		double dist = distX + distZ;
 		
-		PlayerData.setPlayerData("onGround", p, NoFallA.isOnGround(p.getLocation()));
+		PlayerData.setPlayerData("onGround", p, PlayerUtil.isOnGround(p.getLocation()));
 		
 		double lastDist = 0;
 		
