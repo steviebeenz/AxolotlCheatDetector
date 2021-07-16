@@ -16,7 +16,7 @@ public class SpeedA extends Check implements Listener {
 		super("SpeedA", false, 12);
 	}
 	
-	public final double maxXZMove = 0.91f;
+	public final double maxXZMove = 0.93f;
 	
 	@Override
 	public void onMove(PlayerMoveEvent e) {

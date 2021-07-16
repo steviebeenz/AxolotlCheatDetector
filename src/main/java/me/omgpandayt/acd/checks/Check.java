@@ -52,6 +52,8 @@ public class Check {
 
 	public void punish(Player p) {
 		
+		ACD.logPlayers(p.getName() + " was kicked for cheating.");
+		
 		p.kickPlayer(ChatColor.translateAlternateColorCodes('&', ACD.prefix + "\n&7Suspicious activity"));
 		
 		Violations.clearViolations(this, p);

@@ -53,7 +53,7 @@ public class SpeedB extends Check implements Listener {
 			lastLastOnGround = (boolean) PlayerData.getPlayerData("theLastLOG", p);
 		PlayerData.setPlayerData("lastDist", p, dist);
 		
-		double tooFast = 0.46f;
+		double tooFast = 0.51f;
 		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
 			if (BlockUtils.isIce(b)) {
