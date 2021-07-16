@@ -11,9 +11,11 @@ import me.omgpandayt.acd.checks.movement.fly.*;
 import me.omgpandayt.acd.checks.movement.speed.*;
 
 import me.omgpandayt.acd.checks.player.groundspoof.*;
+import me.omgpandayt.acd.checks.player.jesus.*;
 import me.omgpandayt.acd.checks.player.noslowdown.*;
 
 import me.omgpandayt.acd.listeners.RegisterListeners;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
@@ -43,6 +45,7 @@ public class ACD extends JavaPlugin {
 		new ReachA();
 		new CriticalsA();
 		new NoSlowdownA();
+		new JesusA();
 		
 	}
 	
