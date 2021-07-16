@@ -11,19 +11,16 @@ public class PlayerData {
 	private static Map<UUID, Map<String, Object>> playerData = new HashMap<>();
 	
     public static Object getPlayerData(String data, Player p) {
-        if (playerData.containsKey(p.getUniqueId())) {
-            if (playerData.get(p.getUniqueId()).containsKey(data)) {
-                return playerData.get(p.getUniqueId()).get(data);
-            }
+        if (playerData.get(p.getUniqueId()) != null) {
+            return playerData.get(p.getUniqueId()).get(data);
         }
         return null;
     }
     
     public static void setPlayerData(String data, Player p, Object setData) {
-    	Map<String, Object> d = new HashMap<>();
-    	d.put(data, setData);
-    	
-    	playerData.put(p.getUniqueId(), d);
+        HashMap<String, Object> someData = new HashMap<>();                
+        someData.put(data, setData);
+        playerData.put(p.getUniqueId(), someData);
     }
 	
 }

@@ -16,7 +16,7 @@ public class SpeedB extends Check implements Listener {
 	public SpeedB() {
 		super("SpeedB", false, 12);
 	}
-
+	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
 
@@ -43,7 +43,7 @@ public class SpeedB extends Check implements Listener {
 		lastLastOnGround = true;
 
 		onGround = (boolean) PlayerData.getPlayerData("onGround", p);
-		PlayerData.setPlayerData("lOG", p, (boolean) PlayerData.getPlayerData("onGround", p)); // Random names due to "lastOnGround" not working and always being null no matter what
+		PlayerData.setPlayerData("lOG", p, (boolean) PlayerData.getPlayerData("onGround", p));
 		if (PlayerData.getPlayerData("lOG", p) != null) {
 			lastOnGround = (boolean) PlayerData.getPlayerData("lOG", p);
 			PlayerData.setPlayerData("theLastLOG", p, (boolean) PlayerData.getPlayerData("lOG", p));
