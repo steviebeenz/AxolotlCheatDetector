@@ -23,10 +23,10 @@ public class FlyA extends Check {
 		boolean sameY = e.getFrom().getY() == e.getTo().getY();
 		
 		int fallHeight = PlayerUtil.getFallHeight(p);
-		
+		boolean dontFlag = false;
 		boolean isBouncing = p.getVelocity().getY() > STILL;
 		
-		if(sameY && fallHeight >= 3 && !isBouncing && PlayerUtil.isValid(p)) {
+		if(sameY && fallHeight >= 3 && !isBouncing && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding()) {
 			if(!PlayerUtil.isOnGround(p.getLocation())) {
 				flag(p, "Fly (A)", "(VL" + (Violations.getViolations(this, p) + 1) + ")");
 				p.teleport(e.getFrom());

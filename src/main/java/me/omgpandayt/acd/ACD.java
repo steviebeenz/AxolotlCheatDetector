@@ -9,6 +9,7 @@ import me.omgpandayt.acd.checks.combat.reach.*;
 
 import me.omgpandayt.acd.checks.movement.fly.*;
 import me.omgpandayt.acd.checks.movement.speed.*;
+import me.omgpandayt.acd.checks.movement.elytrafly.*;
 
 import me.omgpandayt.acd.checks.player.groundspoof.*;
 import me.omgpandayt.acd.checks.player.jesus.*;
@@ -46,6 +47,8 @@ public class ACD extends JavaPlugin {
 		new CriticalsA();
 		new NoSlowdownA();
 		new JesusA();
+		new ElytraFlyA();
+		new ElytraFlyB();
 		
 	}
 	
