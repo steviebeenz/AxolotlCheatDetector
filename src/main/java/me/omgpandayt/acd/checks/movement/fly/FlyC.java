@@ -24,6 +24,7 @@ public class FlyC extends Check {
 				&& playerData.lastPacketY == p.getLocation().getY()
 				&& p.getVelocity().getY() <= 0
 				&& PlayerUtil.getFallHeight(p) > 1
+				&& !p.isFlying()
 		) {
 			playerData.flyCLimiter++;
 			if(playerData.flyCLimiter >= 3) {
