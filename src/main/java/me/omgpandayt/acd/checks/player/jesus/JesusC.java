@@ -22,6 +22,7 @@ public class JesusC extends Check {
 				p.getLocation().getBlock().getType() == Material.WATER
 				&& playerData.lastPacketY == p.getLocation().getY()
 				&& p.getVelocity().getY() <= 0
+				&& p.getLocation().clone().add(0, -1 , 0).getBlock().getType() == Material.WATER
 		) {
 			playerData.jesusCLimiter++;
 			if(playerData.jesusCLimiter >= 3) {

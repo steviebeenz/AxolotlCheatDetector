@@ -50,6 +50,7 @@ public class ACD extends JavaPlugin {
 		new FlyA();
 		new FlyB();
 		new FlyC();
+		new FlyD();
 		
 		new ReachA();
 		
@@ -85,6 +86,9 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.flyCLimiter > 0) {
                     		playerData.flyCLimiter--;
+                    	}
+                       	if(playerData.flyDLimiter > 0) {
+                    		playerData.flyDLimiter--;
                     	}
                     	if(playerData.jesusBLimiter > 0) {
                     		playerData.jesusBLimiter--;

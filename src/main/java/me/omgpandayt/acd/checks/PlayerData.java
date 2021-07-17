@@ -40,11 +40,12 @@ public class PlayerData {
 	public Player p;
 	public boolean invMoveWaitTick = false;
 	public int flyBLimiter = 0,
-			flyCLimiter = 0,
-			ticksLived = 0,
-			jesusBLimiter = 0,
-			jesusCLimiter = 0,
-			ticksSinceHit = 250000000;
+			   flyCLimiter = 0,
+			   flyDLimiter = 0,
+			   ticksLived = 0,
+			   jesusBLimiter = 0,
+			   jesusCLimiter = 0,
+			   ticksSinceHit = 250000000;
 	
 	public PlayerData(Player p) {
 		this.p = p;
