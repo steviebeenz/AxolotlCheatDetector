@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
@@ -28,33 +29,19 @@ public class SpeedB extends Check implements Listener {
 		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 		double dist = distX + distZ;
 
-		PlayerData.setPlayerData("onGround", p, PlayerUtil.isOnGround(p.getLocation()));
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
 
 		double lastDist = 0;
 
-		if (PlayerData.getPlayerData("lastDist", p) != null)
-			lastDist = (float) PlayerData.getPlayerData("lastDist", p);
 		float friction = 0.91F;
 		double shiftedLastDist = lastDist * friction;
 		double equalness = dist - shiftedLastDist;
 		double scaledEqualness = equalness;
-		
-		
 
-		boolean
-		onGround = true,
-		lastOnGround = true,
-		lastLastOnGround = true;
-
-		onGround = (boolean) PlayerData.getPlayerData("onGround", p);
-		PlayerData.setPlayerData("lOG", p, (boolean) PlayerData.getPlayerData("onGround", p));
-		if (PlayerData.getPlayerData("lOG", p) != null) {
-			lastOnGround = (boolean) PlayerData.getPlayerData("lOG", p);
-			PlayerData.setPlayerData("theLastLOG", p, (boolean) PlayerData.getPlayerData("lOG", p));
-		}
-		if (PlayerData.getPlayerData("theLastLOG", p) != null)
-			lastLastOnGround = (boolean) PlayerData.getPlayerData("theLastLOG", p);
-		PlayerData.setPlayerData("lastDist", p, dist);
+		playerData.setLastLastOnGround(playerData.lastOnGround);
+		playerData.setLastOnGround(playerData.isOnGround);
+		playerData.setOnGround(PlayerUtil.isOnGround(p.getLocation()));
+		playerData.setLastDist(dist);
 		
 		double tooFast = 0.51f;
 		
@@ -73,10 +60,9 @@ public class SpeedB extends Check implements Listener {
 		boolean dontFlag = false;
 		
 
-		if (!lastOnGround && !onGround && !lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && PlayerUtil.getFallHeight(p) > 0.1) {
+		if (!playerData.lastOnGround && !playerData.isOnGround && !playerData.lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && PlayerUtil.getFallHeight(p) > 0.1) {
 			double got = Math.floor(scaledEqualness * 100);
-			flag(p, "Speed (B)",
-					"(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
+			flag(p, "Speed (B)", "(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
 			p.teleport(e.getFrom());
 		}
 

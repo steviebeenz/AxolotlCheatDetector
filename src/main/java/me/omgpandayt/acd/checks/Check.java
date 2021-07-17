@@ -3,9 +3,15 @@ package me.omgpandayt.acd.checks;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.violation.Violations;
@@ -59,9 +65,30 @@ public class Check {
 		
 		ACD.logPlayers(p.getName() + " was kicked for cheating.");
 		
+		p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
+		Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);
+		entity.setInvulnerable(true);
+		
 		p.kickPlayer(ChatColor.translateAlternateColorCodes('&', ACD.prefix + "\n&7Suspicious activity"));
 		
 		Violations.clearViolations(this, p);
+		
+		BukkitRunnable task = new BukkitRunnable() {
+			@Override
+			public void run() {
+				((LivingEntity)entity).setHealth(0);
+			}
+		};
+		
+		task.runTaskLater(ACD.getInstance(), 20);
+		
+	}
+
+	public void onInventoryClick(InventoryClickEvent e) {
+		
+	}
+
+	public void onInventoryClose(InventoryCloseEvent e) {
 		
 	}
 

@@ -34,7 +34,7 @@ public class NoSlowdownA extends Check {
         }
 		
 		if(dis > tooFast && PlayerUtil.isUsingItem(p) && PlayerUtil.isValid(p) && p.getVelocity().getY() == FlyA.STILL) {
-			flag(p, "NoSlowdown (A)", "(VL" + Violations.getViolations(this, p) + ") (MOVE " + dis + ")");
+			flag(p, "NoSlowdown (A)", "(VL" + (Violations.getViolations(this, p)+1) + ") (MOVE " + dis + ")");
 		}
 	}
 	

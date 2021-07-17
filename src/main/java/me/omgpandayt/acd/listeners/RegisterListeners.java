@@ -1,13 +1,19 @@
 package me.omgpandayt.acd.listeners;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.CheckManager;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class RegisterListeners implements Listener {
 
@@ -19,7 +25,35 @@ public class RegisterListeners implements Listener {
 		
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDamage(EntityDamageByEntityEvent e) {
+		
+		if(e.getDamager().hasPermission("acd.bypass")) return;
+		
+		for (Object obj : CheckManager.getRegisteredChecks()) {
+			
+			Check check = (Check)obj;
+			
+			check.onDamage(e);
+			
+		}
+		
+		if(!(e.getEntity() instanceof Player)) return;
+		
+		PlayerDataManager.getPlayer((Player)e.getEntity()).ticksSinceHit = 0;
+	}
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDamage(EntityDamageEvent e) {
+		
+		if(!(e.getEntity() instanceof Player)) return;
+		
+		if(e.getEntity().hasPermission("acd.bypass")) return;
+		
+		PlayerDataManager.getPlayer((Player)e.getEntity()).ticksSinceHit = 0;
+		
+	}
+	
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onMove(PlayerMoveEvent e) {
 		
 		if(e.getPlayer().hasPermission("acd.bypass")) return;
@@ -34,15 +68,29 @@ public class RegisterListeners implements Listener {
 	}
 	
 	@EventHandler
-	public void onDamage(EntityDamageByEntityEvent e) {
+	public void onInventoryClick(InventoryClickEvent e) {
 		
-		if(e.getDamager().hasPermission("acd.bypass")) return;
+		if(e.getWhoClicked().hasPermission("acd.bypass")) return;
 		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
 			Check check = (Check)obj;
 			
-			check.onDamage(e);
+			check.onInventoryClick(e);
+			
+		}
+	}
+	
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent e) {
+		
+		if(e.getPlayer().hasPermission("acd.bypass")) return;
+		
+		for (Object obj : CheckManager.getRegisteredChecks()) {
+			
+			Check check = (Check)obj;
+			
+			check.onInventoryClose(e);
 			
 		}
 	}
