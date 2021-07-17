@@ -1,5 +1,6 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -30,7 +31,9 @@ public class SpeedB extends Check implements Listener {
 		double dist = distX + distZ;
 
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
-
+		
+		if(playerData == null) return;
+		
 		double lastDist = 0;
 
 		float friction = 0.91F;
@@ -54,6 +57,8 @@ public class SpeedB extends Check implements Listener {
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
 			if (BlockUtils.isIce(b)) {
 				tooFast += 0.11f;
+			} else if (b.getType() == Material.SLIME_BLOCK) {
+				tooFast += 0.04f;
 			}
 		}
 		

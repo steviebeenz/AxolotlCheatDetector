@@ -4,12 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.checks.combat.criticals.CriticalsA;
 import me.omgpandayt.acd.checks.combat.reach.ReachA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyB;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
+import me.omgpandayt.acd.checks.movement.fly.FlyB;
 import me.omgpandayt.acd.checks.movement.speed.SpeedA;
 import me.omgpandayt.acd.checks.movement.speed.SpeedB;
 import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofA;
@@ -45,6 +47,7 @@ public class ACD extends JavaPlugin {
 		new GroundSpoofA();
 		
 		new FlyA();
+		new FlyB();
 		
 		new ReachA();
 		
@@ -68,7 +71,15 @@ public class ACD extends JavaPlugin {
             @Override
             public void run() {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    PlayerDataManager.getPlayer(player).addTicksSinceHit();
+                	PlayerData playerData = PlayerDataManager.getPlayer(player);
+                    playerData.addTicksSinceHit();
+                    playerData.ticksLived++;
+                    
+                    if(playerData.ticksLived % 20 == 0) {
+                    	if(playerData.flyBLimiter > 0) {
+                    		playerData.flyBLimiter--;
+                    	}
+                    }
                 }
             }
             

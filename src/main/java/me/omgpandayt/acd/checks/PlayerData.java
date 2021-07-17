@@ -8,7 +8,10 @@ public class PlayerData {
 				   lastOnGround = true,
 				   lastLastOnGround = true,
 				   invOpen = false;
-	public double dist = 0;
+	public double dist = 0,
+			
+			lastPacketY = -1,
+			lastLastPacketY = -1;
 	
 	public boolean isOnGround() {
 		return isOnGround;
@@ -37,6 +40,8 @@ public class PlayerData {
 	public Player p;
 	public int ticksSinceHit = 25000000;
 	public boolean invMoveWaitTick = false;
+	public int flyBLimiter = 0;
+	public int ticksLived = 0;
 	
 	public PlayerData(Player p) {
 		this.p = p;

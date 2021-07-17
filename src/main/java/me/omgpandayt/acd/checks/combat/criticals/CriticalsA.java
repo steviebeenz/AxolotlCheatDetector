@@ -21,7 +21,7 @@ public class CriticalsA extends Check {
 			return;
 		Player player = (Player) e.getDamager();
 		if (isCritical(player)) {
-			if ((player.getLocation().getY() % 1.0 == 0 || player.getLocation().getY() % 0.5 == 0)
+			if (player.getLocation().getY() % 0.5 == 0
 					&& player.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
 				e.setCancelled(true);
 				flag(player, "Criticals (A)", "");

@@ -23,27 +23,23 @@ public class JesusA extends Check {
 		Player p = e.getPlayer();
 		Location loc = e.getTo();
 		
-		if(e.getFrom().getY() == e.getTo().getY()) {
-			if(loc.getBlock().getType() == Material.AIR) {
-				if(loc.clone().add(0, -1, 0).getBlock().isLiquid()) {
-					if(e.getFrom().clone().add(0, -1, 0).getBlock().isLiquid()) {
+		if(e.getFrom().getY() != e.getTo().getY()) return; // Not same Y? Don't check
+		if(loc.getBlock().getType() != Material.AIR) return; // In a block? Don't check
+		if(!loc.clone().add(0, -1, 0).getBlock().isLiquid()) return; // Not above air? Don't check
+		if(!e.getFrom().clone().add(0, -1, 0).getBlock().isLiquid()) return; // Last packet not above air? Don't check
 						
-						boolean dontFlag = false;
-						
-						for(Block b : BlockUtils.getBlocksBelow(loc)) {
-							if (!b.isLiquid()) dontFlag = true;
-						}
-						if(!dontFlag) {
-							for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
-								if (!b.isLiquid()) dontFlag = true;
-							}
-							if(!dontFlag && PlayerUtil.isValid(p)) {
-								flag(p, "Jesus (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
-								p.teleport(e.getFrom().clone().add(0, 0.2, 0));
-							}
-						}
-					}
-				}
+		boolean dontFlag = false;
+		
+		for(Block b : BlockUtils.getBlocksBelow(loc)) {
+			if (!b.isLiquid()) dontFlag = true;
+		}
+		if(!dontFlag) {
+			for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
+				if (!b.isLiquid()) dontFlag = true;
+			}
+			if(!dontFlag && PlayerUtil.isValid(p)) {
+				flag(p, "Jesus (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				p.teleport(e.getFrom().clone().add(0, 0.2, 0));
 			}
 		}
 		

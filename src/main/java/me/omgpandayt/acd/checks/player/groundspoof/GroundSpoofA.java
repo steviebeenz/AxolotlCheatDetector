@@ -52,7 +52,7 @@ public class GroundSpoofA extends Check {
 			dontFlag = true;
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
-		
+		if(playerData == null) return;
 		if(p.isOnGround() && !playerData.isOnGround && !playerData.lastOnGround && p.isValid() && !p.isDead() && !dontFlag && PlayerUtil.getFallHeight(p) > 1) {
 			flag(p, "GroundSpoof (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 		}
