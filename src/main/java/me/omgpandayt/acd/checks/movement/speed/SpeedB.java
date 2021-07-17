@@ -2,6 +2,8 @@ package me.omgpandayt.acd.checks.movement.speed;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -64,6 +66,11 @@ public class SpeedB extends Check implements Listener {
 		
 		boolean dontFlag = false;
 		
+		for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
+			if (entity instanceof Boat) {
+				dontFlag = true;
+			}
+		}
 
 		if (!playerData.lastOnGround && !playerData.isOnGround && !playerData.lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && PlayerUtil.getFallHeight(p) > 0.1) {
 			double got = Math.floor(scaledEqualness * 100);

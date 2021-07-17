@@ -43,7 +43,7 @@ public class GroundSpoofA extends Check {
 			}
 		}
 		
-		for (Entity entity : p.getNearbyEntities(0.5, 0.5, 0.5)) {
+		for (Entity entity : p.getNearbyEntities(1, 1, 1)) {
 			if(entity instanceof Boat) {
 				dontFlag = true;
 			}

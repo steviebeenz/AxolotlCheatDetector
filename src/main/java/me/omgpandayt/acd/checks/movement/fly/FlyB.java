@@ -3,6 +3,8 @@ package me.omgpandayt.acd.checks.movement.fly;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -49,6 +51,12 @@ public class FlyB extends Check {
 							break;
 						}
 					}
+				}
+			}
+			
+			for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
+				if(entity instanceof Boat) {
+					dontFlag = true;
 				}
 			}
 			

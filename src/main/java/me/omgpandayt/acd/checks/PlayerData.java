@@ -39,7 +39,8 @@ public class PlayerData {
 
 	public Player p;
 	public boolean invMoveWaitTick = false;
-	public int flyBLimiter = 0,
+	public int flyALimiter = 0,
+			   flyBLimiter = 0,
 			   flyCLimiter = 0,
 			   flyDLimiter = 0,
 			   ticksLived = 0,

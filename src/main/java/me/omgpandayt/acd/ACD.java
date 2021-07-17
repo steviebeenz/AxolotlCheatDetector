@@ -81,6 +81,9 @@ public class ACD extends JavaPlugin {
                     playerData.ticksLived++;
                     
                     if(playerData.ticksLived % 20 == 0) {
+                    	if(playerData.flyALimiter > 0) {
+                    		playerData.flyALimiter--;
+                    	}
                     	if(playerData.flyBLimiter > 0) {
                     		playerData.flyBLimiter--;
                     	}
