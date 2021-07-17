@@ -3,6 +3,7 @@ package me.omgpandayt.acd.util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class PlayerUtil {
@@ -38,6 +39,15 @@ public class PlayerUtil {
 
 	public static boolean isUsingItem(Player p) {
 		return p.getItemInUse() != null;
+	}
+
+	public static boolean isAboveLiquids(Location location) {
+		for(Block b : BlockUtils.getBlocksBelow(location)) {
+			if(b.getType() == Material.WATER || b.getType() == Material.LAVA) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

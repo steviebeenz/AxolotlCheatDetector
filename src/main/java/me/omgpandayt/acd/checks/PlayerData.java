@@ -38,10 +38,13 @@ public class PlayerData {
 	}
 
 	public Player p;
-	public int ticksSinceHit = 25000000;
 	public boolean invMoveWaitTick = false;
-	public int flyBLimiter = 0;
-	public int ticksLived = 0;
+	public int flyBLimiter = 0,
+			flyCLimiter = 0,
+			ticksLived = 0,
+			jesusBLimiter = 0,
+			jesusCLimiter = 0,
+			ticksSinceHit = 250000000;
 	
 	public PlayerData(Player p) {
 		this.p = p;

@@ -92,4 +92,8 @@ public class Check {
 		
 	}
 
+	public void onTick(Player p) {
+		
+	}
+
 }

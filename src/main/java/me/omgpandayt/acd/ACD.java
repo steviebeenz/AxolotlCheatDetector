@@ -4,21 +4,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.checks.combat.criticals.CriticalsA;
-import me.omgpandayt.acd.checks.combat.reach.ReachA;
-import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyA;
-import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyB;
-import me.omgpandayt.acd.checks.movement.fly.FlyA;
-import me.omgpandayt.acd.checks.movement.fly.FlyB;
-import me.omgpandayt.acd.checks.movement.speed.SpeedA;
-import me.omgpandayt.acd.checks.movement.speed.SpeedB;
-import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofA;
-import me.omgpandayt.acd.checks.player.invmove.InvMoveA;
-import me.omgpandayt.acd.checks.player.jesus.JesusA;
-import me.omgpandayt.acd.checks.player.noslowdown.NoSlowdownA;
+import me.omgpandayt.acd.checks.*;
+
+import me.omgpandayt.acd.checks.combat.criticals.*;
+import me.omgpandayt.acd.checks.combat.reach.*;
+
+import me.omgpandayt.acd.checks.movement.elytrafly.*;
+import me.omgpandayt.acd.checks.movement.fly.*;
+import me.omgpandayt.acd.checks.movement.speed.*;
+
+import me.omgpandayt.acd.checks.player.groundspoof.*;
+import me.omgpandayt.acd.checks.player.invmove.*;
+import me.omgpandayt.acd.checks.player.jesus.*;
+import me.omgpandayt.acd.checks.player.noslowdown.*;
+
 import me.omgpandayt.acd.listeners.RegisterListeners;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
@@ -48,6 +49,7 @@ public class ACD extends JavaPlugin {
 		
 		new FlyA();
 		new FlyB();
+		new FlyC();
 		
 		new ReachA();
 		
@@ -56,6 +58,8 @@ public class ACD extends JavaPlugin {
 		new NoSlowdownA();
 		
 		new JesusA();
+		new JesusB();
+		new JesusC();
 		
 		new ElytraFlyA();
 		new ElytraFlyB();
@@ -79,6 +83,19 @@ public class ACD extends JavaPlugin {
                     	if(playerData.flyBLimiter > 0) {
                     		playerData.flyBLimiter--;
                     	}
+                    	if(playerData.flyCLimiter > 0) {
+                    		playerData.flyCLimiter--;
+                    	}
+                    	if(playerData.jesusBLimiter > 0) {
+                    		playerData.jesusBLimiter--;
+                    	}
+                    	if(playerData.jesusCLimiter > 0) {
+                    		playerData.jesusCLimiter--;
+                    	}
+                    }
+                    
+                    for(Object c : CheckManager.getRegisteredChecks()) {
+                    	((Check)c).onTick(player);
                     }
                 }
             }
