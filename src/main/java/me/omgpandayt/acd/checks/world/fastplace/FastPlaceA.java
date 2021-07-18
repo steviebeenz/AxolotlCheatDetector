@@ -11,7 +11,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class FastPlaceA extends Check {
 	
 	public FastPlaceA() {
-		super("FastPlaceA", false, 8);
+		super("FastPlaceA", false);
 	}
 	
 	private String path = "checks.fastplace.a.";

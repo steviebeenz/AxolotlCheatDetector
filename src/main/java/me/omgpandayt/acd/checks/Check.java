@@ -27,9 +27,12 @@ public class Check {
 	
 	public FileConfiguration config;
 	
-	public Check(String check, boolean experimental, int flagsToKick) {
+	public String getName() {
+		return check;
+	}
+	
+	public Check(String check, boolean experimental) {
 		
-		this.flagsToKick = flagsToKick;
 		this.check = check;
 		this.experimental = experimental;
 		
@@ -78,9 +81,9 @@ public class Check {
     	
     }
 
-	public void punish(Player p) {
+	public void punish(Player p, String check) {
 		
-		ACD.logPlayers(p.getName() + " was kicked for cheating.");
+		ACD.logPlayers(p.getName() + " was kicked for cheating (" + check + ")");
 		
 		p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
 		Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);

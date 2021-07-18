@@ -15,7 +15,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class NoSlowdownA extends Check {
 
 	public NoSlowdownA() {
-		super("NoSlowdownA", false, 5);
+		super("NoSlowdownA", false);
 	}
 	
 	private String path = "checks.noslowdown.a.";

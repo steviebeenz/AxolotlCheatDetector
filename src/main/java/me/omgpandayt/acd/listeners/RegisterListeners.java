@@ -144,8 +144,9 @@ public class RegisterListeners implements Listener {
 	}
 	
 	public boolean bypass(Player p) {
-		if(!p.isOnline())return true;
-		return PlayerDataManager.getPlayer(p).ticksLived <= ACD.getInstance().getConfig().getDouble("main.join-bypass-ticks") || p.hasPermission("acd.bypass");
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null) return true;
+		return playerData.ticksLived <= ACD.getInstance().getConfig().getDouble("main.join-bypass-ticks") || p.hasPermission("acd.bypass");
 	}
 	
 }

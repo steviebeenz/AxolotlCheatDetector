@@ -18,7 +18,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class FlyB extends Check {
 
 	public FlyB() {
-		super("FlyB", true, 8);
+		super("FlyB", true);
 	}
 	
 	private String path = "checks.fly.b.";

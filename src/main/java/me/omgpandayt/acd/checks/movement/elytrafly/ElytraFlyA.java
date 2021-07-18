@@ -16,7 +16,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class ElytraFlyA extends Check {
 
 	public ElytraFlyA() {
-		super("ElytraFlyA", false, 8);
+		super("ElytraFlyA", false);
 	}
 	
 	private String path = "checks.elytrafly.a.";

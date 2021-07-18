@@ -9,60 +9,80 @@ checks:
       a:
          ice-increase: 0.3
          maximum-speed: 0.95
+         flags-to-kick: 5
       b:
          ice-increase: 0.11
          slime-increase: 0.04
          too-little-friction: 0.51
+         flags-to-kick: 6
    fly:
       a:
          limiter: 3 
+         flags-to-kick: 5
       b:
          limiter: 3
          descend: -0.1
          fall-height: 1
+         flags-to-kick: 8
       c:
          limiter: 3
          fall-height: 1
+         flags-to-kick: 5
       d:
          limiter: 2
          smallest-descend: 0.3
          fall-distance: 0.4
+         flags-to-kick: 12
    fastplace:
       a:
          maxplace: 5
          place-removal-rate-ticks: 2
+         flags-to-kick: 3
    impossibleactions:
       a:
          limiter: 3
+         flags-to-kick: 8
+      b:
+         flags-to-kick: 8
    noslowdown:
       a:
          ice-increase: 0.11
          maxspeed: 0.2153
+         flags-to-kick: 4
    jesus:
       a:
          nearby-boat-radius: 2
+         flags-to-kick: 5
       b:
          max-ascend: 0.1
+         flags-to-kick: 5
       c:
          limiter: 3
+         flags-to-kick: 8
    invmove:
       a:
          ticks-since-damage: 5
          max-speed: 0.1
+         flags-to-kick: 5
    groundspoof:
       a:
          nearby-boat-radius: 2
+         flags-to-kick: 6
       b:
          limiter: 5
+         flags-to-kick: 3
    elytrafly:
       a:
          ticks-since-rocket: 100
+         flags-to-kick: 4
       b:
          ticks-since-rocket: 100
+         flags-to-kick: 4
    reach:
       a:
          max-reach: 4.4
          creative-increase: 2.6
+         flags-to-kick: 8
      
        
        

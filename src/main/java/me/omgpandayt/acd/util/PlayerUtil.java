@@ -34,7 +34,7 @@ public class PlayerUtil {
 	}
 
 	public static boolean isValid(Player p) {
-		return !p.isFlying() && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE);
+		return !p.isFlying() && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
 	}
 
 	public static boolean isUsingItem(Player p) {

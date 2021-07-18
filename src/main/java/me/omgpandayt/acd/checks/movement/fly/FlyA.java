@@ -19,7 +19,7 @@ public class FlyA extends Check {
 	private String path = "checks.fly.a.";
 	
 	public FlyA() {
-		super("FlyA", true, 8);
+		super("FlyA", true);
 	}
 	
 	@Override

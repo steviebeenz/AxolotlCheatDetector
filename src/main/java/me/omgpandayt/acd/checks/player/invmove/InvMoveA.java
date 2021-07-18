@@ -18,7 +18,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class InvMoveA extends Check {
 
 	public InvMoveA() {
-		super("InvMoveA", false, 8);
+		super("InvMoveA", false);
 	}
 	
 	private String path = "checks.invmove.a.";

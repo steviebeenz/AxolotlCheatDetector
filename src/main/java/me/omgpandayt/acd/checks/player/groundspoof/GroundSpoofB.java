@@ -15,7 +15,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class GroundSpoofB extends Check {
 
 	public GroundSpoofB() {
-		super("GroundSpoofB", false, 8);
+		super("GroundSpoofB", false);
 	}
 	
 	private String path = "checks.groundspoof.b.";
@@ -42,6 +42,11 @@ public class GroundSpoofB extends Check {
 			if(playerData.groundSpoofBLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "GroundSpoof (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 				playerData.groundSpoofBLimiter = 0;
+				if(config.getBoolean("main.cancel-event")) {
+					double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
+					p.setFallDistance((float) (playerData.lastPacketFD + deltaY));
+					p.teleport(p.getLocation());
+				}
 			}
 		}
 		

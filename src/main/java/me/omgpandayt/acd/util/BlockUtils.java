@@ -37,5 +37,9 @@ public class BlockUtils {
 	public static boolean isFence(Block b) {
 		return b.getType() == Material.OAK_FENCE || b.getType() == Material.DARK_OAK_FENCE || b.getType() == Material.SPRUCE_FENCE || b.getType() == Material.ACACIA_FENCE || b.getType() == Material.BIRCH_FENCE || b.getType() == Material.JUNGLE_FENCE;
 	}
+
+	public static boolean invalidPlace(Location add) {
+		return add.getBlock().getType() == Material.WATER || add.getBlock().getType() == Material.LAVA || add.getBlock().getType() == Material.AIR;
+	}
 	
 }

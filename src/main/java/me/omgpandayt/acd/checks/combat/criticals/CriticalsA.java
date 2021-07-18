@@ -12,7 +12,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 public class CriticalsA extends Check {
 
 	public CriticalsA() {
-		super("CriticalsA", false, 8);
+		super("CriticalsA", false);
 	}
 	
 	@Override

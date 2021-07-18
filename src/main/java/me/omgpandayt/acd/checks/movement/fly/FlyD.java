@@ -12,7 +12,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class FlyD extends Check {
 
 	public FlyD() {
-		super("FlyD", false, 8);
+		super("FlyD", false);
 	}
 	
 	private String path = "checks.fly.d.";

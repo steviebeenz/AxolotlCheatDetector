@@ -19,7 +19,7 @@ public class SpeedA extends Check implements Listener {
 	private String path = "checks.speed.a.";
 	
 	public SpeedA() {
-		super("SpeedA", false, 12);
+		super("SpeedA", false);
 	}
 	
 	@Override

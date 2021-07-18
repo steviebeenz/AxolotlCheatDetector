@@ -22,7 +22,7 @@ public class SpeedB extends Check implements Listener {
 	private String path = "checks.speed.b.";
 	
 	public SpeedB() {
-		super("SpeedB", false, 12);
+		super("SpeedB", false);
 	}
 	
 	@Override

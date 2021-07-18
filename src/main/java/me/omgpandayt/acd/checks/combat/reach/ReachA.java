@@ -11,7 +11,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class ReachA extends Check {
 
 	public ReachA() {
-		super("ReachA", false, 5);
+		super("ReachA", false);
 	}
 	
 	private String path = "checks.reach.a.";

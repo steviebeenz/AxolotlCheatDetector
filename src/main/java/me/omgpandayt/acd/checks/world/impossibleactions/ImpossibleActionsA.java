@@ -12,7 +12,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class ImpossibleActionsA extends Check {
 
 	public ImpossibleActionsA() {
-		super("ImpossibleActionsA", false, 8);
+		super("ImpossibleActionsA", false);
 	}
 	
 	private String path = "checks.impossibleactions.a.";

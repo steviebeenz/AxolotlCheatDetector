@@ -9,13 +9,14 @@ import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.violation.Violations;
 
 public class ImpossibleActionsB extends Check {
-
+	
 	public ImpossibleActionsB() {
-		super("ImpossibleActionsB", false, 8);
+		super("ImpossibleActionsB", false);
 	}
 	
 	@Override
 	public void onPlace(BlockPlaceEvent e) {
+		
 		
 		Player p = e.getPlayer();
 		

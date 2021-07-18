@@ -18,7 +18,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class JesusA extends Check {
 
 	public JesusA() {
-		super("JesusA", false, 8);
+		super("JesusA", false);
 	}
 	
 	private String path = "checks.jesus.a.";

@@ -22,12 +22,12 @@ import me.omgpandayt.acd.checks.player.groundspoof.*;
 import me.omgpandayt.acd.checks.player.invmove.*;
 import me.omgpandayt.acd.checks.player.jesus.*;
 import me.omgpandayt.acd.checks.player.noslowdown.*;
-
 import me.omgpandayt.acd.checks.world.fastplace.*;
 import me.omgpandayt.acd.checks.world.impossibleactions.*;
 
 import me.omgpandayt.acd.listeners.RegisterListeners;
 import me.omgpandayt.acd.util.PlayerUtil;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
@@ -110,12 +110,15 @@ public class ACD extends JavaPlugin {
 		
 		new FastPlaceA();
 		
-		for(Object c : CheckManager.getRegisteredChecks())
-			((Check)c).config = config;
-		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			PlayerDataManager.createPlayer(p);
 			PlayerDataManager.getPlayer(p).ticksLived = 170;
+		}
+		
+		for(Object e : CheckManager.getRegisteredChecks()) {
+			Check c = ((Check)e);
+			c.config = config;
+			c.flagsToKick = (int) c.config.getDouble("checks." + c.getName().substring(0, c.getName().length() - 1).toLowerCase() + "." + c.getName().substring(c.getName().length() - 1, c.getName().length()).toLowerCase() + ".flags-to-kick");
 		}
 		
         Bukkit.getServer().getScheduler().runTaskTimer(this, new Runnable() {

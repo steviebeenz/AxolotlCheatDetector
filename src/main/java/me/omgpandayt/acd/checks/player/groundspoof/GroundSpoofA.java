@@ -17,7 +17,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class GroundSpoofA extends Check {
 
 	public GroundSpoofA() {
-		super("GroundSpoofA", false, 15);
+		super("GroundSpoofA", false);
 	}
 	
 	private String path = "checks.groundspoof.a.";
@@ -59,6 +59,8 @@ public class GroundSpoofA extends Check {
 		if(playerData == null) return;
 		if(p.isOnGround() && !playerData.isOnGround && !playerData.lastOnGround && p.isValid() && !p.isDead() && !dontFlag && PlayerUtil.getFallHeight(p) > 1) {
 			flag(p, "GroundSpoof (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+			double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
+			p.damage((playerData.lastPacketFD + deltaY) - 3);
 		}
 		
 	}

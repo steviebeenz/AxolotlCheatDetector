@@ -14,7 +14,7 @@ import me.omgpandayt.acd.violation.Violations;
 public class FlyC extends Check {
 
 	public FlyC() {
-		super("FlyC", false, 8);
+		super("FlyC", false);
 	}
 	
 	private String path = "checks.fly.c.";
@@ -40,6 +40,7 @@ public class FlyC extends Check {
 				&& PlayerUtil.getFallHeight(p) > 1
 				&& !p.isFlying()
 				&& !dontFlag
+				&& PlayerUtil.isValid(p)
 		) {
 			playerData.flyCLimiter++;
 			if(playerData.flyCLimiter >= config.getDouble(path + "limiter")) {
