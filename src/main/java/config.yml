@@ -30,6 +30,7 @@ checks:
    fastplace:
       a:
          maxplace: 5
+         place-removal-rate-ticks: 2
    impossibleactions:
       a:
          limiter: 3
