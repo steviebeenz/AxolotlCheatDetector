@@ -47,6 +47,7 @@ public class PlayerData {
 			   jesusBLimiter = 0,
 			   jesusCLimiter = 0,
 			   impactALimiter = 0,
+			   groundSpoofBLimiter = 0,
 			   ticksSinceHit = 250000000,
 			   placedBlocks = 0;
 	public float lastPacketFD = 0,
