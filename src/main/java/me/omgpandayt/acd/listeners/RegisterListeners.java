@@ -36,6 +36,8 @@ public class RegisterListeners implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageByEntityEvent e) {
 		
+		if(!(e.getDamager() instanceof Player)) return;
+		
 		if(bypass((Player)e.getDamager())) return;
 		
 		for (Object obj : CheckManager.getRegisteredChecks()) {

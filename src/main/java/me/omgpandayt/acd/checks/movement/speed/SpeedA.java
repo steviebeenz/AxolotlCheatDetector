@@ -77,8 +77,7 @@ public class SpeedA extends Check implements Listener {
 		
 		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat) {
 			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ") (VL" + (Violations.getViolations(this, p)+1) + ")");
-			
-			p.teleport(e.getFrom());
+			lagBack(e);
 		}
 		
 	}

@@ -23,7 +23,7 @@ public class CriticalsA extends Check {
 		if (isCritical(player)) {
 			if (player.getLocation().getY() % 0.5 == 0
 					&& player.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
-				e.setCancelled(true);
+				cancelDamage(e);
 				flag(player, "Criticals (A)", "");
 			}
 		}

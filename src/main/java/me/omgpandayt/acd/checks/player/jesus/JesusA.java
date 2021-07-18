@@ -38,6 +38,7 @@ public class JesusA extends Check {
 		
 		for(Block b : BlockUtils.getBlocksBelow(loc)) {
 			if (!b.isLiquid()) dontFlag = true;
+			if(b.getLocation().clone().add(0,1,0).getBlock().getType() != Material.AIR) dontFlag = true;
 		}
 		
 		double nbr = config.getDouble(path + "nearby-boat-radius");
@@ -57,7 +58,8 @@ public class JesusA extends Check {
 			}
 			if(!dontFlag && PlayerUtil.isValid(p)) {
 				flag(p, "Jesus (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
-				p.teleport(e.getFrom().clone().add(0, 0.2, 0));
+				if(config.getBoolean("main.cancel-event"))
+						p.teleport(e.getFrom().clone().add(0, 0.2, 0));
 			}
 		}
 		

@@ -3,6 +3,7 @@ main:
    limiter-removal-rate: 1
    flag-removal-rate: 30
    join-bypass-ticks: 170
+   cancel-event: true
 checks:
    speed:
       a:

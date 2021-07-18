@@ -49,6 +49,8 @@ public class JesusB extends Check {
 			if(playerData.jesusBLimiter >= 3) {
 				playerData.jesusBLimiter = 0;
 				flag(p, "Jesus (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				if(config.getBoolean("main.cancel-event"))
+					p.teleport(e.getFrom().clone().add(0, 0.2, 0));
 			}
 		}
 		

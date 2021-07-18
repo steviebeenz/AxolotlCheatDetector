@@ -61,6 +61,7 @@ public class InvMoveA extends Check {
 			
 			if(!dontFlag && p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
 				flag(p, "InvMove (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				lagBack(e);
 			}
 			
 		}

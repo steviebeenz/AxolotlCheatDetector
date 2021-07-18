@@ -51,7 +51,7 @@ public class FlyA extends Check {
 				playerData.flyALimiter++;
 				if(playerData.flyALimiter >= config.getDouble(path + "limiter")) {
 					flag(p, "Fly (A)", "(VL" + (Violations.getViolations(this, p) + 1) + ")");
-					p.teleport(e.getFrom());
+					lagBack(e);
 					playerData.flyALimiter = 0;
 				}
 			}

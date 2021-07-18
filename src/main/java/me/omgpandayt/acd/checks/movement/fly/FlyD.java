@@ -32,7 +32,7 @@ public class FlyD extends Check {
 			if(playerData.flyDLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "Fly (D)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 				playerData.flyDLimiter = 0;
-				p.teleport(e.getFrom());
+				lagBack(e);
 			}
 		}
 		

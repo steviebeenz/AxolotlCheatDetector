@@ -30,6 +30,7 @@ public class FastPlaceA extends Check {
 		if(playerData.placedBlocks >= config.getDouble(path + "maxplace")) {
 			flag(p, "FastPlace (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 			playerData.placedBlocks = 0;
+			cancelPlace(e);
 		}
 		
 	}

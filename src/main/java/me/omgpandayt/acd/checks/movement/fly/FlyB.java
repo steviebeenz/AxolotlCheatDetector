@@ -72,7 +72,8 @@ public class FlyB extends Check {
 					Location loc = e.getFrom().clone();
 					loc.setY(playerData.lastLastPacketY);
 					
-					p.teleport(loc);
+					if(config.getBoolean("main.cancel-event"))
+						p.teleport(loc);
 				}
 			}
 		}

@@ -57,6 +57,19 @@ public class Check {
     	
     }
     
+    public void lagBack(PlayerMoveEvent e) {
+    	if(config.getBoolean("main.cancel-event")) 
+    		e.getPlayer().teleport(e.getFrom());
+    }
+    public void cancelDamage(EntityDamageByEntityEvent e) {
+    	if(config.getBoolean("main.cancel-event")) 
+    		e.setCancelled(true);
+    }
+    public void cancelPlace(BlockPlaceEvent e) {
+    	if(config.getBoolean("main.cancel-event")) 
+    		e.setCancelled(true);
+    }
+    
     public void onMove(PlayerMoveEvent e) {
     	
     }

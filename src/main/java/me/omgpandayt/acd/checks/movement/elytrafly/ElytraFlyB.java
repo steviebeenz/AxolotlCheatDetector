@@ -42,7 +42,7 @@ public class ElytraFlyB extends Check {
 				ItemStack chestplate = p.getInventory().getChestplate();
 				p.getInventory().setChestplate(new ItemStack(Material.AIR));
 				p.getInventory().setChestplate(chestplate);
-				p.teleport(e.getFrom());
+				lagBack(e);
 			}
 		}
 	}

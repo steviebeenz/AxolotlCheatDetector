@@ -38,7 +38,7 @@ public class ImpossibleActionsA extends Check {
 			if(playerData.impactALimiter >= config.getDouble(path + "limiter")) {
 				playerData.impactALimiter = 0;
 				flag(p, "ImpossibleActions (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
-				e.setCancelled(true);
+				cancelPlace(e);
 			}
 		}
 		
