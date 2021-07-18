@@ -20,6 +20,8 @@ public class GroundSpoofA extends Check {
 		super("GroundSpoofA", false, 15);
 	}
 	
+	private String path = "checks.groundspoof.a.";
+	
 	@SuppressWarnings("deprecation")
 	public void onMove(PlayerMoveEvent e) {
 		
@@ -43,7 +45,9 @@ public class GroundSpoofA extends Check {
 			}
 		}
 		
-		for (Entity entity : p.getNearbyEntities(1, 1, 1)) {
+		double nbr = config.getDouble(path + "nearby-boat-radius");
+		
+		for (Entity entity : p.getNearbyEntities(nbr, nbr, nbr)) {
 			if(entity instanceof Boat) {
 				dontFlag = true;
 			}

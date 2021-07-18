@@ -15,6 +15,8 @@ public class ImpossibleActionsA extends Check {
 		super("ImpossibleActionsA", false, 8);
 	}
 	
+	private String path = "checks.impossibleactions.a.";
+	
 	@Override
 	public void onPlace(BlockPlaceEvent e) {
 		
@@ -33,7 +35,7 @@ public class ImpossibleActionsA extends Check {
 				&& targetBlock.getZ() != placedBlock.getZ())
 		) {
 			playerData.impactALimiter++;
-			if(playerData.impactALimiter >= 3) {
+			if(playerData.impactALimiter >= config.getDouble(path + "limiter")) {
 				playerData.impactALimiter = 0;
 				flag(p, "ImpossibleActions (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 				e.setCancelled(true);

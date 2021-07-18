@@ -3,6 +3,7 @@ package me.omgpandayt.acd.checks;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -23,6 +24,8 @@ public class Check {
 	public String check;
 	public boolean experimental;
 	public int flagsToKick;
+	
+	public FileConfiguration config;
 	
 	public Check(String check, boolean experimental, int flagsToKick) {
 		
@@ -70,7 +73,12 @@ public class Check {
 		Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);
 		entity.setInvulnerable(true);
 		
-		p.kickPlayer(ChatColor.translateAlternateColorCodes('&', ACD.prefix + "\n&7Suspicious activity"));
+		String kickMessage = ACD.getInstance().getConfig().getString("main.kick-message");
+		
+		kickMessage = kickMessage.replace("[PREFIX]", ACD.prefix);
+		kickMessage = kickMessage.replace("[NEWLINE]", "\n");
+		
+		p.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
 		
 		Violations.clearViolations(this, p);
 		

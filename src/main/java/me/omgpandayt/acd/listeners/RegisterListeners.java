@@ -1,19 +1,23 @@
 package me.omgpandayt.acd.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.CheckManager;
 import me.omgpandayt.acd.checks.PlayerData;
@@ -32,7 +36,7 @@ public class RegisterListeners implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageByEntityEvent e) {
 		
-		if(e.getDamager().hasPermission("acd.bypass")) return;
+		if(bypass((Player)e.getDamager())) return;
 		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
@@ -51,7 +55,7 @@ public class RegisterListeners implements Listener {
 		
 		if(!(e.getEntity() instanceof Player)) return;
 		
-		if(e.getEntity().hasPermission("acd.bypass")) return;
+		if(bypass((Player)e.getEntity())) return;
 		
 		PlayerDataManager.getPlayer((Player)e.getEntity()).ticksSinceHit = 0;
 		
@@ -60,7 +64,7 @@ public class RegisterListeners implements Listener {
 	@EventHandler
 	public void onPlace(BlockPlaceEvent e) {
 	
-		if(e.getPlayer().hasPermission("acd.bypass")) return;
+		if(bypass((Player)e.getPlayer())) return;
 		
 		for(Object obj : CheckManager.getRegisteredChecks()) {
 			
@@ -75,7 +79,7 @@ public class RegisterListeners implements Listener {
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onMove(PlayerMoveEvent e) {
 		
-		if(e.getPlayer().hasPermission("acd.bypass")) return;
+		if(bypass((Player)e.getPlayer())) return;
 		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
@@ -97,9 +101,19 @@ public class RegisterListeners implements Listener {
 	}
 	
 	@EventHandler
+	public void onUse(PlayerInteractEvent e) {
+		if(e.getAction() != Action.RIGHT_CLICK_AIR)return;
+		if(!e.getPlayer().isGliding()) return;
+		if(e.getItem().getType() != Material.FIREWORK_ROCKET) return;
+		
+		PlayerDataManager.getPlayer(e.getPlayer()).ticksSinceRocket = 0;
+		
+	}
+	
+	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
 		
-		if(e.getWhoClicked().hasPermission("acd.bypass")) return;
+		if(bypass((Player)e.getWhoClicked())) return;
 		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
@@ -113,7 +127,7 @@ public class RegisterListeners implements Listener {
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent e) {
 		
-		if(e.getPlayer().hasPermission("acd.bypass")) return;
+		if(bypass((Player)e.getPlayer())) return;
 		
 		for (Object obj : CheckManager.getRegisteredChecks()) {
 			
@@ -122,6 +136,10 @@ public class RegisterListeners implements Listener {
 			check.onInventoryClose(e);
 			
 		}
+	}
+	
+	public boolean bypass(Player p) {
+		return PlayerDataManager.getPlayer(p).ticksLived <= ACD.getInstance().getConfig().getDouble("main.join-bypass-ticks") || p.hasPermission("acd.bypass");
 	}
 	
 }

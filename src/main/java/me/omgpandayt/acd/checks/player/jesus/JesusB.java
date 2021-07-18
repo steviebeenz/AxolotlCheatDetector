@@ -17,6 +17,8 @@ public class JesusB extends Check {
 	public JesusB() {
 		super("JesusB", false, 8);
 	}
+	
+	private String path = "checks.jesus.b.";
 
 	@Override
 	public void onMove(PlayerMoveEvent e) {
@@ -34,7 +36,7 @@ public class JesusB extends Check {
 			}
 		}
 		
-		if(p.getVelocity().getY() > 0.1 &&
+		if(p.getVelocity().getY() > config.getDouble(path + "max-ascend") &&
 				PlayerUtil.isAboveLiquids(p.getLocation()) &&
 				p.getLocation().getBlock().getType() == Material.AIR
 				&& !dontFlag) {

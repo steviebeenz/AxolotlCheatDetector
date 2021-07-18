@@ -54,6 +54,7 @@ public class PlayerData {
 				 lastPacketHP = 0,
 				 realisticFD = 0;
 	public boolean lastPacketNearBoat = false;
+	public int ticksSinceRocket = 0;
 	
 	public PlayerData(Player p) {
 		this.p = p;

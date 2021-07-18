@@ -1,0 +1,66 @@
+main:
+   kick-message: '[PREFIX][NEWLINE]&7Suspicious activity'
+   limiter-removal-rate: 1
+   flag-removal-rate: 30
+   join-bypass-ticks: 170
+checks:
+   speed:
+      a:
+         ice-increase: 0.3
+         maximum-speed: 0.95
+      b:
+         ice-increase: 0.11
+         slime-increase: 0.04
+         too-little-friction: 0.51
+   fly:
+      a:
+         limiter: 3 
+      b:
+         limiter: 3
+         descend: -0.1
+         fall-height: 1
+      c:
+         limiter: 3
+         fall-height: 1
+      d:
+         limiter: 2
+         smallest-descend: 0.3
+         fall-distance: 0.4
+   fastplace:
+      a:
+         maxplace: 5
+   impossibleactions:
+      a:
+         limiter: 3
+   noslowdown:
+      a:
+         ice-increase: 0.11
+         maxspeed: 0.2153
+   jesus:
+      a:
+         nearby-boat-radius: 2
+      b:
+         max-ascend: 0.1
+      c:
+         limiter: 3
+   invmove:
+      a:
+         ticks-since-damage: 5
+         max-speed: 0.1
+   groundspoof:
+      a:
+         nearby-boat-radius: 2
+      b:
+         limiter: 5
+   elytrafly:
+      a:
+         ticks-since-rocket: 100
+      b:
+         ticks-since-rocket: 100
+   reach:
+      a:
+         max-reach: 4.4
+         creative-increase: 2.6
+     
+       
+       

@@ -20,6 +20,8 @@ public class JesusA extends Check {
 	public JesusA() {
 		super("JesusA", false, 8);
 	}
+	
+	private String path = "checks.jesus.a.";
 
 	@Override
 	public void onMove(PlayerMoveEvent e) {
@@ -37,7 +39,10 @@ public class JesusA extends Check {
 		for(Block b : BlockUtils.getBlocksBelow(loc)) {
 			if (!b.isLiquid()) dontFlag = true;
 		}
-		for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
+		
+		double nbr = config.getDouble(path + "nearby-boat-radius");
+		
+		for(Entity entity : p.getNearbyEntities(nbr, nbr, nbr)) {
 			if(entity instanceof Boat) {
 				dontFlag = true;
 			}

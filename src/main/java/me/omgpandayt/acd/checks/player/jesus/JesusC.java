@@ -17,6 +17,8 @@ public class JesusC extends Check {
 		super("JesusC", false, 8);
 	}
 	
+	private String path = "checks.jesus.c.";
+	
 	@Override
 	public void onTick(Player p) {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
@@ -44,7 +46,7 @@ public class JesusC extends Check {
 				&& PlayerUtil.isValid(p)
 		) {
 			playerData.jesusCLimiter++;
-			if(playerData.jesusCLimiter >= 3) {
+			if(playerData.jesusCLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "Jesus (C)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 				playerData.jesusCLimiter = 0;
 			}

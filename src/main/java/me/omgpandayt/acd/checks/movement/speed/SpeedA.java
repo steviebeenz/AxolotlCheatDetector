@@ -16,11 +16,11 @@ import me.omgpandayt.acd.violation.Violations;
 
 public class SpeedA extends Check implements Listener {
 
+	private String path = "checks.speed.a.";
+	
 	public SpeedA() {
 		super("SpeedA", false, 12);
 	}
-	
-	public final double maxXZMove = 0.95f;
 	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
@@ -30,11 +30,11 @@ public class SpeedA extends Check implements Listener {
 		double distX = Math.abs(e.getFrom().getX() - e.getTo().getX());
 		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 		
-		double maxXZMove = this.maxXZMove;
+		double maxXZMove = config.getDouble(path + "maximum-speed");
 		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
 			if (b != null && BlockUtils.isIce(b)) {
-				maxXZMove += 0.3;
+				maxXZMove += config.getDouble(path + "ice-increase");
 			}
 		}
 		

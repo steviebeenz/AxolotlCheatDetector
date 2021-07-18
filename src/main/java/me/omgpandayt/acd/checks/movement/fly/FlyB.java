@@ -21,6 +21,8 @@ public class FlyB extends Check {
 		super("FlyB", true, 8);
 	}
 	
+	private String path = "checks.fly.b.";
+	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
 		
@@ -63,7 +65,7 @@ public class FlyB extends Check {
 			if(y == lastY && lastY > lastLastY && p.getVelocity().getY() < -0.1 && !dontFlag && PlayerUtil.getFallHeight(p) > 1 && !PlayerUtil.isOnGround(p.getLocation())) {
 				playerData.flyBLimiter += 1;
 				
-				if(playerData.flyBLimiter >= 3) {
+				if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
 					flag(p, "Fly (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 					playerData.flyBLimiter = 0;
 					

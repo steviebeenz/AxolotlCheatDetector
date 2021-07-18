@@ -14,6 +14,8 @@ public class FastPlaceA extends Check {
 		super("FastPlaceA", false, 8);
 	}
 	
+	private String path = "checks.fastplace.a.";
+	
 	@Override
 	public void onPlace(BlockPlaceEvent e) {
 		
@@ -25,7 +27,7 @@ public class FastPlaceA extends Check {
 		
 		playerData.placedBlocks++;
 		
-		if(playerData.placedBlocks > 5) {
+		if(playerData.placedBlocks >= config.getDouble(path + "maxplace")) {
 			flag(p, "FastPlace (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 			playerData.placedBlocks = 0;
 		}

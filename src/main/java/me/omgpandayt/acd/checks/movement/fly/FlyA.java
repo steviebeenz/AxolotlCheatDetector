@@ -16,6 +16,8 @@ public class FlyA extends Check {
 
 	public static final double STILL = -0.0784000015258789;
 	
+	private String path = "checks.fly.a.";
+	
 	public FlyA() {
 		super("FlyA", true, 8);
 	}
@@ -34,6 +36,10 @@ public class FlyA extends Check {
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
 			if(b.getType() != Material.AIR) {
 				dontFlag = true;
+				break;
+			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) {
+				dontFlag = true;
+				break;
 			}
 		}
 		
@@ -43,7 +49,7 @@ public class FlyA extends Check {
 		if(sameY && fallHeight >= 3 && !isBouncing && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding()) {
 			if(!PlayerUtil.isOnGround(p.getLocation())) {
 				playerData.flyALimiter++;
-				if(playerData.flyALimiter >= 3) {
+				if(playerData.flyALimiter >= config.getDouble(path + "limiter")) {
 					flag(p, "Fly (A)", "(VL" + (Violations.getViolations(this, p) + 1) + ")");
 					p.teleport(e.getFrom());
 					playerData.flyALimiter = 0;

@@ -21,6 +21,8 @@ public class InvMoveA extends Check {
 		super("InvMoveA", false, 8);
 	}
 	
+	private String path = "checks.invmove.a.";
+	
 	@Override
 	public void onInventoryClick(InventoryClickEvent e) {
 		if(PlayerDataManager.getPlayer((Player) e.getWhoClicked()) == null) return;
@@ -57,7 +59,7 @@ public class InvMoveA extends Check {
 			
 			double deltaXZ = (Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 			
-			if(!dontFlag && p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit > 5 && deltaXZ > 0.1f) {
+			if(!dontFlag && p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
 				flag(p, "InvMove (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 			}
 			

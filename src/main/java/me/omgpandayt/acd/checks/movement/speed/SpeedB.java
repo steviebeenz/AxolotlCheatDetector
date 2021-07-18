@@ -19,6 +19,8 @@ import me.omgpandayt.acd.violation.Violations;
 
 public class SpeedB extends Check implements Listener {
 
+	private String path = "checks.speed.b.";
+	
 	public SpeedB() {
 		super("SpeedB", false, 12);
 	}
@@ -48,7 +50,9 @@ public class SpeedB extends Check implements Listener {
 		playerData.setOnGround(PlayerUtil.isOnGround(p.getLocation()));
 		playerData.setLastDist(dist);
 		
-		double tooFast = 0.51f;
+		double tooFast = config.getDouble(path + "too-little-friction");
+		
+		boolean dontFlag = false;
 		
         PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
         if ( effect != null )
@@ -58,13 +62,13 @@ public class SpeedB extends Check implements Listener {
 		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
 			if (BlockUtils.isIce(b)) {
-				tooFast += 0.11f;
+				tooFast += config.getDouble(path + "ice-increase");
 			} else if (b.getType() == Material.SLIME_BLOCK) {
-				tooFast += 0.04f;
+				tooFast += config.getDouble(path + "slime-increase");
+			} else if (b.getLocation().clone().add(0, 1.825, 0).getBlock().getType() != Material.AIR) {
+				dontFlag = true;
 			}
 		}
-		
-		boolean dontFlag = false;
 		
 		for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
 			if (entity instanceof Boat) {

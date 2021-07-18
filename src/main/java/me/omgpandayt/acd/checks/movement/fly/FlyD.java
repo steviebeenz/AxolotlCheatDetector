@@ -15,6 +15,8 @@ public class FlyD extends Check {
 		super("FlyD", false, 8);
 	}
 	
+	private String path = "checks.fly.d.";
+	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -25,9 +27,9 @@ public class FlyD extends Check {
 		
 		double deltaY = Math.abs(e.getFrom().getY() - e.getTo().getY());
 		
-		if(deltaY < 0.3 && p.getFallDistance() > 0.4f && !PlayerUtil.isOnGround(p.getLocation())) {
+		if(deltaY < 0.3 && p.getFallDistance() > 0.4f && !PlayerUtil.isOnGround(p.getLocation()) && PlayerUtil.isValid(p) && !p.isGliding()) {
 			playerData.flyDLimiter++;
-			if(playerData.flyDLimiter >= 2) {
+			if(playerData.flyDLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "Fly (D)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
 				playerData.flyDLimiter = 0;
 				p.teleport(e.getFrom());
