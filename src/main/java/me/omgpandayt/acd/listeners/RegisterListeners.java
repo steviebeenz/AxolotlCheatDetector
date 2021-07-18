@@ -22,6 +22,7 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.CheckManager;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.command.AlertsCommand;
 
 public class RegisterListeners implements Listener {
 
@@ -30,6 +31,8 @@ public class RegisterListeners implements Listener {
 		jp.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(), jp);
 		
 		jp.getServer().getPluginManager().registerEvents(new RegisterListeners(), jp);
+		
+		jp.getCommand("alerts").setExecutor(new AlertsCommand());
 		
 	}
 	
@@ -141,6 +144,7 @@ public class RegisterListeners implements Listener {
 	}
 	
 	public boolean bypass(Player p) {
+		if(!p.isOnline())return true;
 		return PlayerDataManager.getPlayer(p).ticksLived <= ACD.getInstance().getConfig().getDouble("main.join-bypass-ticks") || p.hasPermission("acd.bypass");
 	}
 	

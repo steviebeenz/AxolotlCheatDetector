@@ -55,9 +55,11 @@ public class PlayerData {
 				 realisticFD = 0;
 	public boolean lastPacketNearBoat = false;
 	public int ticksSinceRocket = 0;
+	public boolean alerts;
 	
 	public PlayerData(Player p) {
 		this.p = p;
+		alerts = p.hasPermission("acd.notify");
 	}
 
 	public Player getPlayer() {

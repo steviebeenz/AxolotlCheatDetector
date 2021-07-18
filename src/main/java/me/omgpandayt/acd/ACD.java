@@ -1,6 +1,7 @@
 package me.omgpandayt.acd;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -45,6 +46,14 @@ public class ACD extends JavaPlugin {
 	
 					startupMessage = "&cPreventing your baby axolotls from cheating!",
 					turnoffMessage = "&cNo longer preventing your baby axolotls from cheating!";
+	
+	public static void sendMessage(CommandSender sender, String message) {
+		if(sender instanceof Player) {
+			((Player)sender).sendMessage(ChatColor.translateAlternateColorCodes('&', ACD.prefix + " " + message));
+		} else {
+			ACD.log(ChatColor.translateAlternateColorCodes('&', message));
+		}
+	}
 	
     @Override
     public void onLoad() {
@@ -111,6 +120,7 @@ public class ACD extends JavaPlugin {
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			PlayerDataManager.createPlayer(p);
+			PlayerDataManager.getPlayer(p).ticksLived = 170;
 		}
 		
         Bukkit.getServer().getScheduler().runTaskTimer(this, new Runnable() {
@@ -177,7 +187,7 @@ public class ACD extends JavaPlugin {
 		instance = null;
 	}
 	
-	public void log(String message) {
+	public static void log(String message) {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + message));
 	}
 	
@@ -189,7 +199,7 @@ public class ACD extends JavaPlugin {
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			
-			if(p.hasPermission("acd.notify")) {
+			if(p.hasPermission("acd.notify") && PlayerDataManager.getPlayer(p).alerts) {
 				
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + b));
 				
