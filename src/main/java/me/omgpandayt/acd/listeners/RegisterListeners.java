@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -50,6 +51,21 @@ public class RegisterListeners implements Listener {
 		if(e.getEntity().hasPermission("acd.bypass")) return;
 		
 		PlayerDataManager.getPlayer((Player)e.getEntity()).ticksSinceHit = 0;
+		
+	}
+	
+	@EventHandler
+	public void onPlace(BlockPlaceEvent e) {
+	
+		if(e.getPlayer().hasPermission("acd.bypass")) return;
+		
+		for(Object obj : CheckManager.getRegisteredChecks()) {
+			
+			Check check = (Check)obj;
+			
+			check.onPlace(e);
+			
+		}
 		
 	}
 	

@@ -18,6 +18,9 @@ import me.omgpandayt.acd.checks.player.invmove.*;
 import me.omgpandayt.acd.checks.player.jesus.*;
 import me.omgpandayt.acd.checks.player.noslowdown.*;
 
+import me.omgpandayt.acd.checks.world.impossibleactions.*;
+import me.omgpandayt.acd.checks.world.fastplace.*;
+
 import me.omgpandayt.acd.listeners.RegisterListeners;
 
 import net.md_5.bungee.api.ChatColor;
@@ -67,6 +70,10 @@ public class ACD extends JavaPlugin {
 		
 		new InvMoveA();
 		
+		new ImpossibleActionsA();
+		
+		new FastPlaceA();
+		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			PlayerDataManager.createPlayer(p);
 		}
@@ -98,6 +105,14 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.jesusCLimiter > 0) {
                     		playerData.jesusCLimiter--;
+                    	}
+                	
+                    	if(playerData.impactALimiter > 0) {
+                    		playerData.impactALimiter--;
+                    	}
+                    } else if (playerData.ticksLived % 2 == 0) {
+                    	if(playerData.placedBlocks > 0) {
+                    		playerData.placedBlocks--;
                     	}
                     }
                     

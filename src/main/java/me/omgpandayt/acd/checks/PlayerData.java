@@ -46,7 +46,9 @@ public class PlayerData {
 			   ticksLived = 0,
 			   jesusBLimiter = 0,
 			   jesusCLimiter = 0,
-			   ticksSinceHit = 250000000;
+			   impactALimiter = 0,
+			   ticksSinceHit = 250000000,
+			   placedBlocks = 0;
 	
 	public PlayerData(Player p) {
 		this.p = p;
