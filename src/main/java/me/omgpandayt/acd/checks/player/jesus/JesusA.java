@@ -3,10 +3,14 @@ package me.omgpandayt.acd.checks.player.jesus;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
@@ -33,7 +37,16 @@ public class JesusA extends Check {
 		for(Block b : BlockUtils.getBlocksBelow(loc)) {
 			if (!b.isLiquid()) dontFlag = true;
 		}
-		if(!dontFlag) {
+		for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
+			if(entity instanceof Boat) {
+				dontFlag = true;
+			}
+		}
+		
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null) return;
+		
+		if(!dontFlag && !playerData.lastPacketNearBoat) {
 			for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
 				if (!b.isLiquid()) dontFlag = true;
 			}

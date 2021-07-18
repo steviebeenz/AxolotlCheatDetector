@@ -8,6 +8,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
@@ -70,7 +72,10 @@ public class SpeedA extends Check implements Listener {
 			}
 		}
 		
-		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding()) {
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null) return;
+		
+		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat) {
 			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ") (VL" + (Violations.getViolations(this, p)+1) + ")");
 			
 			p.teleport(e.getFrom());

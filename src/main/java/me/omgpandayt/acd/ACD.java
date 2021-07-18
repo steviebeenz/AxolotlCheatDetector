@@ -22,7 +22,7 @@ import me.omgpandayt.acd.checks.world.impossibleactions.*;
 import me.omgpandayt.acd.checks.world.fastplace.*;
 
 import me.omgpandayt.acd.listeners.RegisterListeners;
-
+import me.omgpandayt.acd.util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
@@ -49,6 +49,7 @@ public class ACD extends JavaPlugin {
 		new SpeedB();
 		
 		new GroundSpoofA();
+		new GroundSpoofB();
 		
 		new FlyA();
 		new FlyB();
@@ -87,6 +88,12 @@ public class ACD extends JavaPlugin {
                     playerData.addTicksSinceHit();
                     playerData.ticksLived++;
                     
+                    double deltaY = Math.abs(playerData.lastPacketY - player.getLocation().getY());
+                    
+                    if(!PlayerUtil.isOnGround(player.getLocation())) playerData.realisticFD += deltaY;
+                    else playerData.realisticFD = 0;
+                    
+                    
                     if(playerData.ticksLived % 20 == 0) {
                     	if(playerData.flyALimiter > 0) {
                     		playerData.flyALimiter--;
@@ -106,7 +113,6 @@ public class ACD extends JavaPlugin {
                     	if(playerData.jesusCLimiter > 0) {
                     		playerData.jesusCLimiter--;
                     	}
-                	
                     	if(playerData.impactALimiter > 0) {
                     		playerData.impactALimiter--;
                     	}

@@ -49,6 +49,10 @@ public class PlayerData {
 			   impactALimiter = 0,
 			   ticksSinceHit = 250000000,
 			   placedBlocks = 0;
+	public float lastPacketFD = 0,
+				 lastPacketHP = 0,
+				 realisticFD = 0;
+	public boolean lastPacketNearBoat = false;
 	
 	public PlayerData(Player p) {
 		this.p = p;
