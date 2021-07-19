@@ -33,10 +33,11 @@ public class Check {
 	
 	public Check(String check, boolean experimental) {
 		
-		this.check = check;
-		this.experimental = experimental;
-		
-		CheckManager.registerCheck(this);
+		if(ACD.getInstance().getConfig().getBoolean("checks." + check.substring(0, check.length() - 1).toLowerCase() + "." + check.substring(check.length() - 1, check.length()).toLowerCase() + ".enabled")) {
+			this.check = check;
+			this.experimental = experimental;
+			CheckManager.registerCheck(this);
+		}
 		
 	}
 	

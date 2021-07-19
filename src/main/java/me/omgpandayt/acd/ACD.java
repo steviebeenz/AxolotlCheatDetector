@@ -99,6 +99,7 @@ public class ACD extends JavaPlugin {
 		new JesusA();
 		new JesusB();
 		new JesusC();
+		new JesusD();
 		
 		new ElytraFlyA();
 		new ElytraFlyB();
@@ -157,6 +158,9 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.impactALimiter > 0) {
                     		playerData.impactALimiter--;
+                    	}
+                    	if(playerData.jesusDLimiter > 0) {
+                    		playerData.jesusDLimiter--;
                     	}
                     	if(playerData.groundSpoofBLimiter > 0) {
                     		playerData.groundSpoofBLimiter--;
