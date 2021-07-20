@@ -39,7 +39,7 @@ public class GroundSpoofC extends Check {
 			}
 		}
 		
-		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !dontFlag && correctFall(p) && p.getVelocity().getY() < 0) {
+		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !dontFlag && correctFall(p) && p.getVelocity().getY() < 0 && PlayerUtil.aboveAreAir(p)) {
 			playerData.groundSpoofCLimiter++;
 			if(playerData.groundSpoofCLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "GroundSpoof (C)", "(VL" + (Violations.getViolations(this, p)+1) + ")");

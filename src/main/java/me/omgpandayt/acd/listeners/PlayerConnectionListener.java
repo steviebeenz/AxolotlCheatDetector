@@ -27,7 +27,7 @@ public class PlayerConnectionListener implements Listener {
 		    String inputLine;
 		    while ((inputLine = in.readLine()) != null)
 		    	if(!inputLine.equalsIgnoreCase(ACD.version))
-		    		ACD.sendMessage(event.getPlayer(), "Hey! You are running ACD " + ACD.version + ", the latest is currently ACD " + inputLine);
+		    		ACD.sendMessage(event.getPlayer(), "Hey! You are running ACD " + ACD.version + ", the latest is currently ACD " + inputLine + "! Download latest at https://www.spigotmc.org/resources/axolotl-cheat-detector.94494/");
 		    in.close();
 		} catch(Exception e) {
 			e.printStackTrace();

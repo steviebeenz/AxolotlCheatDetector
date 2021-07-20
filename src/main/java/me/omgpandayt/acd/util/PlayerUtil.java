@@ -87,4 +87,13 @@ public class PlayerUtil {
 		return false;
 	}
 
+	public static boolean aboveAreAir(Player p) {
+		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 3, 0))) {
+			if(b.getType() != Material.AIR) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

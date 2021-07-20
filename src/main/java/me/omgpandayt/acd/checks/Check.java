@@ -21,12 +21,12 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Check {
 	
-	public String check;
+	public String check, path;
 	public boolean experimental;
 	public int flagsToKick;
 	
 	public FileConfiguration config;
-	
+
 	public String getName() {
 		return check;
 	}
@@ -37,6 +37,7 @@ public class Check {
 			this.check = check;
 			this.experimental = experimental;
 			CheckManager.registerCheck(this);
+			this.path = "checks." + check.substring(0, check.length() - 1).toLowerCase() + "." + check.substring(check.length() - 1, check.length()).toLowerCase() + ".";
 		}
 		
 	}
@@ -83,30 +84,64 @@ public class Check {
     }
 
 	public void punish(Player p) {
-		
-		ACD.logPlayers(p.getName() + " was kicked for cheating (" + getName() + ")");
-		
-		p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
-		Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);
-		entity.setInvulnerable(true);
-		
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null) return;
+		playerData.kicks++;
+		Violations.clearViolations(this, p);
 		String kickMessage = ACD.getInstance().getConfig().getString("main.kick-message");
-		
 		kickMessage = kickMessage.replace("[PREFIX]", ACD.prefix);
 		kickMessage = kickMessage.replace("[NEWLINE]", "\n");
-		
-		p.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
-		
-		Violations.clearViolations(this, p);
-		
-		BukkitRunnable task = new BukkitRunnable() {
-			@Override
-			public void run() {
-				((LivingEntity)entity).setHealth(0);
+		if(playerData.kicks < config.getDouble("main.kicks-to-ban")) {
+			if(config.getBoolean("main.kick-player")) {
+				ACD.logPlayers(p.getName() + " was kicked for cheating (" + getName() + ")");
+				
+				p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
+				Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);
+				entity.setInvulnerable(true);
+				
+				p.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
+				
+				BukkitRunnable task = new BukkitRunnable() {
+					@Override
+					public void run() {
+						((LivingEntity)entity).setHealth(0);
+					}
+				};
+				
+				task.runTaskLater(ACD.getInstance(), 20);
+			} else {
+				ACD.logPlayers(p.getName() + " would have been kicked for cheating.");
 			}
-		};
-		
-		task.runTaskLater(ACD.getInstance(), 20);
+		} else {
+			playerData.kicks = 0;
+			if(config.getBoolean("main.ban-player")) {
+				ACD.logPlayers(p.getName() + " was banned for cheating (" + getName() + ")");
+				
+				p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
+				Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);
+				entity.setInvulnerable(true);
+				
+				String banMessage = ACD.getInstance().getConfig().getString("main.ban-command");
+				
+				banMessage = banMessage.replace("[PREFIX]", ACD.prefix);
+				banMessage = banMessage.replace("[NEWLINE]", "\n");
+				banMessage = banMessage.replace("[NEWLINE]", "\n");
+				banMessage = banMessage.replace("[PLAYER]", p.getName());
+				ACD.getInstance().getServer().dispatchCommand(ACD.getInstance().getServer().getConsoleSender(), ChatColor.translateAlternateColorCodes('&', banMessage));
+				p.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
+				
+				BukkitRunnable task = new BukkitRunnable() {
+					@Override
+					public void run() {
+						((LivingEntity)entity).setHealth(0);
+					}
+				};
+				
+				task.runTaskLater(ACD.getInstance(), 20);
+			} else {
+				ACD.logPlayers(p.getName() + " would have been banned for cheating.");
+			}
+		}
 		
 	}
 

@@ -1,5 +1,9 @@
 package me.omgpandayt.acd;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,6 +17,7 @@ import me.omgpandayt.acd.checks.*;
 
 import me.omgpandayt.acd.checks.combat.criticals.*;
 import me.omgpandayt.acd.checks.combat.reach.*;
+import me.omgpandayt.acd.checks.combat.killaura.*;
 
 import me.omgpandayt.acd.checks.movement.elytrafly.*;
 import me.omgpandayt.acd.checks.movement.fly.*;
@@ -35,7 +40,7 @@ public class ACD extends JavaPlugin {
 	private static ACD instance; // The plugins instance (Used for finding things in the plugin not static)
 	
 	public static String prefix = "&7[&cACD&7]";
-	public static String version = "1.3.3-BETA";
+	public static String version = "";
 
 	public String 
 	
@@ -76,8 +81,9 @@ public class ACD extends JavaPlugin {
         //new Metrics(this, pluginId);
 		// -BROKEN-
         
-        
 		instance = this;  // Creating our instance
+		
+		version = getDescription().getVersion();
 		
 		RegisterListeners.register(instance);
 		
@@ -99,7 +105,10 @@ public class ACD extends JavaPlugin {
 		
 		new CriticalsA();
 		
+		new KillAuraA();
+		
 		new NoSlowdownA();
+		new NoSlowdownB();
 		
 		new JesusA();
 		new JesusB();
@@ -116,9 +125,24 @@ public class ACD extends JavaPlugin {
 		
 		new FastPlaceA();
 		
+		
+		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			PlayerDataManager.createPlayer(p);
 			PlayerDataManager.getPlayer(p).ticksLived = 170;
+		}
+		try {
+			URL url = new URL("https://pastebin.com/raw/Zh3qqGri");
+		    BufferedReader in = new BufferedReader(
+    	    new InputStreamReader(url.openStream()));
+		    
+		    String inputLine;
+		    while ((inputLine = in.readLine()) != null)
+		    	if(!inputLine.equalsIgnoreCase(ACD.version))
+		    		ACD.logPlayers("Hey! You are running ACD " + ACD.version + ", the latest is currently ACD " + inputLine + "! Download latest at https://www.spigotmc.org/resources/axolotl-cheat-detector.94494/");
+		    in.close();
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		
 		for(Object e : CheckManager.getRegisteredChecks()) {
