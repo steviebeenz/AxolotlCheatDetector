@@ -1,5 +1,7 @@
 main:
    kick-message: '[PREFIX][NEWLINE]Suspicious activity'
+   kicks-to-ban: 3
+   ban-command: 'minecraft:ban [PLAYER] [PREFIX][NEWLINE]You were caught cheating!'
    limiter-removal-rate: 1
    flag-removal-rate: 30
    join-bypass-ticks: 170
@@ -52,7 +54,7 @@ checks:
       flags-to-kick: 8
     b:
       enabled: true
-      flags-to-kick: 8
+      flags-to-kick: 1
   noslowdown:
     a:
       enabled: true
@@ -91,6 +93,10 @@ checks:
       enabled: true
       limiter: 5
       flags-to-kick: 3
+    c:
+      enabled: true
+      limiter: 3
+      flags-to-kick: 5
   elytrafly:
     a:
       enabled: true

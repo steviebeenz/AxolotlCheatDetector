@@ -50,4 +50,41 @@ public class PlayerUtil {
 		return false;
 	}
 
+	public static boolean isAboveSlime(Location location) {
+		for(Block b : BlockUtils.getBlocksBelow(location)) {
+			if(b.getType() == Material.SLIME_BLOCK) {
+				return true;
+			} else {
+				for(int i=0;i<10;i++) {
+					if(b.getLocation().clone().add(0, -i, 0).getBlock().getType() == Material.SLIME_BLOCK) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @deprecated Goes down till it finds slime
+	 * 
+	 */
+	
+	@Deprecated
+	public static boolean isAboveSlimeUnsafe(Location location) {
+		for(Block b : BlockUtils.getBlocksBelow(location)) {
+			if(b.getType() == Material.SLIME_BLOCK) {
+				return true;
+			} else {
+				for(int i=0;i<location.getY();i++) {
+					if(b.getLocation().clone().add(0, -i, 0).getBlock().getType() == Material.SLIME_BLOCK) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 }

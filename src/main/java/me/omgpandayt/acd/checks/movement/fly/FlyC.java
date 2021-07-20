@@ -41,6 +41,7 @@ public class FlyC extends Check {
 				&& !p.isFlying()
 				&& !dontFlag
 				&& PlayerUtil.isValid(p)
+				&& !PlayerUtil.isAboveSlime(p.getLocation())
 		) {
 			playerData.flyCLimiter++;
 			if(playerData.flyCLimiter >= config.getDouble(path + "limiter")) {

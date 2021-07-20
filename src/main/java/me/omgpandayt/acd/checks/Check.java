@@ -82,9 +82,9 @@ public class Check {
     	
     }
 
-	public void punish(Player p, String check) {
+	public void punish(Player p) {
 		
-		ACD.logPlayers(p.getName() + " was kicked for cheating (" + check + ")");
+		ACD.logPlayers(p.getName() + " was kicked for cheating (" + getName() + ")");
 		
 		p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
 		Entity entity = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);

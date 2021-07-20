@@ -12,15 +12,16 @@ import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
 
-public class GroundSpoofB extends Check {
+public class GroundSpoofC extends Check {
 
-	public GroundSpoofB() {
-		super("GroundSpoofB", false);
+	public GroundSpoofC() {
+		super("GroundSpoofC", false);
 	}
 	
-	private String path = "checks.groundspoof.b.";
+	private String path = "checks.groundspoof.c.";
 	
-	@SuppressWarnings("deprecation")
+	private double notFallingVY = -0.07544406518948656;
+	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
 		
@@ -38,11 +39,11 @@ public class GroundSpoofB extends Check {
 			}
 		}
 		
-		if(playerData.lastPacketFD > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !dontFlag && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation())) {
-			playerData.groundSpoofBLimiter++;
-			if(playerData.groundSpoofBLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "GroundSpoof (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
-				playerData.groundSpoofBLimiter = 0;
+		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !dontFlag && correctFall(p) && p.getVelocity().getY() < 0) {
+			playerData.groundSpoofCLimiter++;
+			if(playerData.groundSpoofCLimiter >= config.getDouble(path + "limiter")) {
+				flag(p, "GroundSpoof (C)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				playerData.groundSpoofCLimiter = 0;
 				if(config.getBoolean("main.cancel-event")) {
 					double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
 					p.setFallDistance((float) (playerData.lastPacketFD + deltaY));
@@ -51,9 +52,10 @@ public class GroundSpoofB extends Check {
 			}
 		}
 		
-		playerData.lastPacketFD = (float) playerData.realisticFD;
-		playerData.lastPacketHP = (float) p.getHealth();
-		
+	}
+	
+	public boolean correctFall(Player p) {
+		return p.getVelocity().getY() != notFallingVY && !PlayerUtil.isAboveSlime(p.getLocation());
 	}
 	
 }

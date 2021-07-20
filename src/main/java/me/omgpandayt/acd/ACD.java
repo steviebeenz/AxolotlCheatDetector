@@ -22,12 +22,12 @@ import me.omgpandayt.acd.checks.player.groundspoof.*;
 import me.omgpandayt.acd.checks.player.invmove.*;
 import me.omgpandayt.acd.checks.player.jesus.*;
 import me.omgpandayt.acd.checks.player.noslowdown.*;
+
 import me.omgpandayt.acd.checks.world.fastplace.*;
 import me.omgpandayt.acd.checks.world.impossibleactions.*;
 
 import me.omgpandayt.acd.listeners.RegisterListeners;
 import me.omgpandayt.acd.util.PlayerUtil;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
@@ -35,17 +35,18 @@ public class ACD extends JavaPlugin {
 	private static ACD instance; // The plugins instance (Used for finding things in the plugin not static)
 	
 	public static String prefix = "&7[&cACD&7]";
+	public static String version = "1.3.3-BETA";
 
 	public String 
 	
 					startupMessage = "&cPreventing your baby axolotls from cheating!",
 					turnoffMessage = "&cNo longer preventing your baby axolotls from cheating!";
 	
-	public static void sendMessage(CommandSender sender, String message) {
+	public static void sendMessage(CommandSender sender, Object message) {
 		if(sender instanceof Player) {
 			((Player)sender).sendMessage(ChatColor.translateAlternateColorCodes('&', ACD.prefix + " " + message));
 		} else {
-			ACD.log(ChatColor.translateAlternateColorCodes('&', message));
+			ACD.log(ChatColor.translateAlternateColorCodes('&', message+""));
 		}
 	}
 	
@@ -69,14 +70,17 @@ public class ACD extends JavaPlugin {
 		this.saveDefaultConfig();
         config.options().copyDefaults(true);
         saveConfig();
-		
-		//PacketEvents.get().init();
-		
+        
+        //bStats
+        //int pluginId = 12114;
+        //new Metrics(this, pluginId);
+		// -BROKEN-
+        
+        
 		instance = this;  // Creating our instance
 		
 		RegisterListeners.register(instance);
 		
-		//PacketEvents.get().registerListener(new ACD());
 		
 		
 		new SpeedA();
@@ -84,6 +88,7 @@ public class ACD extends JavaPlugin {
 		
 		new GroundSpoofA();
 		new GroundSpoofB();
+		new GroundSpoofC();
 		
 		new FlyA();
 		new FlyB();
@@ -164,6 +169,9 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.groundSpoofBLimiter > 0) {
                     		playerData.groundSpoofBLimiter--;
+                    	}
+                    	if(playerData.groundSpoofCLimiter > 0) {
+                    		playerData.groundSpoofCLimiter--;
                     	}
                     } else if (playerData.ticksLived % config.getDouble("checks.fastplace.a.place-removal-rate-ticks") == 0) {
                     	if(playerData.placedBlocks > 0) {

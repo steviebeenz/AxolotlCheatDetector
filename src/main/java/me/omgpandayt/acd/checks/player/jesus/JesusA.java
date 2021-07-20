@@ -46,6 +46,14 @@ public class JesusA extends Check {
 		for(Entity entity : p.getNearbyEntities(nbr, nbr, nbr)) {
 			if(entity instanceof Boat) {
 				dontFlag = true;
+				break;
+			}
+		}
+		
+		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0,1,0))) {
+			if(b.getType() != Material.AIR) {
+				dontFlag = true;
+				break;
 			}
 		}
 		

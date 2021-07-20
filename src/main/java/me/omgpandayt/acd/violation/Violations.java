@@ -36,7 +36,7 @@ public class Violations {
         }
         violations.put(p.getUniqueId(), vl);
         if(getViolations(check, p) >= check.flagsToKick){
-            check.punish(p, check.getName());
+            check.punish(p);
         }
         
         BukkitRunnable task = new BukkitRunnable() {
