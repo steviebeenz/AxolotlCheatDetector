@@ -51,7 +51,8 @@ public class PlayerData {
 			   groundSpoofBLimiter = 0,
 			   groundSpoofCLimiter = 0,
 			   ticksSinceHit = 250000000,
-			   placedBlocks = 0;
+			   placedBlocks = 0,
+			   kicks = 0;
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,
 				 realisticFD = 0;
