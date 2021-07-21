@@ -121,3 +121,9 @@ checks:
     a:
       flags-to-kick: 5
       enabled: true
+  killaura:
+    a:
+      enabled: true
+      flags-to-kick: 5
+      ice-increase: 0.11
+      max-speed: 0.26
