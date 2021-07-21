@@ -1,84 +1,48 @@
 package me.omgpandayt.acd.checks;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 
+@Setter
+@Getter
 public class PlayerData {
 
-	public boolean isOnGround = true,
-				   lastOnGround = true,
-				   lastLastOnGround = true,
-				   invOpen = false;
-	public double dist = 0,
-			
-			lastPacketY = -1,
-			lastLastPacketY = -1;
-	
-	public boolean isOnGround() {
-		return isOnGround;
-	}
+    private boolean isOnGround = true;
+    private boolean lastOnGround = true;
+    private boolean lastLastOnGround = true;
+    private boolean invOpen = false;
+    private double dist = 0;
 
-	public void setOnGround(boolean isOnGround) {
-		this.isOnGround = isOnGround;
-	}
+    private double lastPacketY = -1;
+    private double lastLastPacketY = -1;
+    private Player player;
+    private boolean invMoveWaitTick = false;
+    private int flyALimiter = 0;
+    private int flyBLimiter = 0;
+    private int flyCLimiter = 0;
+    private int flyDLimiter = 0;
+    private int ticksLived = 0;
+    private int jesusBLimiter = 0;
+    private int jesusCLimiter = 0;
+    private int jesusDLimiter = 0;
+    private int impactALimiter = 0;
+    private int groundSpoofBLimiter = 0;
+    private int groundSpoofCLimiter = 0;
+    private int ticksSinceHit = 250000000;
+    private int placedBlocks = 0;
+    private int kicks = 0;
+    private float lastPacketFD = 0;
+    private float lastPacketHP = 0;
+    private float realisticFD = 0;
+    private boolean lastPacketNearBoat = false;
+    private int ticksSinceRocket = 0;
+    private boolean alert;
 
-	public boolean isLastOnGround() {
-		return lastOnGround;
-	}
+    public PlayerData(Player p) {
+        this.player = p;
+        alert = p.hasPermission("acd.notify");
+    }
 
-	public void setLastOnGround(boolean lastOnGround) {
-		this.lastOnGround = lastOnGround;
-	}
 
-	public boolean isLastLastOnGround() {
-		return lastLastOnGround;
-	}
-
-	public void setLastLastOnGround(boolean lastLastOnGround) {
-		this.lastLastOnGround = lastLastOnGround;
-	}
-
-	public Player p;
-	public boolean invMoveWaitTick = false;
-	public int flyALimiter = 0,
-			   flyBLimiter = 0,
-			   flyCLimiter = 0,
-			   flyDLimiter = 0,
-			   ticksLived = 0,
-			   jesusBLimiter = 0,
-			   jesusCLimiter = 0,
-			   jesusDLimiter = 0,
-			   impactALimiter = 0,
-			   groundSpoofBLimiter = 0,
-			   groundSpoofCLimiter = 0,
-			   ticksSinceHit = 250000000,
-			   placedBlocks = 0,
-			   kicks = 0;
-	public float lastPacketFD = 0,
-				 lastPacketHP = 0,
-				 realisticFD = 0;
-	public boolean lastPacketNearBoat = false;
-	public int ticksSinceRocket = 0;
-	public boolean alerts;
-	
-	public PlayerData(Player p) {
-		this.p = p;
-		alerts = p.hasPermission("acd.notify");
-	}
-
-	public Player getPlayer() {
-		return p;
-	}
-
-	public double getLastDist() {
-		return dist;
-	}
-	
-	public void addTicksSinceHit() {
-		ticksSinceHit++;
-	}
-	
-	public void setLastDist(double dist) {
-		this.dist = dist;
-	}
-	
 }
