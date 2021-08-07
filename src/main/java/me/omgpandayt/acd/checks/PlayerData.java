@@ -38,15 +38,17 @@ public class PlayerData {
 	}
 
 	public Player p;
-	public boolean invMoveWaitTick = false;
 	public int flyALimiter = 0,
 			   flyBLimiter = 0,
 			   flyCLimiter = 0,
 			   flyDLimiter = 0,
+			   flyFLimiter = 0,
 			   ticksLived = 0,
+			   speedCLimiter = 0,
 			   jesusBLimiter = 0,
 			   jesusCLimiter = 0,
 			   jesusDLimiter = 0,
+			   jesusELimiter = 0,
 			   impactALimiter = 0,
 			   groundSpoofBLimiter = 0,
 			   groundSpoofCLimiter = 0,
@@ -56,9 +58,9 @@ public class PlayerData {
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,
 				 realisticFD = 0;
-	public boolean lastPacketNearBoat = false;
+	public boolean lastPacketNearBoat = false, alerts, invMoveWaitTick = false;
 	public int ticksSinceRocket = 0;
-	public boolean alerts;
+	public double lastDeltaY;
 	
 	public PlayerData(Player p) {
 		this.p = p;

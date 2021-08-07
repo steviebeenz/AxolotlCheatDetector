@@ -11,16 +11,28 @@ main:
 checks:
   speed:
     a:
-      enabled: false
+      enabled: true
       ice-increase: 0.3
       maximum-speed: 0.95
       flags-to-kick: 5
     b:
-      enabled: false
+      enabled: true
       ice-increase: 0.11
       slime-increase: 0.04
       too-little-friction: 0.51
       flags-to-kick: 6
+    c:
+      enabled: true
+      too-fast:
+         x: 0.238
+         z: 0.254
+      ice-increase: 0.11
+      slime-increase: 0.04
+      limiter: 3
+      flags-to-kick: 5
+      disable:
+         min: 0.12
+         max: 0.125
   fly:
     a:
       enabled: true
@@ -43,6 +55,20 @@ checks:
       smallest-descend: 0.3
       fall-distance: 0.4
       flags-to-kick: 12
+    e:
+      enabled: true
+      velocity: -1.3
+      flags-to-kick: 5
+      dist: 0.27
+    f:
+      enabled: true
+      flags-to-kick: 5
+      limiter: 3
+      descend-y: 0.124
+    g:
+      enabled: true
+      flags-to-kick: 7
+      velocity-max: 0.419
   fastplace:
     a:
       enabled: true
@@ -83,6 +109,9 @@ checks:
       enabled: true
       max-ascend: 0.1
       flags-to-kick: 5
+    e:
+      enabled: true
+      flags-to-kick: 8
   invmove:
     a:
       enabled: true
@@ -121,9 +150,3 @@ checks:
     a:
       flags-to-kick: 5
       enabled: true
-  killaura:
-    a:
-      enabled: true
-      flags-to-kick: 5
-      ice-increase: 0.11
-      max-speed: 0.26

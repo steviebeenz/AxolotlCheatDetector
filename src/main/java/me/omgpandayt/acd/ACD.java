@@ -17,7 +17,6 @@ import me.omgpandayt.acd.checks.*;
 
 import me.omgpandayt.acd.checks.combat.criticals.*;
 import me.omgpandayt.acd.checks.combat.reach.*;
-import me.omgpandayt.acd.checks.combat.killaura.*;
 
 import me.omgpandayt.acd.checks.movement.elytrafly.*;
 import me.omgpandayt.acd.checks.movement.fly.*;
@@ -88,9 +87,9 @@ public class ACD extends JavaPlugin {
 		RegisterListeners.register(instance);
 		
 		
-		
 		new SpeedA();
 		new SpeedB();
+		new SpeedC();
 		
 		new GroundSpoofA();
 		new GroundSpoofB();
@@ -100,12 +99,13 @@ public class ACD extends JavaPlugin {
 		new FlyB();
 		new FlyC();
 		new FlyD();
+		new FlyE();
+		new FlyF();
+		new FlyG();
 		
 		new ReachA();
 		
 		new CriticalsA();
-		
-		new KillAuraA();
 		
 		new NoSlowdownA();
 		new NoSlowdownB();
@@ -114,6 +114,7 @@ public class ACD extends JavaPlugin {
 		new JesusB();
 		new JesusC();
 		new JesusD();
+		new JesusE();
 		
 		new ElytraFlyA();
 		new ElytraFlyB();
@@ -139,7 +140,7 @@ public class ACD extends JavaPlugin {
 		    String inputLine;
 		    while ((inputLine = in.readLine()) != null)
 		    	if(!inputLine.equalsIgnoreCase(ACD.version))
-		    		ACD.logPlayers("Hey! You are running ACD " + ACD.version + ", the latest is currently ACD " + inputLine + "! Download latest at https://www.spigotmc.org/resources/axolotl-cheat-detector.94494/");
+		    		ACD.logPlayers("Hey! You are running ACD " + ACD.version + ", the latest is currently ACD " + inputLine + "! Download latest from Jxy#0001 on discord! (SPIGOT REMOVED)");
 		    in.close();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -160,13 +161,15 @@ public class ACD extends JavaPlugin {
                     playerData.addTicksSinceHit();
                     playerData.ticksLived++;
                     
-                    double deltaY = Math.abs(playerData.lastPacketY - player.getLocation().getY());
+                    double deltaY = playerData.lastPacketY - player.getLocation().getY();
                     
-                    if(!PlayerUtil.isOnGround(player.getLocation())) playerData.realisticFD += deltaY;
+                    if(!PlayerUtil.isOnGround(player.getLocation()) && player.getLocation().getY() < playerData.lastPacketY) playerData.realisticFD += deltaY;
                     else playerData.realisticFD = 0;
                     
-                    
                     if(playerData.ticksLived % (config.getDouble("main.limiter-removal-rate") * 20) == 0) {
+                    	if(playerData.jesusELimiter > 0) {
+                    		playerData.jesusELimiter--;
+                    	}
                     	if(playerData.flyALimiter > 0) {
                     		playerData.flyALimiter--;
                     	}
@@ -196,6 +199,12 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.groundSpoofCLimiter > 0) {
                     		playerData.groundSpoofCLimiter--;
+                    	}
+                    	if(playerData.speedCLimiter > 0) {
+                    		playerData.speedCLimiter--;
+                    	}
+                    	if(playerData.flyFLimiter > 0) {
+                    		playerData.flyFLimiter--;
                     	}
                     } else if (playerData.ticksLived % config.getDouble("checks.fastplace.a.place-removal-rate-ticks") == 0) {
                     	if(playerData.placedBlocks > 0) {

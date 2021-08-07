@@ -17,8 +17,6 @@ public class FlyC extends Check {
 		super("FlyC", false);
 	}
 	
-	private String path = "checks.fly.c.";
-	
 	@Override
 	public void onTick(Player p) {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);

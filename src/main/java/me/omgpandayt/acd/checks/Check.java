@@ -3,6 +3,7 @@ package me.omgpandayt.acd.checks;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -65,6 +66,10 @@ public class Check {
     public void lagBack(PlayerMoveEvent e) {
     	if(config.getBoolean("main.cancel-event")) 
     		e.getPlayer().teleport(e.getFrom());
+    }
+    public void lagBack(Location e, Player p) {
+    	if(config.getBoolean("main.cancel-event")) 
+    		p.teleport(e);
     }
     public void cancelDamage(EntityDamageByEntityEvent e) {
     	if(config.getBoolean("main.cancel-event")) 

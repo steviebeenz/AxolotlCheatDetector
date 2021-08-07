@@ -33,6 +33,12 @@ public class JesusC extends Check {
 			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.WATER) {
 				dontFlag = true;
 				break;
+			} else if (b.getLocation().clone().add(0, 2, 0).getBlock().getType() != Material.AIR) {
+				dontFlag = true;
+				break;
+			} else if (b.getLocation().clone().add(0, 3, 0).getBlock().getType() != Material.AIR) {
+				dontFlag = true;
+				break;
 			}
 		}
 		

@@ -39,7 +39,11 @@ public class BlockUtils {
 	}
 
 	public static boolean invalidPlace(Location add) {
-		return add.getBlock().getType() == Material.WATER || add.getBlock().getType() == Material.LAVA || add.getBlock().getType() == Material.AIR;
+		return isLiquidBlock(add.getBlock()) || add.getBlock().getType() == Material.AIR;
 	}
+
+	public static boolean isLiquidBlock(Block block) {
+		return block.getType() == Material.WATER || block.getType() == Material.LAVA;
+	} 
 	
 }
