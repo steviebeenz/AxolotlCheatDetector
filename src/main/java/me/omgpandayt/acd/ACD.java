@@ -133,7 +133,7 @@ public class ACD extends JavaPlugin {
 		
 		new InvalidAttackA();
 		new InvalidAttackB();
-		
+		new InvalidAttackC();
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			PlayerDataManager.createPlayer(p);

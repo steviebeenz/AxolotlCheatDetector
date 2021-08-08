@@ -1,5 +1,6 @@
 package me.omgpandayt.acd.checks.player.jesus;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -22,15 +23,11 @@ public class JesusE extends Check {
 		
 		Player p = e.getPlayer();
 		
-		boolean dontFlag = false;
-		
 		for(Block b : BlockUtils.getBlocksBelow(e.getTo())) {
-			if (!b.isLiquid()) dontFlag = true;
+			if (!b.isLiquid() || b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) return;
 		}
-		if(!dontFlag) {
-			for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
-				if (!b.isLiquid()) dontFlag = true;
-			}
+		for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
+			if (!b.isLiquid() || b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) return;
 		}
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
