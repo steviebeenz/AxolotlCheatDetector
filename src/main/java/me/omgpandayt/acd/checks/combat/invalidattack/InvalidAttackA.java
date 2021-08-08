@@ -21,9 +21,11 @@ public class InvalidAttackA extends Check {
 		Player p = (Player) e.getDamager();
 		
 		BlockIterator blocksToAdd = new BlockIterator(p.getEyeLocation(), 0.1, (int) (Math.floor(e.getDamager().getLocation().distance(e.getEntity().getLocation()) * 10)));
-		double expand = 0.0D;
+		double times = 0;
+		Object expand = 0.0D;
 		
 		while(blocksToAdd.hasNext()) {
+			times++;
 			Location loc = blocksToAdd.next().getLocation();
 			
 			double dis = loc.distance(e.getEntity().getLocation());
@@ -31,13 +33,24 @@ public class InvalidAttackA extends Check {
 			if(dis < config.getDouble(path + "hitbox")) {
 				return;
 			} else {
-				if(expand == 0) expand = dis;
+				if((double) expand == 0) expand = dis;
+			}
+			
+			if(loc.getBlock().getType().isSolid() && times < 20) {
+				expand = "BLOCK_IN_WAY";
+				break;
 			}
 		}
 		
-		expand = ((Math.floor((double)expand * 1000))/1000);
+		Object expandNum = 0;
 		
-		flag(p, "InvalidAttack (A)", "(VL" + (Violations.getViolations(this, p)+1) + ") (EXP " + expand + ")");
+		if(expand instanceof Double) {
+			expandNum = ((Math.floor((double)expand * 1000))/1000);
+		} else {
+			expandNum = expand;
+		}
+		
+		flag(p, "InvalidAttack (A)", "(VL" + (Violations.getViolations(this, p)+1) + ") (EXP " + expandNum + ")");
 		cancelDamage(e);
 		
 	}
