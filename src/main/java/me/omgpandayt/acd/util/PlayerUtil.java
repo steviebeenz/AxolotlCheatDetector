@@ -27,7 +27,7 @@ public class PlayerUtil {
             for (int y = -radiusY; y < radiusY; y++) {
                 for (int z = -radius; z < radius; z++) {
                     Block block = loc.getWorld().getBlockAt(loc.clone().add(x, y, z));
-                    if (block.getType().isSolid()) {
+                    if (block.getType().isSolid() || block.getLocation().clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
                         return true;
                     }
                 }
@@ -41,7 +41,7 @@ public class PlayerUtil {
             for (int y = -radiusY; y < radiusY; y++) {
                 for (int z = -radius; z < radius; z++) {
                     Block block = loc.getWorld().getBlockAt(loc.clone().add(x, y, z));
-                    if (block.getType().isSolid()) {
+                    if (block.getType().isSolid() || block.getLocation().clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
                         return true;
                     }
                 }
@@ -59,6 +59,19 @@ public class PlayerUtil {
 			yHeight--;
 			loc.setY(yHeight);
 			fallHeight++;
+		}
+		return fallHeight;
+	}
+	
+	public static double getFallHeightDouble(Player p) {
+		double yHeight = Math.floor(p.getPlayer().getLocation().getY());
+		Location loc = p.getLocation().clone();
+		loc.setY(yHeight);
+		double fallHeight = 0;
+		while(loc.getBlock().getType() == Material.AIR) {
+			yHeight-=0.1;
+			loc.setY(yHeight);
+			fallHeight+=0.1;
 		}
 		return fallHeight;
 	}
@@ -105,7 +118,7 @@ public class PlayerUtil {
 	
 	@Deprecated
 	public static boolean isAboveSlimeUnsafe(Location location) {
-		for(Block b : BlockUtils.getBlocksBelow(location)) {
+		for(Block b : BlockUtils.getBlocksBelowCustom(location, 1)) {
 			if(b.getType() == Material.SLIME_BLOCK) {
 				return true;
 			} else {
@@ -126,6 +139,15 @@ public class PlayerUtil {
 			}
 		}
 		return true;
+	}
+
+	public static boolean isOnClimbable(Location from) {
+		for(Block b : BlockUtils.getBlocksBelow(from)) {
+			if(BlockUtils.isClimbable(b) || BlockUtils.isClimbable(b.getLocation().clone().add(0, 1, 0).getBlock())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

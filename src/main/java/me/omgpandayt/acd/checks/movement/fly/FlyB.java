@@ -28,27 +28,43 @@ public class FlyB extends Check {
 		double y = p.getLocation().getY();
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
-		playerData.lastLastPacketY = playerData.lastPacketY;
-		playerData.lastPacketY = y;
 		
 		double lastY = playerData.lastPacketY,
-			   lastLastY = playerData.lastLastPacketY;
+			   lastLastY = playerData.lastLastPacketY,
+			   fallHeight = PlayerUtil.getFallHeightDouble(p),
+			   lastFallHeight = playerData.lastFallHeight,
+			   lastLastFallHeight = playerData.lastLastFallHeight;
+
+		playerData.lastLastPacketY = playerData.lastPacketY;
+		playerData.lastPacketY = y;
+		playerData.lastLastFallHeight = playerData.lastFallHeight;
+		playerData.lastFallHeight = fallHeight;
 		
-		if(playerData.lastLastPacketY != -1 && playerData.lastPacketY != -1) {
+		
+		double fhm = config.getDouble(path + "fall-height");
+		
+		if(fallHeight < fhm
+				|| lastFallHeight < fhm
+				|| lastLastFallHeight < fhm
+		)return;
+	
+		
+		if(playerData.lastLastPacketY != -1 && playerData.lastPacketY != -1 && lastFallHeight != -1 && lastLastFallHeight != -1) {
 			
-			
-			boolean dontFlag = false;
+			if(playerData.isOnGround ||
+					playerData.lastOnGround
+			)return;
 			
 			if(PlayerUtil.isAboveSlime(p.getLocation()))
-				dontFlag = true;
+				return;
 			
 			for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
 				if(entity instanceof Boat) {
-					dontFlag = true;
+					return;
 				}
 			}
 			
-			if(y == lastY && lastY > lastLastY && p.getVelocity().getY() < -0.1 && !dontFlag && PlayerUtil.getFallHeight(p) > 1 && !PlayerUtil.isOnGround(p.getLocation())&& PlayerUtil.aboveAreAir(p)) {
+			if(y > lastY && lastY > lastLastY && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
 				playerData.flyBLimiter += 1;
 				
 				if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
@@ -56,14 +72,14 @@ public class FlyB extends Check {
 					playerData.flyBLimiter = 0;
 					
 					Location loc = e.getFrom().clone();
-					loc.setY(playerData.lastLastPacketY);
+					for(int i=0;i<3;i++)
+						loc.setY((Math.floor(y) + 1) - PlayerUtil.getFallHeight(p));
 					
 					if(config.getBoolean("main.cancel-event"))
 						p.teleport(loc);
 				}
 			}
 		}
-		
 	}
 	
 }

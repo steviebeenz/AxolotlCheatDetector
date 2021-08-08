@@ -26,8 +26,13 @@ public class FlyC extends Check {
 		
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
 			if(b.getType() != Material.AIR) {
-				dontFlag = true;
-				break;
+				return;
+			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) {
+				return;
+			} else if (b.getLocation().clone().add(0, 0.5, 0).getBlock().getType() != Material.AIR) {
+				return;
+			} else if (b.getLocation().clone().add(0, -0.5, 0).getBlock().getType() != Material.AIR) {
+				return;
 			}
 		}
 		

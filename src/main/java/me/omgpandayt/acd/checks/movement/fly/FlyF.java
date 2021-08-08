@@ -35,6 +35,8 @@ public class FlyF extends Check implements Listener {
         if(!PlayerUtil.isOnGround(e.getTo())) return;
         if(PlayerUtil.isAboveLiquids(e.getFrom())) return;
         if(PlayerUtil.isAboveLiquids(e.getTo())) return;
+        if(PlayerUtil.isOnClimbable(e.getTo())) return;
+        if(PlayerUtil.isOnClimbable(e.getFrom())) return;
         
         if( toY < fromY){
             double deltaY = toY - fromY;

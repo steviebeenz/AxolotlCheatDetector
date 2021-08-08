@@ -24,6 +24,8 @@ public class FlyG extends Check implements Listener {
         double deltaY = to.getY() - from.getY();
         double yVel = deltaY - p.getVelocity().getY() ;
         
+        if(to.getY() < 0)return;
+        
         if(p.isFlying()
         		|| (PlayerUtil.isOnGround2(to)
         		&& PlayerUtil.isOnGround(to)

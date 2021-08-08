@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
+import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class CriticalsA extends Check {
@@ -30,10 +31,9 @@ public class CriticalsA extends Check {
 	}
 
 	private boolean isCritical(Player player) {
-		return player.getFallDistance() > 0.0f && !PlayerUtil.isOnGround(player.getLocation()) && !player.isInsideVehicle()
+		return player.getFallDistance() > 0 && !PlayerUtil.isOnGround(player.getLocation()) && !player.isInsideVehicle()
 				&& !player.hasPotionEffect(PotionEffectType.BLINDNESS)
-				&& player.getLocation().clone().add(0, -1, 0).getBlock().getType() != Material.WATER
-				&& player.getLocation().clone().add(0, -1, 0).getBlock().getType() != Material.LAVA
+				&& !BlockUtils.isLiquidBlock(player.getLocation().clone().add(0, -1, 0).getBlock())
 				&& player.getEyeLocation().getBlock().getType() != Material.LADDER;
 	}
 	

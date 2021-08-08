@@ -1,41 +1,23 @@
 package me.omgpandayt.acd.checks;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
+
+import me.omgpandayt.acd.util.ACDAttack;
 
 public class PlayerData {
 
 	public boolean isOnGround = true,
 				   lastOnGround = true,
 				   lastLastOnGround = true,
+				   lastLastLastOnGround = true,
+				   lastLastLastLastOnGround = true,
 				   invOpen = false;
 	public double dist = 0,
 			
 			lastPacketY = -1,
 			lastLastPacketY = -1;
-	
-	public boolean isOnGround() {
-		return isOnGround;
-	}
-
-	public void setOnGround(boolean isOnGround) {
-		this.isOnGround = isOnGround;
-	}
-
-	public boolean isLastOnGround() {
-		return lastOnGround;
-	}
-
-	public void setLastOnGround(boolean lastOnGround) {
-		this.lastOnGround = lastOnGround;
-	}
-
-	public boolean isLastLastOnGround() {
-		return lastLastOnGround;
-	}
-
-	public void setLastLastOnGround(boolean lastLastOnGround) {
-		this.lastLastOnGround = lastLastOnGround;
-	}
 
 	public Player p;
 	public int flyALimiter = 0,
@@ -54,13 +36,15 @@ public class PlayerData {
 			   groundSpoofCLimiter = 0,
 			   ticksSinceHit = 250000000,
 			   placedBlocks = 0,
-			   kicks = 0;
+			   kicks = 0,
+			   attackTicks = 0;
+	public ArrayList<ACDAttack> attacks = new ArrayList<ACDAttack>();
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,
 				 realisticFD = 0;
 	public boolean lastPacketNearBoat = false, alerts, invMoveWaitTick = false;
 	public int ticksSinceRocket = 0;
-	public double lastDeltaY;
+	public double lastDeltaY, lastLastFallHeight = -1, lastFallHeight = -1;
 	
 	public PlayerData(Player p) {
 		this.p = p;
@@ -69,18 +53,6 @@ public class PlayerData {
 
 	public Player getPlayer() {
 		return p;
-	}
-
-	public double getLastDist() {
-		return dist;
-	}
-	
-	public void addTicksSinceHit() {
-		ticksSinceHit++;
-	}
-	
-	public void setLastDist(double dist) {
-		this.dist = dist;
 	}
 	
 }

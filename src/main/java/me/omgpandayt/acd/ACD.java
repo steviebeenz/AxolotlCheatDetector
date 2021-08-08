@@ -17,10 +17,12 @@ import me.omgpandayt.acd.checks.*;
 
 import me.omgpandayt.acd.checks.combat.criticals.*;
 import me.omgpandayt.acd.checks.combat.reach.*;
+import me.omgpandayt.acd.checks.combat.invalidattack.*;
 
 import me.omgpandayt.acd.checks.movement.elytrafly.*;
 import me.omgpandayt.acd.checks.movement.fly.*;
 import me.omgpandayt.acd.checks.movement.speed.*;
+import me.omgpandayt.acd.checks.movement.fastladder.*;
 
 import me.omgpandayt.acd.checks.player.groundspoof.*;
 import me.omgpandayt.acd.checks.player.invmove.*;
@@ -104,6 +106,7 @@ public class ACD extends JavaPlugin {
 		new FlyG();
 		
 		new ReachA();
+		new ReachB();
 		
 		new CriticalsA();
 		
@@ -124,8 +127,12 @@ public class ACD extends JavaPlugin {
 		new ImpossibleActionsA();
 		new ImpossibleActionsB();
 		
+		new FastLadderA();
+		
 		new FastPlaceA();
 		
+		new InvalidAttackA();
+		new InvalidAttackB();
 		
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
@@ -158,13 +165,20 @@ public class ACD extends JavaPlugin {
             public void run() {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                 	PlayerData playerData = PlayerDataManager.getPlayer(player);
-                    playerData.addTicksSinceHit();
+                    playerData.ticksSinceHit++;
                     playerData.ticksLived++;
+                    playerData.attackTicks++;
                     
                     double deltaY = playerData.lastPacketY - player.getLocation().getY();
                     
                     if(!PlayerUtil.isOnGround(player.getLocation()) && player.getLocation().getY() < playerData.lastPacketY) playerData.realisticFD += deltaY;
                     else playerData.realisticFD = 0;
+                    
+                    if(playerData.ticksLived % Math.floor(config.getDouble("checks.invalidattack.b.decrease-time") * 20) == 0) {
+                    	if(playerData.attacks.size() > 6) {
+                    		playerData.attacks.remove(playerData.attacks.size()-1);
+                    	}
+                    }
                     
                     if(playerData.ticksLived % (config.getDouble("main.limiter-removal-rate") * 20) == 0) {
                     	if(playerData.jesusELimiter > 0) {

@@ -34,7 +34,7 @@ public class SpeedC extends Check implements Listener {
 		
 		double y = p.getLocation().getYaw();
 		
-		if(playerData.isOnGround && !playerData.isLastOnGround())return;
+		if(playerData.isOnGround && !playerData.lastOnGround)return;
 		
 		double tooFastX = config.getDouble(path + "too-fast.x");
 		double tooFastZ = config.getDouble(path + "too-fast.z");

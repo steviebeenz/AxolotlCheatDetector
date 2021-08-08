@@ -16,8 +16,6 @@ public class FlyA extends Check {
 
 	public static final double STILL = -0.0784000015258789;
 	
-	private String path = "checks.fly.a.";
-	
 	public FlyA() {
 		super("FlyA", true);
 	}

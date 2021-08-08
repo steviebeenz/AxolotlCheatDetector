@@ -38,17 +38,17 @@ public class SpeedB extends Check implements Listener {
 		
 		if(playerData == null) return;
 		
-		double lastDist = 0;
+		double lastDist = playerData.dist;
 
 		float friction = 0.91F;
 		double shiftedLastDist = lastDist * friction;
 		double equalness = dist - shiftedLastDist;
 		double scaledEqualness = equalness;
 
-		playerData.setLastLastOnGround(playerData.lastOnGround);
-		playerData.setLastOnGround(playerData.isOnGround);
-		playerData.setOnGround(PlayerUtil.isOnGround(p.getLocation()));
-		playerData.setLastDist(dist);
+		playerData.lastLastOnGround = playerData.lastOnGround;
+		playerData.lastOnGround = playerData.isOnGround;
+		playerData.isOnGround = PlayerUtil.isOnGround(p.getLocation());
+		playerData.dist = dist;
 		
 		double tooFast = config.getDouble(path + "too-little-friction");
 		

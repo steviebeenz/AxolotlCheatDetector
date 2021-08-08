@@ -44,6 +44,8 @@ checks:
       descend: -0.1
       fall-height: 1
       flags-to-kick: 8
+      velocity: -0.0784000015258789
+      fall-height: 1.5
     c:
       enabled: true
       limiter: 3
@@ -83,6 +85,23 @@ checks:
     b:
       enabled: true
       flags-to-kick: 1
+  invalidattack:
+    a:
+      enabled: true
+      flags-to-kick: 4
+      hitbox: 1.8
+    b:
+      enabled: true
+      flags-to-kick: 4
+      attacks-size: 9
+      low-attack-time: 1
+      attack-low-to-flag: 8
+      decrease-time: 0.20
+  fastladder:
+    a:
+      enabled: true
+      flags-to-kick: 5
+      max-rise: 0.5322
   noslowdown:
     a:
       enabled: true
@@ -146,6 +165,11 @@ checks:
       max-reach: 4.4
       creative-increase: 2.6
       flags-to-kick: 8
+    b:
+      enabled: true
+      max-reach: 3.9
+      creative-increase: 2.2
+      flags-to-kick: 5
   criticals:
     a:
       flags-to-kick: 5

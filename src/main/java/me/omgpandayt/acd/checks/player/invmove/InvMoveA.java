@@ -1,6 +1,7 @@
 package me.omgpandayt.acd.checks.player.invmove;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.CommandBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -26,6 +27,7 @@ public class InvMoveA extends Check {
 	@Override
 	public void onInventoryClick(InventoryClickEvent e) {
 		if(PlayerDataManager.getPlayer((Player) e.getWhoClicked()) == null) return;
+		if(e.getWhoClicked().getTargetBlockExact(5) instanceof CommandBlock)return;
 		PlayerDataManager.getPlayer((Player)e.getWhoClicked()).invOpen = true;
 	}
 	
