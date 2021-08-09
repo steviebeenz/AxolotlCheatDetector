@@ -45,7 +45,7 @@ public class Violations {
             	removeViolation(check,p,1);
             }
         };
-        task.runTaskLater(ACD.getInstance(), (long) (20 * ACD.getInstance().getConfig().getDouble("main.flag-removal-rate")));
+        task.runTaskLater(ACD.getInstance(), (long) (20 * ACD.getInstance().getConfig().getDouble("main.punish.flag-removal-rate")));
     }
     
     public static Integer getViolations(Check check, Player p) {

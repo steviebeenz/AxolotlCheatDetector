@@ -92,6 +92,7 @@ public class ACD extends JavaPlugin {
 		new SpeedA();
 		new SpeedB();
 		new SpeedC();
+		new SpeedE();
 		
 		new GroundSpoofA();
 		new GroundSpoofB();
@@ -180,7 +181,7 @@ public class ACD extends JavaPlugin {
                     	}
                     }
                     
-                    if(playerData.ticksLived % (config.getDouble("main.limiter-removal-rate") * 20) == 0) {
+                    if(playerData.ticksLived % (config.getDouble("main.punish.limiter-removal-rate") * 20) == 0) {
                     	if(playerData.jesusELimiter > 0) {
                     		playerData.jesusELimiter--;
                     	}

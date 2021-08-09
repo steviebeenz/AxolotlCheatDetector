@@ -12,6 +12,18 @@ public class PlayerUtil {
 		double expand = 0.3;
 		for(double x=-expand;x<=expand;x+=expand) {
 			for(double z=-expand;z<=expand;z+=expand) {
+				if (loc.clone().add(x, -0.02, z).getBlock().getType() != Material.AIR && loc.clone().add(x, 0.5001, z).getBlock().getType() == Material.AIR) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isOnGround3(Location loc) {
+		double expand = 0.3;
+		for(double x=-expand;x<=expand;x+=expand) {
+			for(double z=-expand;z<=expand;z+=expand) {
 				if (loc.clone().add(x, -0.5001, z).getBlock().getType() != Material.AIR && loc.clone().add(x, 0.5001, z).getBlock().getType() == Material.AIR) {
 					return true;
 				}
@@ -80,10 +92,6 @@ public class PlayerUtil {
 		return !p.isFlying() && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
 	}
 
-	public static boolean isUsingItem(Player p) {
-		return p.getItemInUse() != null;
-	}
-
 	public static boolean isAboveLiquids(Location location) {
 		for(Block b : BlockUtils.getBlocksBelow(location)) {
 			
@@ -148,6 +156,10 @@ public class PlayerUtil {
 			}
 		}
 		return false;
+	}
+
+	public static boolean isUsingItem(Player p) {
+		return p.getItemInUse() != null;
 	}
 
 }

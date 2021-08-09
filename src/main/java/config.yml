@@ -1,13 +1,17 @@
 main:
-   kick-player: true
-   kick-message: '[PREFIX][NEWLINE]Suspicious activity'
-   ban-player: false
-   kicks-to-ban: 3
-   ban-command: 'minecraft:ban [PLAYER] [NEWLINE][PREFIX][NEWLINE]You were caught cheating!'
-   limiter-removal-rate: 1
-   flag-removal-rate: 30
-   join-bypass-ticks: 170
-   cancel-event: true
+   kick:
+      kick-player: true
+      kick-message: '[PREFIX][NEWLINE]Suspicious activity'
+   ban:
+      ban-player: false
+      kicks-to-ban: 3
+      ban-command: 'minecraft:ban [PLAYER] [NEWLINE][PREFIX][NEWLINE]You were caught cheating!'
+   punish:
+      limiter-removal-rate: 1
+      flag-removal-rate: 30
+      join-bypass-ticks: 170
+      cancel-event: true
+      axolotl-on-punish: true
 checks:
   speed:
     a:
@@ -17,9 +21,9 @@ checks:
       flags-to-kick: 5
     b:
       enabled: true
-      ice-increase: 0.11
-      slime-increase: 0.04
-      too-little-friction: 0.51
+      ice-increase: 0.00125
+      slime-increase: 0.004
+      too-little-friction: 0.07
       flags-to-kick: 6
     c:
       enabled: true
@@ -33,6 +37,12 @@ checks:
       disable:
          min: 0.12
          max: 0.125
+    e:
+      enabled: true
+      ice-increase: 0.0011
+      slime-increase: 0.004
+      too-little-friction: 0.05
+      flags-to-kick: 6
   fly:
     a:
       enabled: true

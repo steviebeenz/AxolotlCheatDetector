@@ -107,11 +107,15 @@ public class RegisterListeners implements Listener {
 	
 	@EventHandler
 	public void onUse(PlayerInteractEvent e) {
+		PlayerData playerData = PlayerDataManager.getPlayer(e.getPlayer());
+		if(playerData == null)return;
 		if(e.getAction() != Action.RIGHT_CLICK_AIR)return;
 		if(!e.getPlayer().isGliding()) return;
-		if(e.getItem().getType() != Material.FIREWORK_ROCKET) return;
+		if(e.getItem().getType() == Material.FIREWORK_ROCKET) {
 		
-		PlayerDataManager.getPlayer(e.getPlayer()).ticksSinceRocket = 0;
+			playerData.ticksSinceRocket = 0;
+		
+		}
 		
 	}
 	
@@ -146,7 +150,7 @@ public class RegisterListeners implements Listener {
 	public boolean bypass(Player p) {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return true;
-		return playerData.ticksLived <= ACD.getInstance().getConfig().getDouble("main.join-bypass-ticks") || p.hasPermission("acd.bypass");
+		return playerData.ticksLived <= ACD.getInstance().getConfig().getDouble("main.punish.join-bypass-ticks") || p.hasPermission("acd.bypass");
 	}
 	
 }

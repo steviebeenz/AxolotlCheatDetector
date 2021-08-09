@@ -66,7 +66,7 @@ public class BlockUtils {
 	}
 
 	public static boolean isClimbable(Block block) {
-		return block.getType() == Material.LADDER || block.getType() == Material.CAVE_VINES;
-	} 
+		return block.getType() == Material.LADDER || block.getType() == Material.WEEPING_VINES || block.getType() == Material.TWISTING_VINES || block.getType() == Material.CAVE_VINES;
+	}
 	
 }

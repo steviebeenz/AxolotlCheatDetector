@@ -8,4 +8,6 @@ public class ACDAttack {
 		this.attackTime = attackTime;
 	}
 	
+	// Used for InvalidAttackB (fast attack)
+	
 }
