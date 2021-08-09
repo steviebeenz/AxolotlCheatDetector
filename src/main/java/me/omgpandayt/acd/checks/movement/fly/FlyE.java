@@ -8,7 +8,6 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyE extends Check {
 
@@ -45,7 +44,7 @@ public class FlyE extends Check {
             		&& p.getVelocity().getY() < config.getDouble(path + "velocity")
             ) {
                 
-            	flag(p, "Fly (E)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+            	flag(p, "Fly (E)", "");
             	
             }
 

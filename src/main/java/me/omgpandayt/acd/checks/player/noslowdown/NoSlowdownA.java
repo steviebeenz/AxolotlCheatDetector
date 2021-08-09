@@ -10,7 +10,6 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class NoSlowdownA extends Check {
 
@@ -44,7 +43,7 @@ public class NoSlowdownA extends Check {
         }
 		
 		if(dis > tooFast && PlayerUtil.isUsingItem(p) && PlayerUtil.isValid(p) && p.getVelocity().getY() == FlyA.STILL) {
-			flag(p, "NoSlowdown (A)", "(VL" + (Violations.getViolations(this, p)+1) + ") (MOVE " + dis + ")");
+			flag(p, "NoSlowdown (A)", "(MOVE " + dis + ")");
 			lagBack(e);
 		}
 	}

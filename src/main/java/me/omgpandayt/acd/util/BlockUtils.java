@@ -68,5 +68,9 @@ public class BlockUtils {
 	public static boolean isClimbable(Block block) {
 		return block.getType() == Material.LADDER || block.getType() == Material.WEEPING_VINES || block.getType() == Material.TWISTING_VINES || block.getType() == Material.CAVE_VINES;
 	}
+
+	public static boolean isSoil(Block b) {
+		return b.getType() == Material.SOUL_SAND || b.getType() == Material.SOUL_SOIL;
+	}
 	
 }

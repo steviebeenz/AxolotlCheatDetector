@@ -9,7 +9,6 @@ import org.bukkit.potion.PotionEffectType;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class CriticalsA extends Check {
 
@@ -26,7 +25,7 @@ public class CriticalsA extends Check {
 			if (player.getLocation().getY() % 0.5 == 0
 					&& player.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
 				cancelDamage(e);
-				flag(player, "Criticals (A)", "(VL" + (Violations.getViolations(this, player)+1) + ")");
+				flag(player, "Criticals (A)", "");
 			}
 		}
 	}

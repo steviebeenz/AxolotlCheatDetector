@@ -3,16 +3,18 @@ package me.omgpandayt.acd.checks.movement.speed;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class SpeedC extends Check implements Listener {
 	
@@ -30,11 +32,11 @@ public class SpeedC extends Check implements Listener {
 
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		
-		if(playerData == null) return;
+		if(playerData == null || playerData.ticksSinceHit < 5) return;
 		
 		double y = p.getLocation().getYaw();
 		
-		if(playerData.isOnGround && !playerData.lastOnGround)return;
+		if((playerData.isOnGround && !playerData.lastOnGround) || !PlayerUtil.isValid(p))return;
 		
 		double tooFastX = config.getDouble(path + "too-fast.x");
 		double tooFastZ = config.getDouble(path + "too-fast.z");
@@ -44,6 +46,19 @@ public class SpeedC extends Check implements Listener {
 			tooFastZ += 0.1f;
 		}
 		
+		double ssi = 0;
+		
+		if(p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED)) {
+			ssi = p.getInventory().getBoots().getEnchantmentLevel(Enchantment.SOUL_SPEED) / (Math.PI * Math.PI);
+		}
+		
+        PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
+        if ( effect != null )
+        {
+            tooFastX += effect.getAmplifier() / (Math.PI * Math.PI);
+            tooFastZ += effect.getAmplifier() / (Math.PI * Math.PI);
+        }
+		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
 			if (BlockUtils.isIce(b)) {
 				tooFastX += config.getDouble(path + "ice-increase");
@@ -51,7 +66,15 @@ public class SpeedC extends Check implements Listener {
 			} else if (b.getType() == Material.SLIME_BLOCK) {
 				tooFastX += config.getDouble(path + "slime-increase");
 				tooFastZ += config.getDouble(path + "slime-increase");
+			} else if (soil(b, p) || soil(b.getLocation().clone().add(0, 0.325, 0).getBlock(), p)) {
+				tooFastX += ssi;
+				tooFastZ += ssi;
 			}
+		}
+		
+		if (soil(p.getLocation().getBlock(), p)) {
+			tooFastX += ssi;
+			tooFastZ += ssi;
 		}
 		
 		if(y > -140 && y < -47)	{
@@ -105,10 +128,14 @@ public class SpeedC extends Check implements Listener {
 		playerData.speedCLimiter++;
 		if(playerData.speedCLimiter > config.getDouble(path + "limiter")) {
 			double l = Math.pow(10, (new String(tooFast+"").length() - 2));
-			flag(p, "Speed (C)", "(MAX " + tooFast + ") (GOT " + ((Math.floor(speed * l)) / l) + ") (VL" + (Violations.getViolations(this, p)+1) + ")");
+			flag(p, "Speed (C)", "(MAX " + tooFast + ") (GOT " + ((Math.floor(speed * l)) / l) + ")");
 			playerData.speedCLimiter = 0;
 			lagBack(lastLoc, p);
 		}
+	}
+	
+	public boolean soil(Block b, Player p) {
+		return BlockUtils.isSoil(b) && p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED);
 	}
 
 }

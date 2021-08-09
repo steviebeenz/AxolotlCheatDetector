@@ -5,7 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import me.omgpandayt.acd.checks.Check;
-import me.omgpandayt.acd.violation.Violations;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class InvalidAttackC extends Check {
 	
@@ -19,6 +20,9 @@ public class InvalidAttackC extends Check {
 		
 		Player p = (Player) e.getDamager();
 		
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null)return;
+		
 		Block targetBlock = p.getTargetBlockExact(5);
 		if(targetBlock == null || !targetBlock.getType().isSolid())return;
 		
@@ -27,7 +31,7 @@ public class InvalidAttackC extends Check {
 		
 		if(targetDis + config.getDouble(path + "block-distance-increase") < entityDis) {
 		
-			flag(p, "InvalidAttack (C)", "(VL" + (Violations.getViolations(this, p)+1) + ") (DIST " + ((Math.floor(((entityDis - (targetDis + config.getDouble(path + "block-distance-increase")))) * 100))/100) + ")");
+			flag(p, "InvalidAttack (C)", "(DIST " + ((Math.floor(((entityDis - (targetDis + config.getDouble(path + "block-distance-increase")))) * 100))/100) + ")");
 			cancelDamage(e);
 		
 		}

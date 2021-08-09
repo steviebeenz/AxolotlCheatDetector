@@ -7,7 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import me.omgpandayt.acd.checks.Check;
-import me.omgpandayt.acd.violation.Violations;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class ReachB extends Check {
 	
@@ -28,6 +29,12 @@ public class ReachB extends Check {
 			limit += config.getDouble(path + "creative-increase");
 		}
 		
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null)return;
+		
+		if(playerData.lastAttack < 2) return;
+		playerData.lastAttack = 0;
+		
 		Location locationDamager = p.getLocation();
 		Location locationDamagee = taking.getLocation();
 		
@@ -42,7 +49,7 @@ public class ReachB extends Check {
 		double range = Math.sqrt(Math.pow(LocationDamagerX - LocationDamageeX, 2) + Math.pow(LocationDamagerY - LocationDamageeY, 2)+ Math.pow(LocationDamagerZ - LocationDamageeZ, 2));
 		
 		if (range >= limit) {
-			flag(p, "Reach (B)", "(VL" + (Violations.getViolations(this, p)+1) + ") (REACH " + ((Math.floor(range * 100))/100) + ")");
+			flag(p, "Reach (B)", "(REACH " + ((Math.floor(range * 100))/100) + ")");
 		}
 		
 	}

@@ -11,7 +11,6 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyF extends Check implements Listener {
 
@@ -31,8 +30,8 @@ public class FlyF extends Check implements Listener {
         double toY = e.getTo().getY();
         
         if(p.isFlying())return;
-        if(!PlayerUtil.isOnGround(e.getFrom())) return;
-        if(!PlayerUtil.isOnGround(e.getTo())) return;
+        if(PlayerUtil.isOnGround3(e.getFrom())) return;
+        if(PlayerUtil.isOnGround3(e.getTo())) return;
         if(PlayerUtil.isAboveLiquids(e.getFrom())) return;
         if(PlayerUtil.isAboveLiquids(e.getTo())) return;
         if(PlayerUtil.isOnClimbable(e.getTo())) return;
@@ -71,7 +70,7 @@ public class FlyF extends Check implements Listener {
 		
 		playerData.flyFLimiter++;
 		if(playerData.flyFLimiter > config.getDouble(path + "limiter")) {
-			flag(p, "Fly (F)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+			flag(p, "Fly (F)", "");
 			lagBack(from, p);
 			playerData.flyFLimiter = 0;
 		}

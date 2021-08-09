@@ -10,7 +10,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class GroundSpoofB extends Check {
 
@@ -41,7 +40,7 @@ public class GroundSpoofB extends Check {
 		if(playerData.lastPacketFD > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !dontFlag && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation())) {
 			playerData.groundSpoofBLimiter++;
 			if(playerData.groundSpoofBLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "GroundSpoof (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				flag(p, "GroundSpoof (B)", "");
 				playerData.groundSpoofBLimiter = 0;
 				if(config.getBoolean("main.cancel-event")) {
 					double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());

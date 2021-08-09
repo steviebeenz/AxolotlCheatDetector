@@ -57,7 +57,7 @@ public class Check {
     
     public void flag(Player player, String check, String debug) {
     	
-    	ACD.logPlayers(player.getName() + " failed " + check + " - " + debug);
+    	ACD.logPlayers(player.getName() + " failed " + check + " - (VL" + (Violations.getViolations(this, player)+1) + ") " + debug);
     	
     	Violations.addViolation(this, player);
     	
@@ -91,12 +91,12 @@ public class Check {
 	public void punish(Player p) {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
-		playerData.kicks++;
 		Violations.clearViolations(this, p);
 		String kickMessage = ACD.getInstance().getConfig().getString("main.kick.kick-message");
 		kickMessage = kickMessage.replace("[PREFIX]", ACD.prefix);
 		kickMessage = kickMessage.replace("[NEWLINE]", "\n");
 		if(playerData.kicks < config.getDouble("main.kick.kicks-to-ban")) {
+			playerData.kicks++;
 			if(config.getBoolean("main.kick.kick-player")) {
 				ACD.logPlayers(p.getName() + " was kicked for cheating (" + getName() + ")");
 				

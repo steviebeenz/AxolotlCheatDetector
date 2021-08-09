@@ -15,7 +15,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class SpeedB extends Check implements Listener {
 
@@ -77,9 +76,13 @@ public class SpeedB extends Check implements Listener {
 		}
 
 		if (!playerData.lastOnGround && !playerData.isOnGround && !playerData.lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && PlayerUtil.getFallHeightDouble(p) > 0.1) {
-			double got = Math.floor(scaledEqualness * 100);
-			flag(p, "Speed (B)", "(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
-			lagBack(e);
+			playerData.speedBLimiter++;
+			if(playerData.speedBLimiter > config.getDouble(path + "limiter")) {
+				double got = Math.floor(scaledEqualness * 100);
+				flag(p, "Speed (B)", "(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + ")");
+				lagBack(e);
+				playerData.speedBLimiter = 0;
+			}
 		}
 	}
 

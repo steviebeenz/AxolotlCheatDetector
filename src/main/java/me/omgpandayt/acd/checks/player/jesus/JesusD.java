@@ -10,7 +10,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class JesusD extends Check {
 
@@ -50,7 +49,7 @@ public class JesusD extends Check {
 			
 			if(playerData.jesusDLimiter >= 3) {
 				playerData.jesusDLimiter = 0;
-				flag(p, "Jesus (D)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				flag(p, "Jesus (D)", "");
 				if(config.getBoolean("main.cancel-event"))
 					p.teleport(e.getFrom().clone().add(0, 0.2, 0));
 			}

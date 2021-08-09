@@ -12,7 +12,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class GroundSpoofA extends Check {
 
@@ -58,7 +57,7 @@ public class GroundSpoofA extends Check {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		if(p.isOnGround() && !playerData.isOnGround && !playerData.lastOnGround && p.isValid() && !p.isDead() && !dontFlag && PlayerUtil.getFallHeight(p) > 1) {
-			flag(p, "GroundSpoof (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+			flag(p, "GroundSpoof (A)", "");
 			double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
 			p.damage((playerData.lastPacketFD + deltaY) - 3);
 		}

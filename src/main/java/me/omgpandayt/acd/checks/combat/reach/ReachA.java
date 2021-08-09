@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import me.omgpandayt.acd.checks.Check;
-import me.omgpandayt.acd.violation.Violations;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class ReachA extends Check {
 
@@ -27,9 +28,15 @@ public class ReachA extends Check {
 			
 			double r = a.getLocation().distance(victim.getLocation());
 			
+			PlayerData playerData = PlayerDataManager.getPlayer(a);
+			if(playerData == null)return;
+			
+			if(playerData.lastAttack < 2) return;
+			playerData.lastAttack = 0;
+			
 			if(r > config.getDouble(path + "max-reach") + (a.getGameMode() == GameMode.CREATIVE ? config.getDouble(path + "creative-increase") : 0)) {
 				
-				flag(a, "Reach (A)", " (VL" + (Violations.getViolations(this, a) + 1) + ") (REACH " + ((Math.floor(r * 100)) / 100) + ")");
+				flag(a, "Reach (A)", "(REACH " + ((Math.floor(r * 100)) / 100) + ")");
 				cancelDamage(e);
 				a.teleport(a.getLocation());
 				

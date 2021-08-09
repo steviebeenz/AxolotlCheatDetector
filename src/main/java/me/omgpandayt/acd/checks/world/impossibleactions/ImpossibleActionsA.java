@@ -7,7 +7,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.violation.Violations;
 
 public class ImpossibleActionsA extends Check {
 
@@ -37,7 +36,7 @@ public class ImpossibleActionsA extends Check {
 			playerData.impactALimiter++;
 			if(playerData.impactALimiter >= config.getDouble(path + "limiter")) {
 				playerData.impactALimiter = 0;
-				flag(p, "ImpossibleActions (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				flag(p, "ImpossibleActions (A)", "");
 				cancelPlace(e);
 			}
 		}

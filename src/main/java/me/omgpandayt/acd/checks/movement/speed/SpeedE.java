@@ -2,6 +2,7 @@ package me.omgpandayt.acd.checks.movement.speed;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -54,19 +55,25 @@ public class SpeedE extends Check implements Listener {
             tooFast += effect.getAmplifier() / (Math.PI * Math.PI);
         }
 		
-		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.5001, 0))) {
+		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.2, 0))) {
 			if (BlockUtils.isIce(b)) {
 				tooFast += config.getDouble(path + "ice-increase");
 			} else if (b.getType() == Material.SLIME_BLOCK) {
 				tooFast += config.getDouble(path + "slime-increase");
+			} else if (BlockUtils.isSoil(b) && p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED)) {
+				tooFast += config.getDouble(path + "soul-speed-increase");
 			}
 			
 		}
 
 		if (onGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !p.isGliding() && p.getVelocity().getY() == FlyA.STILL) {
-			double got = Math.floor(scaledEqualness * 100);
-			flag(p, "Speed (E)", "(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
-			lagBack(e);
+			playerData.speedELimiter++;
+			if(playerData.speedELimiter > config.getDouble(path + "limiter")) {
+				double got = Math.floor(scaledEqualness * 100);
+				flag(p, "Speed (E)", "(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
+				lagBack(e);
+				playerData.speedELimiter = 0;
+			}
 		}
 
 	}

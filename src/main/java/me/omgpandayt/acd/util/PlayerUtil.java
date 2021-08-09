@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import me.omgpandayt.acd.checks.PlayerDataManager;
+
 public class PlayerUtil {
 	
 	public static boolean isOnGround(Location loc) {
@@ -89,7 +91,7 @@ public class PlayerUtil {
 	}
 
 	public static boolean isValid(Player p) {
-		return !p.isFlying() && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
+		return PlayerDataManager.getPlayer(p).lastFlight > 20 && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
 	}
 
 	public static boolean isAboveLiquids(Location location) {

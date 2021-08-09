@@ -9,7 +9,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class JesusC extends Check {
 
@@ -53,7 +52,7 @@ public class JesusC extends Check {
 		) {
 			playerData.jesusCLimiter++;
 			if(playerData.jesusCLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "Jesus (C)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				flag(p, "Jesus (C)", "");
 				playerData.jesusCLimiter = 0;
 			}
 		}

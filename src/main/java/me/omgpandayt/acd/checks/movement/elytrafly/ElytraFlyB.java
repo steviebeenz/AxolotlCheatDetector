@@ -9,7 +9,6 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class ElytraFlyB extends Check {
 
@@ -38,7 +37,7 @@ public class ElytraFlyB extends Check {
 					&& PlayerUtil.getFallHeight(p) > 3
 					&& playerData.ticksSinceRocket >= config.getDouble(path + "ticks-since-rocket")
 			) {
-				flag(p, "ElytraFly (B)", "(VL" + Violations.getViolations(this, p) + ")");
+				flag(p, "ElytraFly (B)", "");
 				ItemStack chestplate = p.getInventory().getChestplate();
 				p.getInventory().setChestplate(new ItemStack(Material.AIR));
 				p.getInventory().setChestplate(chestplate);

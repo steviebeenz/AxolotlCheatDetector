@@ -6,7 +6,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.util.BlockUtils;
-import me.omgpandayt.acd.violation.Violations;
 
 public class ImpossibleActionsB extends Check {
 	
@@ -31,7 +30,7 @@ public class ImpossibleActionsB extends Check {
 		if(!BlockUtils.invalidPlace(l.clone().add(0,0,1))) return;
 		if(!BlockUtils.invalidPlace(l.clone().add(0,0,-1))) return;
 		
-		flag(p, "ImpossibleActions (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")"); // Impossible to false (Maybe with client side blocks?)
+		flag(p, "ImpossibleActions (B)", ")"); // Impossible to false (Maybe with client side blocks?)
 		cancelPlace(e);
 		
 	}

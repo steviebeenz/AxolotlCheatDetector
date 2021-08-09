@@ -7,7 +7,6 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FastLadderA extends Check {
 
@@ -34,7 +33,7 @@ public class FastLadderA extends Check {
 				
 				lagBack(e);
 				
-				flag(p, "FastLadder (A)", "(VL" + (Violations.getViolations(this, p)+1) + ") (SPD " + (((Math.floor((e.getTo().getY() - e.getFrom().getY()) * 100)))/100) + "/" + config.getDouble(path + "max-rise") + ")");
+				flag(p, "FastLadder (A)", "(SPD " + (((Math.floor((e.getTo().getY() - e.getFrom().getY()) * 100)))/100) + "/" + config.getDouble(path + "max-rise") + ")");
 				
 			}
 			

@@ -6,7 +6,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FastPlaceA extends Check {
 	
@@ -28,7 +27,7 @@ public class FastPlaceA extends Check {
 		playerData.placedBlocks++;
 		
 		if(playerData.placedBlocks >= config.getDouble(path + "maxplace")) {
-			flag(p, "FastPlace (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+			flag(p, "FastPlace (A)", "");
 			playerData.placedBlocks = 0;
 			cancelPlace(e);
 		}

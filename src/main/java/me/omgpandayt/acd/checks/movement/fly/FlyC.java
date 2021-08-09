@@ -9,7 +9,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyC extends Check {
 
@@ -36,6 +35,8 @@ public class FlyC extends Check {
 			}
 		}
 		
+		if(PlayerUtil.isAboveSlime(p.getLocation()))return;
+		
 		if(
 				!PlayerUtil.isOnGround(p.getLocation())
 				&& playerData.lastPacketY == p.getLocation().getY()
@@ -48,7 +49,7 @@ public class FlyC extends Check {
 		) {
 			playerData.flyCLimiter++;
 			if(playerData.flyCLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "Fly (C)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				flag(p, "Fly (C)", "");
 				playerData.flyCLimiter = 0;
 			}
 		}

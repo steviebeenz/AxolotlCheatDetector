@@ -25,6 +25,7 @@ checks:
       slime-increase: 0.004
       too-little-friction: 0.07
       flags-to-kick: 6
+      limiter: 2
     c:
       enabled: true
       too-fast:
@@ -39,10 +40,12 @@ checks:
          max: 0.125
     e:
       enabled: true
-      ice-increase: 0.0011
-      slime-increase: 0.004
-      too-little-friction: 0.05
+      ice-increase: 0.055
+      slime-increase: 0.04
+      too-little-friction: 0.055
       flags-to-kick: 6
+      soul-speed-increase: 0.01
+      limiter: 2
   fly:
     a:
       enabled: true
@@ -58,12 +61,14 @@ checks:
       fall-height: 1.5
     c:
       enabled: true
-      limiter: 3
+      limiter: 4
       fall-height: 1
       flags-to-kick: 5
     d:
       enabled: true
-      limiter: 6
+      limiter: 7
+      y-drop: 0.25
+      height: 0.5
       smallest-descend: 0.3
       fall-distance: 0.4
       flags-to-kick: 12
@@ -100,13 +105,14 @@ checks:
       enabled: true
       flags-to-kick: 4
       hitbox: 1.8
+      limiter: 3
     b:
       enabled: true
-      flags-to-kick: 4
-      attacks-size: 9
-      low-attack-time: 1
-      attack-low-to-flag: 8
-      decrease-time: 0.20
+      flags-to-kick: 1000
+      attacks-size: 10
+      low-attack-time: 0
+      attack-low-to-flag: 10
+      decrease-time: 0.15
     c:
       enabled: true
       flags-to-kick: 5
@@ -176,12 +182,12 @@ checks:
   reach:
     a:
       enabled: true
-      max-reach: 4.4
+      max-reach: 4.65
       creative-increase: 2.6
       flags-to-kick: 8
     b:
       enabled: true
-      max-reach: 3.9
+      max-reach: 4.53
       creative-increase: 2.2
       flags-to-kick: 5
   criticals:

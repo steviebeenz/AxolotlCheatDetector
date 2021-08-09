@@ -14,7 +14,7 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
 import me.omgpandayt.acd.util.BlockUtils;
-import me.omgpandayt.acd.violation.Violations;
+import me.omgpandayt.acd.util.PlayerUtil;
 
 public class InvMoveA extends Check {
 
@@ -47,22 +47,19 @@ public class InvMoveA extends Check {
 		
 		Player p = e.getPlayer();
 		
-		if(playerData.invOpen) {
+		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && PlayerUtil.getFallHeightDouble(p) <= 1) { 
+		
 			
-			boolean dontFlag = false;
-			
-			for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
-				if(b.isLiquid())
-					dontFlag = true;
-				else if (BlockUtils.isIce(b.getLocation().clone().add(0, -1, 0).getBlock()))
-					dontFlag = true;
+			for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0,1,0))) {
+				if(b.getType().isSolid())
+					return;
 				
 			}
 			
 			double deltaXZ = (Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 			
-			if(!dontFlag && p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
-				flag(p, "InvMove (A)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
+				flag(p, "InvMove (A)", "");
 				lagBack(e);
 			}
 			

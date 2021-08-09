@@ -6,7 +6,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.BlockIterator;
 
 import me.omgpandayt.acd.checks.Check;
-import me.omgpandayt.acd.violation.Violations;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class InvalidAttackA extends Check {
 	
@@ -19,6 +20,9 @@ public class InvalidAttackA extends Check {
 		
 		
 		Player p = (Player) e.getDamager();
+		
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(playerData == null)return;
 		
 		BlockIterator blocksToAdd = new BlockIterator(p.getEyeLocation(), 0.1, (int) (Math.floor(e.getDamager().getLocation().distance(e.getEntity().getLocation()) * 10)));
 		double expand = 0.0D;
@@ -35,10 +39,14 @@ public class InvalidAttackA extends Check {
 			}
 		}
 		
-		expand = ((Math.floor((double)expand * 1000))/1000);
+		playerData.invalidAttackALimiter++;
 		
-		flag(p, "InvalidAttack (A)", "(VL" + (Violations.getViolations(this, p)+1) + ") (EXP " + expand + ")");
-		cancelDamage(e);
+		if(playerData.invalidAttackALimiter > config.getDouble(path + "limiter")) {
+			expand = ((Math.floor((double)expand * 1000))/1000);
+			
+			flag(p, "InvalidAttack (A)", "(EXP " + expand + ")");
+			cancelDamage(e);
+		}
 		
 	}
 	

@@ -169,6 +169,9 @@ public class ACD extends JavaPlugin {
                     playerData.ticksSinceHit++;
                     playerData.ticksLived++;
                     playerData.attackTicks++;
+                    playerData.lastFlight++;
+                    playerData.lastAttack++;
+                    if(player.isFlying()) playerData.lastFlight = 0;
                     
                     double deltaY = playerData.lastPacketY - player.getLocation().getY();
                     
@@ -202,6 +205,12 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.jesusCLimiter > 0) {
                     		playerData.jesusCLimiter--;
+                    	}
+                    	if(playerData.invalidAttackALimiter > 0) {
+                    		playerData.invalidAttackALimiter--;
+                    	}
+                    	if(playerData.speedBLimiter > 0) {
+                    		playerData.speedBLimiter--;
                     	}
                     	if(playerData.impactALimiter > 0) {
                     		playerData.impactALimiter--;

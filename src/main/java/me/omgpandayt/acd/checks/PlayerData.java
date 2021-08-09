@@ -26,7 +26,10 @@ public class PlayerData {
 			   flyDLimiter = 0,
 			   flyFLimiter = 0,
 			   ticksLived = 0,
+			   invalidAttackALimiter = 0,
 			   speedCLimiter = 0,
+			   speedBLimiter = 0,
+			   speedELimiter = 0,
 			   jesusBLimiter = 0,
 			   jesusCLimiter = 0,
 			   jesusDLimiter = 0,
@@ -37,14 +40,16 @@ public class PlayerData {
 			   ticksSinceHit = 250000000,
 			   placedBlocks = 0,
 			   kicks = 0,
-			   attackTicks = 0;
+			   attackTicks = 0,
+			   lastFlight = 250000000,
+			   lastAttack = 250000000;
 	public ArrayList<ACDAttack> attacks = new ArrayList<ACDAttack>();
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,
 				 realisticFD = 0;
 	public boolean lastPacketNearBoat = false, alerts, invMoveWaitTick = false;
 	public int ticksSinceRocket = 0;
-	public double lastDeltaY, lastLastFallHeight = -1, lastFallHeight = -1;
+	public double lastDeltaY, lastFallHeight, lastLastFallHeight;
 	
 	public PlayerData(Player p) {
 		this.p = p;

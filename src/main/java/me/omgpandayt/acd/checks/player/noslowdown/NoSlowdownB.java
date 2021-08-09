@@ -6,7 +6,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class NoSlowdownB extends Check {
 
@@ -19,7 +18,7 @@ public class NoSlowdownB extends Check {
 		Player p = e.getPlayer();
 		
 		if(p.isSneaking() && PlayerUtil.isUsingItem(p) && PlayerUtil.isValid(p) && p.getVelocity().getY() == FlyA.STILL) {
-			flag(p, "NoSlowdown (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+			flag(p, "NoSlowdown (B)", "");
 			lagBack(e);
 		}
 	}

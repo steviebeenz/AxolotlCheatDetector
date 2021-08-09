@@ -7,15 +7,12 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyD extends Check {
 
 	public FlyD() {
 		super("FlyD", false);
 	}
-	
-	private String path = "checks.fly.d.";
 	
 	@Override
 	public void onMove(PlayerMoveEvent e) {
@@ -27,10 +24,10 @@ public class FlyD extends Check {
 		
 		double deltaY = Math.abs(e.getFrom().getY() - e.getTo().getY());
 		
-		if(deltaY < 0.3 && p.getFallDistance() > 0.4f && !PlayerUtil.isOnGround(p.getLocation()) && PlayerUtil.isValid(p) && !p.isGliding()) {
+		if(deltaY < config.getDouble(path + "y-drop") && p.getFallDistance() > config.getDouble(path + "height") && !PlayerUtil.isOnGround(p.getLocation()) && PlayerUtil.isValid(p) && !p.isGliding()) {
 			playerData.flyDLimiter++;
 			if(playerData.flyDLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "Fly (D)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+				flag(p, "Fly (D)", "");
 				playerData.flyDLimiter = 0;
 				lagBack(e);
 			}

@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyG extends Check implements Listener {
 
@@ -37,7 +36,7 @@ public class FlyG extends Check implements Listener {
         
         if(yVel >= maxVel && Math.abs(p.getVelocity().getY()) > maxVel) {
             
-        	flag(p, "Fly (G)", "(VL" + (Violations.getViolations(this, p)+1) + ") (VELY " + ((Math.floor(yVel * 100)) / 100) + ") (VEL " + ((Math.floor(Math.abs(p.getVelocity().getY()) * 100)) / 100) + ")");
+        	flag(p, "Fly (G)", "(VELY " + ((Math.floor(yVel * 100)) / 100) + ") (VEL " + ((Math.floor(Math.abs(p.getVelocity().getY()) * 100)) / 100) + ")");
         	
         }
 	}

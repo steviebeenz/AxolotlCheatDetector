@@ -10,7 +10,6 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyB extends Check {
 
@@ -29,6 +28,8 @@ public class FlyB extends Check {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
+		if(PlayerUtil.isAboveSlime(p.getLocation()))return;
+		
 		double lastY = playerData.lastPacketY,
 			   lastLastY = playerData.lastLastPacketY,
 			   fallHeight = PlayerUtil.getFallHeightDouble(p),
@@ -46,6 +47,7 @@ public class FlyB extends Check {
 		if(fallHeight < fhm
 				|| lastFallHeight < fhm
 				|| lastLastFallHeight < fhm
+				|| !PlayerUtil.isValid(p)
 		)return;
 	
 		
@@ -68,15 +70,12 @@ public class FlyB extends Check {
 				playerData.flyBLimiter += 1;
 				
 				if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
-					flag(p, "Fly (B)", "(VL" + (Violations.getViolations(this, p)+1) + ")");
+					flag(p, "Fly (B)", "");
 					playerData.flyBLimiter = 0;
 					
 					Location loc = e.getFrom().clone();
-					for(int i=0;i<3;i++)
-						loc.setY((Math.floor(y) + 1) - PlayerUtil.getFallHeight(p));
-					
-					if(config.getBoolean("main.cancel-event"))
-						p.teleport(loc);
+					loc.setY((Math.floor(y) + 1) - PlayerUtil.getFallHeight(p));
+					lagBack(loc, e.getPlayer());
 				}
 			}
 		}

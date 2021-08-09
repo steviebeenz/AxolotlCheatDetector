@@ -10,7 +10,6 @@ import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
 public class FlyA extends Check {
 
@@ -28,27 +27,27 @@ public class FlyA extends Check {
 		boolean sameY = e.getFrom().getY() == e.getTo().getY();
 		
 		int fallHeight = PlayerUtil.getFallHeight(p);
-		boolean dontFlag = false;
 		boolean isBouncing = p.getVelocity().getY() > FlyA.STILL;
+		
 		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
 			if(b.getType() != Material.AIR) {
-				dontFlag = true;
-				break;
+				return;
 			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) {
-				dontFlag = true;
-				break;
+				return;
 			}
 		}
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
-		if(sameY && fallHeight >= 3 && !isBouncing && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding()) {
+
+		
+		if(sameY && fallHeight >= 3 && !isBouncing && PlayerUtil.isValid(p) && !p.isGliding()) {
 			if(!PlayerUtil.isOnGround(p.getLocation())) {
 				playerData.flyALimiter++;
 				if(playerData.flyALimiter >= config.getDouble(path + "limiter")) {
-					flag(p, "Fly (A)", "(VL" + (Violations.getViolations(this, p) + 1) + ")");
+					flag(p, "Fly (A)", "");
 					lagBack(e);
 					playerData.flyALimiter = 0;
 				}
