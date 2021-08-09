@@ -13,10 +13,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.omgpandayt.acd.ACD;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.violation.Violations;
 import net.md_5.bungee.api.ChatColor;
 
@@ -63,7 +63,7 @@ public class Check {
     	
     }
     
-    public void lagBack(PlayerMoveEvent e) {
+    public void lagBack(ACDMoveEvent e) {
     	if(config.getBoolean("main.punish.cancel-event")) 
     		e.getPlayer().teleport(e.getFrom());
     }
@@ -80,7 +80,7 @@ public class Check {
     		e.setCancelled(true);
     }
     
-    public void onMove(PlayerMoveEvent e) {
+    public void onMove(ACDMoveEvent e) {
     	
     }
     

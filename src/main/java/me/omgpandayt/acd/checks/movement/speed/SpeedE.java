@@ -5,7 +5,6 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -13,6 +12,7 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import me.omgpandayt.acd.violation.Violations;
@@ -24,7 +24,7 @@ public class SpeedE extends Check implements Listener {
 	}
 	
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 
 		Player p = e.getPlayer();
 
@@ -36,7 +36,7 @@ public class SpeedE extends Check implements Listener {
 		
 		if(playerData == null) return;
 		
-		boolean onGround = PlayerUtil.isOnGround(p.getLocation()) && PlayerUtil.isOnGround(e.getFrom());
+		boolean onGround = e.isOnGround() && e.isOnGroundFrom();
 		
 		double lastDist = playerData.dist;
 
@@ -54,6 +54,8 @@ public class SpeedE extends Check implements Listener {
         {
             tooFast += effect.getAmplifier() / (Math.PI * Math.PI);
         }
+        
+        if(playerData.onHorseTicks < 10)return;
 		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.2, 0))) {
 			if (BlockUtils.isIce(b)) {

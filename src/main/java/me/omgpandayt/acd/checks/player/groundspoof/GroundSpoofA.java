@@ -19,28 +19,25 @@ public class GroundSpoofA extends Check {
 		super("GroundSpoofA", false);
 	}
 	
-	private String path = "checks.groundspoof.a.";
 	
 	@SuppressWarnings("deprecation")
 	public void onMove(PlayerMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
-		boolean dontFlag = false;
-		
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.5001, 0))) {
 			if (BlockUtils.isPiston(b) || BlockUtils.isFence(b) || b.getType() == Material.SLIME_BLOCK) {
-				dontFlag = true;
+				return;
 			}
 		}
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -1.0001, 0))) { 
 			if (BlockUtils.isPiston(b) || BlockUtils.isFence(b) || b.getType() == Material.SLIME_BLOCK) {
-				dontFlag = true;
+				return;
 			}
 		}
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1.0001, 0))) {
 			if (b.getType() != Material.AIR) {
-				dontFlag = true;
+				return;
 			}
 		}
 		
@@ -48,15 +45,15 @@ public class GroundSpoofA extends Check {
 		
 		for (Entity entity : p.getNearbyEntities(nbr, nbr, nbr)) {
 			if(entity instanceof Boat) {
-				dontFlag = true;
+				return;
 			}
 		}
 		if(p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == Material.ELYTRA) 
-			dontFlag = true;
+			return;
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
-		if(p.isOnGround() && !playerData.isOnGround && !playerData.lastOnGround && p.isValid() && !p.isDead() && !dontFlag && PlayerUtil.getFallHeight(p) > 1) {
+		if(p.isOnGround() && !playerData.isOnGround && !playerData.lastOnGround && p.isValid() && !p.isDead() && PlayerUtil.getFallHeight(p) > 1) {
 			flag(p, "GroundSpoof (A)", "");
 			double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
 			p.damage((playerData.lastPacketFD + deltaY) - 3);

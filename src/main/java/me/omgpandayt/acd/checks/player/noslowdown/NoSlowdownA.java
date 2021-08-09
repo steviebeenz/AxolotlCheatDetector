@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -20,8 +21,10 @@ public class NoSlowdownA extends Check {
 	private String path = "checks.noslowdown.a.";
 	
 	@Override
-	public void onMove(PlayerMoveEvent e) {
-		Player p = e.getPlayer();
+	public void onMove(ACDMoveEvent ev) {
+		Player p = ev.getPlayer();
+		
+		PlayerMoveEvent e = ev.getEvent();
 		
 		double distX = Math.abs(e.getTo().getX() - e.getFrom().getX());
 		double distZ = Math.abs(e.getTo().getZ() - e.getFrom().getZ());
@@ -30,7 +33,7 @@ public class NoSlowdownA extends Check {
 		
 		float tooFast = (float) config.getDouble(path + "maxspeed");
 		
-		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -1, 0))) {
+		for (Block b : ev.getBlocksBelow()) {
 			if (BlockUtils.isIce(b)) {
 				tooFast += config.getDouble(path + "ice-increase");
 			}
@@ -44,7 +47,7 @@ public class NoSlowdownA extends Check {
 		
 		if(dis > tooFast && PlayerUtil.isUsingItem(p) && PlayerUtil.isValid(p) && p.getVelocity().getY() == FlyA.STILL) {
 			flag(p, "NoSlowdown (A)", "(MOVE " + dis + ")");
-			lagBack(e);
+			lagBack(ev);
 		}
 	}
 	

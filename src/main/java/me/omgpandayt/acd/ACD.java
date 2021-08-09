@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -13,17 +14,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 /*import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.settings.PacketEventsSettings;
 import io.github.retrooper.packetevents.utils.server.ServerVersion;*/
-import me.omgpandayt.acd.checks.*;
+import me.omgpandayt.acd.checks.Check;
+import me.omgpandayt.acd.checks.CheckManager;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
 
 import me.omgpandayt.acd.checks.combat.criticals.*;
-import me.omgpandayt.acd.checks.combat.reach.*;
 import me.omgpandayt.acd.checks.combat.invalidattack.*;
+import me.omgpandayt.acd.checks.combat.reach.*;
 
 import me.omgpandayt.acd.checks.movement.elytrafly.*;
+import me.omgpandayt.acd.checks.movement.fastladder.*;
 import me.omgpandayt.acd.checks.movement.fly.*;
 import me.omgpandayt.acd.checks.movement.speed.*;
-import me.omgpandayt.acd.checks.movement.fastladder.*;
-
 import me.omgpandayt.acd.checks.player.groundspoof.*;
 import me.omgpandayt.acd.checks.player.invmove.*;
 import me.omgpandayt.acd.checks.player.jesus.*;
@@ -31,8 +34,10 @@ import me.omgpandayt.acd.checks.player.noslowdown.*;
 
 import me.omgpandayt.acd.checks.world.fastplace.*;
 import me.omgpandayt.acd.checks.world.impossibleactions.*;
+import me.omgpandayt.acd.checks.world.timer.*;
 
 import me.omgpandayt.acd.listeners.RegisterListeners;
+import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -120,6 +125,8 @@ public class ACD extends JavaPlugin {
 		new JesusD();
 		new JesusE();
 		
+		new TimerA();
+		
 		new ElytraFlyA();
 		new ElytraFlyB();
 		
@@ -174,10 +181,26 @@ public class ACD extends JavaPlugin {
                     if(player.isFlying()) playerData.lastFlight = 0;
                     
                     double deltaY = playerData.lastPacketY - player.getLocation().getY();
+                    double iceTicks = playerData.iceTicks;
+                    for(Block b : BlockUtils.getBlocksBelow(player.getLocation())) {
+                    	if(BlockUtils.isIce(b)) {
+                    		playerData.iceTicks++;
+                    		break;
+                    	}
+                    }
+                    if(playerData.iceTicks == iceTicks)playerData.iceTicks = 0;
+                    playerData.onHorseTicks++;
+                    if(player.isInsideVehicle())playerData.onHorseTicks = 0;
                     
                     if(!PlayerUtil.isOnGround(player.getLocation()) && player.getLocation().getY() < playerData.lastPacketY) playerData.realisticFD += deltaY;
                     else playerData.realisticFD = 0;
                     
+                    if(playerData.ticksLived % config.getDouble("checks.timer.a.decrease-time") == 0) {
+                    	double amm = config.getDouble("checks.timer.a.decrease-amount");
+                    	if(playerData.movementPackets > amm-1) {
+                    		playerData.movementPackets-=amm;
+                    	}
+                    }
                     if(playerData.ticksLived % Math.floor(config.getDouble("checks.invalidattack.b.decrease-time") * 20) == 0) {
                     	if(playerData.attacks.size() > 6) {
                     		playerData.attacks.remove(playerData.attacks.size()-1);
@@ -205,6 +228,9 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.jesusCLimiter > 0) {
                     		playerData.jesusCLimiter--;
+                    	}
+                    	if(playerData.timerALimiter > 0) {
+                    		playerData.timerALimiter--;
                     	}
                     	if(playerData.invalidAttackALimiter > 0) {
                     		playerData.invalidAttackALimiter--;

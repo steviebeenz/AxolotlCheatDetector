@@ -6,7 +6,6 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -14,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -24,7 +24,7 @@ public class SpeedC extends Check implements Listener {
 	}
 	
 	@Override
-	public void onMove(PlayerMoveEvent e) {	
+	public void onMove(ACDMoveEvent e) {	
 		
 		Player p = e.getPlayer();
 
@@ -62,12 +62,22 @@ public class SpeedC extends Check implements Listener {
             tooFastX += effect.getAmplifier() / (Math.PI * Math.PI);
             tooFastZ += effect.getAmplifier() / (Math.PI * Math.PI);
         }
+        
+        double ii = config.getDouble(path + "ice-increase");
+        double iim = config.getDouble(path + "ice-increase-multi");
+        double it = (playerData.iceTicks * iim);
 		
+        for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
+        	if(BlockUtils.isIce(b)) {
+        		tooFastX += ii + it;
+				tooFastZ += ii + it;
+        	}
+        }
 		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.825, 0))) {
-			if (BlockUtils.isIce(b)) {
-				tooFastX += config.getDouble(path + "ice-increase");
-				tooFastZ += config.getDouble(path + "ice-increase");
-			} else if (b.getType() == Material.SLIME_BLOCK) {
+			if (BlockUtils.isIce(b) || BlockUtils.isIce(b.getLocation().clone().add(0, 0.325, 0).getBlock())) {
+				tooFastX += ii + it;
+				tooFastZ += ii + it;
+			} else if (b.getType() == Material.SLIME_BLOCK || b.getLocation().clone().add(0, 0.325, 0).getBlock().getType() == Material.SLIME_BLOCK) {
 				tooFastX += config.getDouble(path + "slime-increase");
 				tooFastZ += config.getDouble(path + "slime-increase");
 			} else if (soil(b, p) || soil(b.getLocation().clone().add(0, 0.325, 0).getBlock(), p)) {

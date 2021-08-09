@@ -5,12 +5,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusA extends Check {
@@ -22,13 +21,13 @@ public class JesusA extends Check {
 	private String path = "checks.jesus.a.";
 
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
 		
 		if(e.getFrom().getY() != e.getTo().getY()) return;
-		if(!PlayerUtil.isAboveLiquids(p.getLocation()) || !PlayerUtil.isAboveLiquids(e.getFrom()) || p.isSwimming())return;
+		if(!e.isAboveLiquids() || !e.isAboveLiquidsFrom() || p.isSwimming())return;
 		
 		double nbr = config.getDouble(path + "nearby-boat-radius");
 		
@@ -37,7 +36,7 @@ public class JesusA extends Check {
 				return;
 			}
 		}
-		for(Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
+		for(Block b : e.getBlocksBelow()) {
 			if(b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) 
 				return;
 			

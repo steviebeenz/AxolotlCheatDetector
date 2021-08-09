@@ -23,6 +23,7 @@ import me.omgpandayt.acd.checks.CheckManager;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.command.AlertsCommand;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 
 public class RegisterListeners implements Listener {
 
@@ -90,7 +91,7 @@ public class RegisterListeners implements Listener {
 			
 			Check check = (Check)obj;
 			
-			check.onMove(e);
+			check.onMove(new ACDMoveEvent(e));
 			
 		}
 		

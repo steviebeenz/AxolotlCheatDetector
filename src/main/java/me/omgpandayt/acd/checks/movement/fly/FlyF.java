@@ -5,11 +5,10 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyF extends Check implements Listener {
@@ -18,15 +17,15 @@ public class FlyF extends Check implements Listener {
 		super("FlyF", false);
 	}
 	
-    public void onMove(PlayerMoveEvent e) {
+    public void onMove(ACDMoveEvent e) {
         Player p = e.getPlayer( );
         
-        PlayerData playerData = PlayerDataManager.getPlayer(p);
+        PlayerData playerData = e.getPlayerData();
         if(playerData == null)return;
         
         double descendY = config.getDouble(path + "descend-y");
         
-        double fromY = e.getFrom( ).getY();
+        double fromY = e.getFrom().getY();
         double toY = e.getTo().getY();
         
         if(p.isFlying())return;
@@ -54,7 +53,7 @@ public class FlyF extends Check implements Listener {
                     yDropDif = deltaY - playerData.lastDeltaY;
                 
                 if(playerData.lastDeltaY != 0 && yDropDif < 0.02D)
-                	doFlag(p, e.getFrom());
+                	doFlag(p, e.getFrom(), playerData);
 
                 
             }
@@ -64,8 +63,7 @@ public class FlyF extends Check implements Listener {
         }
     }
 
-	private void doFlag(Player p, Location from) {
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+	private void doFlag(Player p, Location from, PlayerData playerData) {
         if(playerData == null)return;
 		
 		playerData.flyFLimiter++;

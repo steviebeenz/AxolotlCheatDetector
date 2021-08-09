@@ -3,12 +3,10 @@ package me.omgpandayt.acd.checks.movement.fly;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyA extends Check {
@@ -20,17 +18,17 @@ public class FlyA extends Check {
 	}
 	
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
 		boolean sameY = e.getFrom().getY() == e.getTo().getY();
 		
-		int fallHeight = PlayerUtil.getFallHeight(p);
+		int fallHeight = e.getFallHeight();
 		boolean isBouncing = p.getVelocity().getY() > FlyA.STILL;
 		
 		
-		for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
+		for (Block b : e.getBlocksBelow()) {
 			if(b.getType() != Material.AIR) {
 				return;
 			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) {
@@ -38,7 +36,7 @@ public class FlyA extends Check {
 			}
 		}
 		
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		PlayerData playerData = e.getPlayerData();
 		if(playerData == null) return;
 		
 

@@ -1,136 +1,389 @@
+# The main things for the plugin
 main:
+
+   # Settings for kicks
    kick:
+   
+      # Determines if the anticheat should kick the player
       kick-player: true
+      
+      # The kick message
       kick-message: '[PREFIX][NEWLINE]Suspicious activity'
+      
+   # Settings for ban
    ban:
+   
+      # Determines if the anticheat should ban the player
       ban-player: false
+      
+      # How many kicks are required to ban the player
       kicks-to-ban: 3
+      
+      # The command ran to ban the player
       ban-command: 'minecraft:ban [PLAYER] [NEWLINE][PREFIX][NEWLINE]You were caught cheating!'
+   
+   # Settings for punishments
    punish:
+   
+      # How many seconds it will take for the limiters on the check to lower
       limiter-removal-rate: 1
+      
+      # How many seconds it will take for the flags to go down
       flag-removal-rate: 30
+      
+      # How many ticks the player will bypass for on join
       join-bypass-ticks: 170
+      
+      # Determines if the player should get lag backed / cancel attack when flagged
       cancel-event: true
+      
+      # Determines if it should summon an axolotl when punished
       axolotl-on-punish: true
+      
+# Checks
+#
+# DETAILS FOR ALL CHECKS:
+# - Limiter: How many times should the check flag before it sends a real flag
+# - Flags-To-Kick: How many times the check must be flagged before kicking the player
+# - Enabled: The status of the check
+#
 checks:
+
+  # Speed
   speed:
+  
     a:
+    
+      # Speed check
+    
       enabled: true
+      
+      # How much to add to maximum speed if on ice
       ice-increase: 0.3
+      
+      # Maximum speed
       maximum-speed: 0.95
+      
       flags-to-kick: 5
+      
     b:
+    
+      # Air friction check
+    
       enabled: true
+      
+      # How much to add to friction if on ice
       ice-increase: 0.00125
+      
+      # How much to add to the friction if on slime
       slime-increase: 0.004
+      
+      # The friction
       too-little-friction: 0.07
+      
       flags-to-kick: 6
+      
       limiter: 2
+      
     c:
+    
+      # Backwards speed check
+    
       enabled: true
+      
+      # Too fast
       too-fast:
+         # Too fast X speed
          x: 0.238
+         # Too fast Z speed
          z: 0.254
-      ice-increase: 0.11
-      slime-increase: 0.04
-      limiter: 3
-      flags-to-kick: 5
+      
+      # Disable flags between these 2 values (0.238 + 0.12, not 0.12)
       disable:
          min: 0.12
          max: 0.125
-    e:
-      enabled: true
-      ice-increase: 0.055
-      slime-increase: 0.04
-      too-little-friction: 0.055
-      flags-to-kick: 6
-      soul-speed-increase: 0.01
-      limiter: 2
-  fly:
-    a:
-      enabled: true
-      limiter: 3
-      flags-to-kick: 5
-    b:
-      enabled: true
-      limiter: 3
-      descend: -0.1
-      fall-height: 1
-      flags-to-kick: 8
-      velocity: -0.0784000015258789
-      fall-height: 1.5
-    c:
-      enabled: true
-      limiter: 4
-      fall-height: 1
-      flags-to-kick: 5
-    d:
-      enabled: true
-      limiter: 7
-      y-drop: 0.25
-      height: 0.5
-      smallest-descend: 0.3
-      fall-distance: 0.4
-      flags-to-kick: 12
-    e:
-      enabled: true
-      velocity: -1.3
-      flags-to-kick: 5
-      dist: 0.27
-    f:
-      enabled: true
-      flags-to-kick: 5
-      limiter: 3
-      descend-y: 0.124
-    g:
-      enabled: true
-      flags-to-kick: 7
-      velocity-max: 0.419
-  fastplace:
-    a:
-      enabled: true
-      maxplace: 5
-      place-removal-rate-ticks: 2
-      flags-to-kick: 3
-  impossibleactions:
-    a:
-      enabled: true
-      limiter: 3
-      flags-to-kick: 8
-    b:
-      enabled: true
-      flags-to-kick: 1
-  invalidattack:
-    a:
-      enabled: true
-      flags-to-kick: 4
-      hitbox: 1.8
-      limiter: 3
-    b:
-      enabled: true
-      flags-to-kick: 1000
-      attacks-size: 10
-      low-attack-time: 0
-      attack-low-to-flag: 10
-      decrease-time: 0.15
-    c:
-      enabled: true
-      flags-to-kick: 5
-      block-distance-increase: 0.252
-  fastladder:
-    a:
-      enabled: true
-      flags-to-kick: 5
-      max-rise: 0.5322
-  noslowdown:
-    a:
-      enabled: true
+      
+      # How much to add to maximum speed if on ice
       ice-increase: 0.11
-      maxspeed: 0.2153
-      flags-to-kick: 4
-    b:
+      
+      # How much to multiply the ticks the player has been on ice for (Prevent falsing on ice)
+      ice-increase-multi: 0.05
+      
+      # How much to add to maximum speed if on slime
+      slime-increase: 0.04
+      
+      limiter: 4
+      
+      flags-to-kick: 5
+      
+         
+    e:
+    
+      # On ground speed check
+    
       enabled: true
+      
+      # How much to add to maximum speed if on ice
+      ice-increase: 0.055
+      
+      # How much to add to maximum speed if on slime
+      slime-increase: 0.04
+      
+      # The friction
+      too-little-friction: 0.055
+      
+      # How much to add to maximum speed if on soul sand with soul speed
+      soul-speed-increase: 0.01
+      
+      flags-to-kick: 6
+      
+      limiter: 2
+     
+  # Timer
+  timer:
+  
+    a:
+    
+      # Too many movements check
+    
+      enabled: true
+      
+      # Maximum movement packets
+      max-move: 3.5
+      
+      # How many ticks for the packet limiter to decrease
+      decrease-time: 1
+      
+      # How much decrease occurs
+      decrease-amount: 1.5
+      
+      limiter: 4
+      
+      flags-to-kick: 15
+      
+  # Flight
+  fly:
+  
+    a:
+    
+      # Same Y check
+    
+      enabled: true
+      
+      limiter: 3
+      
+      flags-to-kick: 5
+      
+    b:
+    
+      # Go up Y check
+    
+      enabled: true
+      
+      # How many blocks up from the ground to flag
+      fall-height: 1.5
+      
+      # Y velocity must be below this point to flag
+      velocity: -0.0784000015258789
+      
+      # The amount of y you must go up to flag
+      y-increase: 0.2
+      
+      limiter: 3
+      
+      flags-to-kick: 8
+      
+    c:
+    
+      # Same Y check (always active)
+    
+      enabled: true
+      
+      limiter: 4
+      
+      flags-to-kick: 5
+      
+    d:
+    
+      # Glide check
+    
+      enabled: true
+      
+      # Minimum y descend
+      y-drop: 0.25
+      
+      # How high up you must be to flag
+      height: 0.5
+      
+      flags-to-kick: 12
+      
+      limiter: 7
+      
+    e:
+    
+      # Ground spoof fly check
+    
+      enabled: true
+      
+      # Velocity to flag
+      velocity: -1.3
+      
+      # Max distance
+      dist: 0.27
+      
+      flags-to-kick: 5     
+      
+    f:
+    
+      # Second glide check
+    
+      enabled: true
+      
+      # Minimum y descend
+      descend-y: 0.124
+      
+      flags-to-kick: 5
+      
+      limiter: 3
+      
+    g:
+    
+      # Velocity fly check
+    
+      enabled: true
+      
+      # Max velocity to flag
+      velocity-max: 0.419
+      
+      flags-to-kick: 7
+      
+      
+  # Fast Place    
+  fastplace:
+  
+    a:
+    
+      # Place too fast check
+    
+      enabled: true
+      
+      # Maximum blocks to place to flag
+      maxplace: 5
+      
+      # How many ticks to remove 1 from placed
+      place-removal-rate-ticks: 2
+      
+      flags-to-kick: 3
+  
+  # Impossible Actions
+  impossibleactions:
+  
+    a:
+    
+      # Not looking at placed block check
+    
+      enabled: true
+      
+      limiter: 3
+      
+      flags-to-kick: 8
+      
+    b:
+     
+      # Liquid interact / air place check
+    
+      enabled: true
+      
+      # Basically impossible to false
+      flags-to-kick: 1
+    
+  # Invalid Attack  
+  invalidattack:
+  
+    a:
+    
+      # Hitboxes check
+    
+      enabled: true
+      
+      # Hitbox size
+      hitbox: 1.8
+      
       flags-to-kick: 4
+      
+      limiter: 3
+      
+    b:
+    
+      # Fast hit check (multiaura)
+    
+      enabled: true
+      
+      # Amount of low time attacks to flag
+      attacks-size: 10
+      
+      # Amount of ticks the hit was since the last hit
+      low-attack-time: 0
+      
+      # How many low attacks to flag
+      attack-low-to-flag: 10
+      
+      # How many seconds to decrease attacks
+      decrease-time: 0.15
+      
+      # Somtimes can detect people normally clicking, you can change this but usually you won't want to flag people for clicking, especialyl on pvp servers
+      flags-to-kick: 1000
+      
+    c:
+    
+      # Hit through wall check
+    
+      enabled: true
+
+      # Distance between the block and entity hit to flag (I don't know but not having this falses)
+      block-distance-increase: 0.252
+      
+      flags-to-kick: 5
+  
+  # Fast Ladder  
+  fastladder:
+  
+    a:
+    
+      # Go up ladder too fast
+    
+      enabled: true
+      
+      # Maximum speed up ladder (Probably should be lower, but this works)
+      max-rise: 0.5322
+      
+      flags-to-kick: 5
+      
+  # No Slowdown
+  noslowdown:
+  
+    a:
+    
+      # Going too fast while eating
+    
+      enabled: true
+      
+      # Max speed increase on ice
+      ice-increase: 0.11
+      
+      # Maximum speed
+      maxspeed: 0.2153
+      
+      flags-to-kick: 4
+    
+    b:
+    
+      # Sprint & eating check
+    
+      enabled: true
+      
+      flags-to-kick: 4
+      
   jesus:
     a:
       enabled: true

@@ -6,13 +6,12 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -25,7 +24,7 @@ public class SpeedB extends Check implements Listener {
 	}
 	
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 
 		Player p = e.getPlayer();
 
@@ -33,7 +32,7 @@ public class SpeedB extends Check implements Listener {
 		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 		double dist = distX + distZ;
 
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		PlayerData playerData = e.getPlayerData();
 		
 		if(playerData == null) return;
 		
@@ -51,7 +50,6 @@ public class SpeedB extends Check implements Listener {
 		
 		double tooFast = config.getDouble(path + "too-little-friction");
 		
-		boolean dontFlag = false;
 		
         PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
         if ( effect != null )
@@ -65,17 +63,17 @@ public class SpeedB extends Check implements Listener {
 			} else if (b.getType() == Material.SLIME_BLOCK) {
 				tooFast += config.getDouble(path + "slime-increase");
 			} else if (b.getLocation().clone().add(0, 1.825, 0).getBlock().getType() != Material.AIR) {
-				dontFlag = true;
+				return;
 			}
 		}
 		
 		for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
 			if (entity instanceof Boat) {
-				dontFlag = true;
+				return;
 			}
 		}
 
-		if (!playerData.lastOnGround && !playerData.isOnGround && !playerData.lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && PlayerUtil.getFallHeightDouble(p) > 0.1) {
+		if (!playerData.lastOnGround && !playerData.isOnGround && !playerData.lastLastOnGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !p.isGliding() && PlayerUtil.getFallHeightDouble(p) > 0.1) {
 			playerData.speedBLimiter++;
 			if(playerData.speedBLimiter > config.getDouble(path + "limiter")) {
 				double got = Math.floor(scaledEqualness * 100);

@@ -2,11 +2,10 @@ package me.omgpandayt.acd.checks.movement.fly;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyE extends Check {
@@ -17,14 +16,14 @@ public class FlyE extends Check {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 		Player p = e.getPlayer();
 		
 		
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		PlayerData playerData = e.getPlayerData();
 		if(playerData == null) return;
 		
-		if(PlayerUtil.isOnGround(p.getLocation()))
+		if(PlayerUtil.isOnGround3(p.getLocation()))
 			playerData.isOnGround = true;
 		else
 			playerData.isOnGround = false;
@@ -42,6 +41,7 @@ public class FlyE extends Check {
             		(f.getY() == t.getY() ||
             		f.getY() + 0.2f > t.getY() )
             		&& p.getVelocity().getY() < config.getDouble(path + "velocity")
+            		&& e.getFallHeightDouble() > 0.2
             ) {
                 
             	flag(p, "Fly (E)", "");

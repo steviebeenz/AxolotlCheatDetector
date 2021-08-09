@@ -4,12 +4,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
+import me.omgpandayt.acd.violation.Violations;
 
 public class FlyB extends Check {
 
@@ -17,18 +18,18 @@ public class FlyB extends Check {
 		super("FlyB", true);
 	}
 	
-	private String path = "checks.fly.b.";
-	
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
-		double y = p.getLocation().getY();
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		if(p.hasPotionEffect(PotionEffectType.JUMP))return;
+		
+		double y = e.getTo().getY();
+		PlayerData playerData = e.getPlayerData();
 		if(playerData == null) return;
 		
-		if(PlayerUtil.isAboveSlime(p.getLocation()))return;
+		if(e.isAboveSlime())return;
 		
 		double lastY = playerData.lastPacketY,
 			   lastLastY = playerData.lastLastPacketY,
@@ -66,16 +67,17 @@ public class FlyB extends Check {
 				}
 			}
 			
-			if(y > lastY && lastY > lastLastY && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
+			if(y > lastY && lastY - config.getDouble(path + "y-increase") > lastLastY && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
 				playerData.flyBLimiter += 1;
 				
 				if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
 					flag(p, "Fly (B)", "");
-					playerData.flyBLimiter = 0;
+					playerData.flyBLimiter = -1;
 					
 					Location loc = e.getFrom().clone();
 					loc.setY((Math.floor(y) + 1) - PlayerUtil.getFallHeight(p));
-					lagBack(loc, e.getPlayer());
+					if(Violations.getViolations(this, p) % 3 == 0)
+						lagBack(loc, e.getPlayer());
 				}
 			}
 		}

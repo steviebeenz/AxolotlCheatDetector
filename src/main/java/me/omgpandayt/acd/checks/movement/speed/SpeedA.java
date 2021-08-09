@@ -3,13 +3,13 @@ package me.omgpandayt.acd.checks.movement.speed;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -22,7 +22,7 @@ public class SpeedA extends Check implements Listener {
 	}
 	
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
@@ -31,7 +31,7 @@ public class SpeedA extends Check implements Listener {
 		
 		double maxXZMove = config.getDouble(path + "maximum-speed");
 		
-		for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
+		for (Block b : e.getBlocksBelow()) {
 			if (b != null && BlockUtils.isIce(b)) {
 				maxXZMove += config.getDouble(path + "ice-increase");
 			}
@@ -56,23 +56,17 @@ public class SpeedA extends Check implements Listener {
 		
 		boolean dontFlag = false;
 		
-		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
+		for(Block b : e.getBlocksBelowUp()) {
 			if (b.getType().isSolid()) {
 				dontFlag = true;
 				break;
 			}
 		}
-		if (!dontFlag) {
-			for(Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
-				if (b.getType().isSolid()) {
-					dontFlag = true;
-					break;
-				}
-			}
-		}
-		
+				
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
+		
+		if(playerData.onHorseTicks < 10)return;
 		
 		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat) {
 			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ")");

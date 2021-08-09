@@ -7,8 +7,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusD extends Check {
@@ -20,28 +19,27 @@ public class JesusD extends Check {
 	private String path = "checks.jesus.d.";
 
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent ev) {
 		
-		Player p = e.getPlayer();
+		Player p = ev.getPlayer();
 		
-		boolean dontFlag = false;
+		PlayerMoveEvent e = ev.getEvent();
 		
-		for(Block b : BlockUtils.getBlocksBelow(e.getTo())) {
-			if (!b.isLiquid()) dontFlag = true;
+		for(Block b : ev.getBlocksBelow()) {
+			if (!b.isLiquid()) return;
 		}
-		if(!dontFlag) {
-			for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
-				if (!b.isLiquid()) dontFlag = true;
-			}
+		for(Block b : ev.getBlocksBelowFrom()) {
+			if (!b.isLiquid()) return;
 		}
+	
+		
+		PlayerData playerData = ev.getPlayerData();
 		
 		double ma = config.getDouble(path + "max-ascend");
 		
 		if(p.getVelocity().getY() > ma &&
 				PlayerUtil.isAboveLiquids(p.getLocation()) &&
-				p.getLocation().getBlock().getType() == Material.AIR
-				&& !dontFlag) {
-			PlayerData playerData = PlayerDataManager.getPlayer(p);
+				p.getLocation().getBlock().getType() == Material.AIR) {
 			
 			if(playerData == null) return;
 			

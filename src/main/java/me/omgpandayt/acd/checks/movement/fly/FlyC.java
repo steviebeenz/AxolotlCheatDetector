@@ -21,8 +21,6 @@ public class FlyC extends Check {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
-		boolean dontFlag = false;
-		
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
 			if(b.getType() != Material.AIR) {
 				return;
@@ -43,9 +41,9 @@ public class FlyC extends Check {
 				&& p.getVelocity().getY() <= 0
 				&& PlayerUtil.getFallHeight(p) > 1
 				&& !p.isFlying()
-				&& !dontFlag
 				&& PlayerUtil.isValid(p)
 				&& !PlayerUtil.isAboveSlime(p.getLocation())
+				&& !p.isInsideVehicle()
 		) {
 			playerData.flyCLimiter++;
 			if(playerData.flyCLimiter >= config.getDouble(path + "limiter")) {
@@ -53,6 +51,7 @@ public class FlyC extends Check {
 				playerData.flyCLimiter = 0;
 			}
 		}
+		playerData.lastPacketY = p.getLocation().getY();
 	}
 	
 }

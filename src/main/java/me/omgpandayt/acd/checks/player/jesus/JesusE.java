@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -18,16 +19,19 @@ public class JesusE extends Check {
 	}
 
 	@Override
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent ev) {
 		
-		Player p = e.getPlayer();
+		Player p = ev.getPlayer();
 		
-		for(Block b : BlockUtils.getBlocksBelow(e.getTo())) {
+		PlayerMoveEvent e = ev.getEvent();
+		
+		for(Block b : ev.getBlocksBelow()) {
 			if (!b.isLiquid()) return;
 			if(b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR)return;
 		}
-		for(Block b : BlockUtils.getBlocksBelow(e.getFrom())) {
+		for(Block b : ev.getBlocksBelowFrom()) {
 			if (!b.isLiquid()) return;
+			if(b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR)return;
 		}
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);

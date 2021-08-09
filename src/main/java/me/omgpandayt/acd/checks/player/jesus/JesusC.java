@@ -16,28 +16,20 @@ public class JesusC extends Check {
 		super("JesusC", false);
 	}
 	
-	private String path = "checks.jesus.c.";
-	
 	@Override
 	public void onTick(Player p) {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
-		boolean dontFlag = false;
-		
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
 			if(b.getType() != Material.WATER) {
-				dontFlag = true;
-				break;
+				return;
 			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.WATER) {
-				dontFlag = true;
-				break;
+				return;
 			} else if (b.getLocation().clone().add(0, 2, 0).getBlock().getType() != Material.AIR) {
-				dontFlag = true;
-				break;
+				return;
 			} else if (b.getLocation().clone().add(0, 3, 0).getBlock().getType() != Material.AIR) {
-				dontFlag = true;
-				break;
+				return;
 			}
 		}
 		
@@ -47,7 +39,6 @@ public class JesusC extends Check {
 				&& playerData.lastLastPacketY == p.getLocation().getY()
 				&& p.getVelocity().getY() <= 0
 				&& p.getLocation().clone().add(0, -1 , 0).getBlock().getType() == Material.WATER
-				&& !dontFlag
 				&& PlayerUtil.isValid(p)
 		) {
 			playerData.jesusCLimiter++;

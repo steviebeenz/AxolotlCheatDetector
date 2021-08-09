@@ -3,9 +3,9 @@ package me.omgpandayt.acd.checks.movement.fly;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyG extends Check implements Listener {
@@ -14,7 +14,7 @@ public class FlyG extends Check implements Listener {
 		super("FlyG", false);
 	}
 	
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(ACDMoveEvent e) {
 		Player p = e.getPlayer();
 		
         Location to = e.getTo();
@@ -27,7 +27,7 @@ public class FlyG extends Check implements Listener {
         
         if(p.isFlying()
         		|| (PlayerUtil.isOnGround2(to)
-        		&& PlayerUtil.isOnGround(to)
+        		&& e.isOnGround()
         		|| PlayerUtil.isOnGroundCustom(to, 4, 3))
         )
         	return;
