@@ -7,6 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -48,9 +49,12 @@ public class SpeedC extends Check implements Listener {
 		
 		double ssi = 0;
 		
-		if(p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED)) {
-			ssi = p.getInventory().getBoots().getEnchantmentLevel(Enchantment.SOUL_SPEED) / (Math.PI * Math.PI);
-		}
+		ItemStack boots = p.getInventory().getBoots();
+		
+		if(boots != null)
+			if(boots.containsEnchantment(Enchantment.SOUL_SPEED)) {
+				ssi = boots.getEnchantmentLevel(Enchantment.SOUL_SPEED) / (Math.PI * Math.PI);
+			}
 		
         PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
         if ( effect != null )

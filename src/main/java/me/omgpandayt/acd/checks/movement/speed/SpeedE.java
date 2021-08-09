@@ -60,7 +60,7 @@ public class SpeedE extends Check implements Listener {
 				tooFast += config.getDouble(path + "ice-increase");
 			} else if (b.getType() == Material.SLIME_BLOCK) {
 				tooFast += config.getDouble(path + "slime-increase");
-			} else if (BlockUtils.isSoil(b) && p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED)) {
+			} else if (BlockUtils.isSoil(b) && p.getInventory().getBoots() != null && p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED)) {
 				tooFast += config.getDouble(path + "soul-speed-increase");
 			}
 			
