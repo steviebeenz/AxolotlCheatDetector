@@ -1,14 +1,12 @@
 package me.omgpandayt.acd.checks.player.jesus;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusD extends Check {
 
@@ -25,12 +23,7 @@ public class JesusD extends Check {
 		
 		PlayerMoveEvent e = ev.getEvent();
 		
-		for(Block b : ev.getBlocksBelow()) {
-			if (!b.isLiquid()) return;
-		}
-		for(Block b : ev.getBlocksBelowFrom()) {
-			if (!b.isLiquid()) return;
-		}
+		if(!ev.isAboveLiquids() || !ev.isAboveLiquidsFrom())return;
 	
 		
 		PlayerData playerData = ev.getPlayerData();
@@ -38,7 +31,6 @@ public class JesusD extends Check {
 		double ma = config.getDouble(path + "max-ascend");
 		
 		if(p.getVelocity().getY() > ma &&
-				PlayerUtil.isAboveLiquids(p.getLocation()) &&
 				p.getLocation().getBlock().getType() == Material.AIR) {
 			
 			if(playerData == null) return;

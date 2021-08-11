@@ -1,10 +1,12 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -35,6 +37,15 @@ public class SpeedE extends Check implements Listener {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		
 		if(playerData == null) return;
+		
+		ItemStack boots = p.getInventory().getBoots();
+		
+		if(boots != null) {
+			if (boots.getItemMeta().getAttributeModifiers().containsValue(Attribute.GENERIC_MOVEMENT_SPEED)) {
+				return;
+			}
+		}
+		if(playerData.ticksSinceHit < 20)return;
 		
 		boolean onGround = e.isOnGround() && e.isOnGroundFrom();
 		

@@ -1,7 +1,6 @@
 package me.omgpandayt.acd.checks.player.jesus;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -25,7 +24,6 @@ public class JesusA extends Check {
 		
 		Player p = e.getPlayer();
 		
-		
 		if(e.getFrom().getY() != e.getTo().getY()) return;
 		if(!e.isAboveLiquids() || !e.isAboveLiquidsFrom() || p.isSwimming())return;
 		
@@ -36,11 +34,7 @@ public class JesusA extends Check {
 				return;
 			}
 		}
-		for(Block b : e.getBlocksBelow()) {
-			if(b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.AIR) 
-				return;
-			
-		}
+		if(p.getLocation().getBlock().getType() == Material.WATER)return;
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;

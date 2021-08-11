@@ -40,6 +40,21 @@ main:
       # Determines if it should summon an axolotl when punished
       axolotl-on-punish: true
       
+   # Discord webhook
+   discord:
+   
+      # If the anti-cheat should log violations to the discord
+      enabled: false
+      
+      # The URL of the discord webhook
+      url: ''
+      
+      # Discord webhook post
+      post-message: '```{player} failed {violation} - {debug}```'
+      
+      # Send at flag (4 or higher, lower will keep it at 4)
+      flags-to-post: 4
+      
 # Checks
 #
 # DETAILS FOR ALL CHECKS:
@@ -404,6 +419,9 @@ checks:
     e:
       enabled: true
       flags-to-kick: 8
+    f:
+      enabled: true
+      flags-to-kick: 10
   invmove:
     a:
       enabled: true
