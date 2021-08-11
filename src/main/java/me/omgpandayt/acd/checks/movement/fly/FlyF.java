@@ -1,7 +1,6 @@
 package me.omgpandayt.acd.checks.movement.fly;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -30,17 +29,12 @@ public class FlyF extends Check implements Listener {
         double toY = e.getTo().getY();
         
         if(p.isFlying())return;
-        if(p.isGliding())return;
         if(PlayerUtil.isOnGround3(e.getFrom())) return;
         if(PlayerUtil.isOnGround3(e.getTo())) return;
-        if(e.isAboveLiquidsFrom()) return;
-        if(e.isAboveLiquids()) return;
-        if(e.isOnClimbableTo()) return;
-        if(e.isOnClimbableFrom()) return;
-        if(e.isOnHoneyTo())return;
-        if(e.isOnHoneyFrom())return;
-        if(p.getLocation().getBlock().getType() == Material.WATER)return;
-        
+        if(PlayerUtil.isAboveLiquids(e.getFrom())) return;
+        if(PlayerUtil.isAboveLiquids(e.getTo())) return;
+        if(PlayerUtil.isOnClimbable(e.getTo())) return;
+        if(PlayerUtil.isOnClimbable(e.getFrom())) return;
         
         if( toY < fromY){
             double deltaY = toY - fromY;

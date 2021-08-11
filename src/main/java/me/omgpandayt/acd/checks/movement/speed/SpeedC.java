@@ -33,7 +33,7 @@ public class SpeedC extends Check implements Listener {
 
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		
-		if(playerData == null || playerData.ticksSinceHit < 30 || playerData.onHorseTicks < 10) return;
+		if(playerData == null || playerData.ticksSinceHit < 5) return;
 		
 		double y = p.getLocation().getYaw();
 		

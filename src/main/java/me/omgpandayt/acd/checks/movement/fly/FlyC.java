@@ -51,6 +51,7 @@ public class FlyC extends Check {
 				playerData.flyCLimiter = 0;
 			}
 		}
+		playerData.lastPacketY = p.getLocation().getY();
 	}
 	
 }

@@ -1,10 +1,8 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -39,14 +37,6 @@ public class SpeedA extends Check implements Listener {
 			}
 		}
 		
-		ItemStack boots = p.getInventory().getBoots();
-		
-		if(boots != null) {
-			if (boots.getItemMeta().getAttributeModifiers().containsValue(Attribute.GENERIC_MOVEMENT_SPEED)) {
-				return;
-			}
-		}
-		
         PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
         if ( effect != null )
         {
@@ -76,7 +66,7 @@ public class SpeedA extends Check implements Listener {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
-		if(playerData.onHorseTicks < 10 || playerData.ticksSinceHit < 30)return;
+		if(playerData.onHorseTicks < 10)return;
 		
 		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat) {
 			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ")");

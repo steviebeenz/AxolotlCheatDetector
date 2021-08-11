@@ -38,7 +38,7 @@ public class ReachA extends Check {
 				
 				flag(a, "Reach (A)", "(REACH " + ((Math.floor(r * 100)) / 100) + ")");
 				cancelDamage(e);
-				lagBack(a.getLocation(), a);
+				a.teleport(a.getLocation());
 				
 			}
 		}

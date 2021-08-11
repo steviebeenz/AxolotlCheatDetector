@@ -1,6 +1,5 @@
 package me.omgpandayt.acd.checks;
 
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.bukkit.Bukkit;
@@ -18,7 +17,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.DiscordWebhook;
 import me.omgpandayt.acd.violation.Violations;
 import net.md_5.bungee.api.ChatColor;
 
@@ -63,34 +61,6 @@ public class Check {
     	
     	Violations.addViolation(this, player);
     	
-    	double ftdl = config.getDouble("main.discord.flags-to-post");
-    	
-    	if(ftdl < 4) ftdl = 4;
-    	
-    	double v = Violations.getViolations(this, player);
-    	
-    	if(v % ftdl == 0 && v != 0) {
-    		
-    		if(config.getBoolean("main.discord.enabled")) {
-    			
-    			
-    			String content = config.getString("main.discord.post-message").replace("{player}", player.getName()).replace("{violation}", check).replace("{debug}", debug + " (VL" + v + ")");
-    			
-	    		DiscordWebhook webhook = new DiscordWebhook(config.getString("main.discord.url"));
-	    		
-	    		webhook.setContent(content);
-	    		webhook.setUsername("Axolotl Anticheat");
-	    		
-	    		try {
-					webhook.execute();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-    			
-    		}
-    		
-    	}
-    	
     }
     
     public void lagBack(ACDMoveEvent e) {
@@ -125,7 +95,7 @@ public class Check {
 		String kickMessage = ACD.getInstance().getConfig().getString("main.kick.kick-message");
 		kickMessage = kickMessage.replace("[PREFIX]", ACD.prefix);
 		kickMessage = kickMessage.replace("[NEWLINE]", "\n");
-		if(playerData.kicks < config.getDouble("main.ban.kicks-to-ban")) {
+		if(playerData.kicks < config.getDouble("main.kick.kicks-to-ban")) {
 			playerData.kicks++;
 			if(config.getBoolean("main.kick.kick-player")) {
 				ACD.logPlayers(p.getName() + " was kicked for cheating (" + getName() + ")");
@@ -191,6 +161,5 @@ public class Check {
 		}.runTaskLater(ACD.getInstance(), 20);
 		
 	}
-	
 
 }

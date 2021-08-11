@@ -17,7 +17,7 @@ public class ACDMoveEvent {
 	private Block[] blocksBelow, blocksBelowFrom, blocksBelowUp, blocksBelowDown;
 	private PlayerData playerData;
 	private Location to,from;
-	private boolean groundFrom, groundTo, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom;
+	private boolean groundFrom, groundTo, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom;
 	private int fallHeight;
 	private double fallHeightDouble;
 	
@@ -41,8 +41,6 @@ public class ACDMoveEvent {
 		this.isAboveSlime = PlayerUtil.isAboveSlime(to);
 		this.isOnClimbableFrom = PlayerUtil.isOnClimbable(from);
 		this.isOnClimbableTo = PlayerUtil.isOnClimbable(to);
-		this.isOnHoneyFrom = PlayerUtil.isOnHoney(from);
-		this.isOnHoneyFrom = PlayerUtil.isOnHoney(to);
 	}
 	
 	public PlayerMoveEvent getEvent() {
@@ -111,13 +109,6 @@ public class ACDMoveEvent {
 	}
 	public boolean isOnClimbableFrom() {
 		return isOnClimbableFrom;
-	}
-
-	public boolean isOnHoneyTo() {
-		return isOnHoneyTo;
-	}
-	public boolean isOnHoneyFrom() {
-		return isOnHoneyFrom;
 	}
 	
 }

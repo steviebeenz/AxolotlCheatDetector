@@ -5,11 +5,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -21,7 +21,7 @@ public class GroundSpoofA extends Check {
 	
 	
 	@SuppressWarnings("deprecation")
-	public void onMove(ACDMoveEvent e) {
+	public void onMove(PlayerMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
@@ -30,12 +30,12 @@ public class GroundSpoofA extends Check {
 				return;
 			}
 		}
-		for (Block b : e.getBlocksBelow()) { 
+		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -1.0001, 0))) { 
 			if (BlockUtils.isPiston(b) || BlockUtils.isFence(b) || b.getType() == Material.SLIME_BLOCK) {
 				return;
 			}
 		}
-		for (Block b : e.getBlocksBelowUp()) {
+		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1.0001, 0))) {
 			if (b.getType() != Material.AIR) {
 				return;
 			}
