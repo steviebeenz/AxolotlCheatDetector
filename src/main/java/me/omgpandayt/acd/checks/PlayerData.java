@@ -22,6 +22,7 @@ public class PlayerData {
 	public Player p;
 	public int flyALimiter = 0,
 			   flyBLimiter = 0,
+			   flyBNFLimiter = 0,
 			   flyCLimiter = 0,
 			   flyDLimiter = 0,
 			   flyFLimiter = 0,
@@ -45,7 +46,8 @@ public class PlayerData {
 			   lastFlight = 250000000,
 			   lastAttack = 250000000,
 			   iceTicks = 0,
-			   onHorseTicks = 250000000;
+			   onHorseTicks = 250000000,
+			   jesusFtb = 0;
 	public ArrayList<ACDAttack> attacks = new ArrayList<ACDAttack>();
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,

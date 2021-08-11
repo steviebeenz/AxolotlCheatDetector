@@ -82,7 +82,7 @@ public class PlayerUtil {
 		Location loc = p.getLocation().clone();
 		loc.setY(yHeight);
 		double fallHeight = 0;
-		while(loc.getBlock().getType() == Material.AIR) {
+		while(loc.getBlock().getType() == Material.AIR || loc.getBlock().getType() == Material.CAVE_AIR) {
 			yHeight-=0.1;
 			loc.setY(yHeight);
 			fallHeight+=0.1;
@@ -162,6 +162,15 @@ public class PlayerUtil {
 
 	public static boolean isUsingItem(Player p) {
 		return p.getItemInUse() != null;
+	}
+
+	public static boolean isOnHoney(Location to) {
+		for(Block b : BlockUtils.getBlocksBelow(to)) {
+			if(b.getType() == Material.HONEY_BLOCK) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

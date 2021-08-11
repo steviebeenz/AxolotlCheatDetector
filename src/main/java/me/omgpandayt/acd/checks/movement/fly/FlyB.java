@@ -68,18 +68,32 @@ public class FlyB extends Check {
 			}
 			
 			if(y > lastY && lastY - config.getDouble(path + "y-increase") > lastLastY && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
-				playerData.flyBLimiter += 1;
-				
-				if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
-					flag(p, "Fly (B)", "");
-					playerData.flyBLimiter = -1;
+				doFlag(p, playerData, e);
+			} else {
+				if(y > lastY && lastY > lastLastY && lastY - config.getDouble(path + "y-increase") < lastLastY  && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
 					
-					Location loc = e.getFrom().clone();
-					loc.setY((Math.floor(y) + 1) - PlayerUtil.getFallHeight(p));
-					if(Violations.getViolations(this, p) % 3 == 0)
-						lagBack(loc, e.getPlayer());
+					playerData.flyBNFLimiter++;
+					if(playerData.flyBNFLimiter > 4) {
+						doFlag(p, playerData, e);
+						playerData.flyBNFLimiter = (int) Math.floorDiv(playerData.flyBNFLimiter, 2);
+					}
+					
 				}
 			}
+		}
+	}
+	
+	public void doFlag(Player p, PlayerData playerData, ACDMoveEvent e) {
+		playerData.flyBLimiter += 1;
+		
+		if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
+			flag(p, "Fly (B)", "");
+			playerData.flyBLimiter = -1;
+			
+			Location loc = e.getFrom().clone();
+			loc.setY((Math.floor(e.getTo().getY()) + 1) - PlayerUtil.getFallHeight(p));
+			if(Violations.getViolations(this, p) % 3 == 0)
+				lagBack(loc, e.getPlayer());
 		}
 	}
 	

@@ -8,6 +8,7 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.events.ACDMoveEvent;
+import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class GroundSpoofB extends Check {
@@ -26,7 +27,7 @@ public class GroundSpoofB extends Check {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
-		for(Block b : e.getBlocksBelowUp()) {
+		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
 			if(b.getType() != Material.AIR) {
 				return;
 			}
