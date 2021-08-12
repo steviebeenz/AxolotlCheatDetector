@@ -4,7 +4,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.PlayerDataManager;
 
@@ -172,5 +174,29 @@ public class PlayerUtil {
 		}
 		return false;
 	}
+
+	public static float getPotionLevel(Player player, PotionEffectType jump) {
+		if(player.hasPotionEffect(jump)) {
+			return player.getPotionEffect(jump).getAmplifier();
+		}
+		return 0;
+	}
+
+	public static boolean isNearStair(Location to) {
+		for(Block b : BlockUtils.getBlocksBelow(to)) {
+			if(b instanceof Stairs) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static double getBaseGroundSpeed(Player player) {
+        return 0.95 + (getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
+    }
+	
+	public static double getBaseSpeed(Player player) {
+        return 1.22 + (getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
+    }
 
 }

@@ -26,6 +26,7 @@ public class PlayerData {
 			   flyCLimiter = 0,
 			   flyDLimiter = 0,
 			   flyFLimiter = 0,
+			   flyGLimiter = 0,
 			   ticksLived = 0,
 			   invalidAttackALimiter = 0,
 			   speedCLimiter = 0,
@@ -46,16 +47,25 @@ public class PlayerData {
 			   lastFlight = 250000000,
 			   lastAttack = 250000000,
 			   iceTicks = 0,
+			   slimeTicks = 0,
 			   onHorseTicks = 250000000,
-			   jesusFtb = 0;
+			   jesusFtb = 0,
+			   groundTicks = 0,
+			   airTicks = 0,
+			   sinceSlimeTicks = 250000000,
+			   sinceIceTicks = 250000000,
+			   sinceBlocksNearHead = 250000000,
+			   ticksBlocksNearHead = 0,
+			   sinceTeleportTicks = 250000000;
 	public ArrayList<ACDAttack> attacks = new ArrayList<ACDAttack>();
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,
-				 realisticFD = 0;
+				 realisticFD = 0,
+				 velocityV = 0;
 	public boolean lastPacketNearBoat = false, alerts, invMoveWaitTick = false;
 	public int ticksSinceRocket = 0;
-	public double lastDeltaY, lastFallHeight, lastLastFallHeight, movementPackets, mpTest;
-	
+	public double lastDeltaY, lastFallHeight, lastLastFallHeight, movementPackets, lastGroundY;
+	public float speedFLimiter;
 	public PlayerData(Player p) {
 		this.p = p;
 		alerts = p.hasPermission("acd.notify");

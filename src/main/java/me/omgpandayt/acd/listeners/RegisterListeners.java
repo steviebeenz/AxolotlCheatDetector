@@ -30,6 +30,7 @@ public class RegisterListeners implements Listener {
 	public static void register(JavaPlugin jp) {
 		
 		jp.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(), jp);
+		jp.getServer().getPluginManager().registerEvents(new TeleportListener(), jp);
 		
 		jp.getServer().getPluginManager().registerEvents(new RegisterListeners(), jp);
 		

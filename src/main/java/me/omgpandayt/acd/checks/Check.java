@@ -28,6 +28,7 @@ public class Check {
 	public boolean experimental;
 	public int flagsToKick;
 	
+	
 	public FileConfiguration config;
 
 	public String getName() {
@@ -36,7 +37,7 @@ public class Check {
 	
 	public Check(String check, boolean experimental) {
 		
-		if(ACD.getInstance().getConfig().getBoolean("checks." + check.substring(0, check.length() - 1).toLowerCase() + "." + check.substring(check.length() - 1, check.length()).toLowerCase() + ".enabled")) {
+		if(ACD.getInstance().getConfig().getBoolean("checks." + check.substring(0, check.length() - 1).toLowerCase() + "." + check.substring(check.length() - 1, check.length()).toLowerCase() + ".enabled") || check.equalsIgnoreCase("FlyCHelper")) {
 			this.check = check;
 			this.experimental = experimental;
 			CheckManager.registerCheck(this);

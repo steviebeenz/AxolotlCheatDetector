@@ -153,6 +153,12 @@ checks:
       flags-to-kick: 6
       
       limiter: 2
+      
+    f:
+      
+      enabled: true
+      
+      flags-to-kick: 5
      
   # Timer
   timer:
@@ -210,16 +216,6 @@ checks:
       
     c:
     
-      # Same Y check (always active)
-    
-      enabled: true
-      
-      limiter: 4
-      
-      flags-to-kick: 5
-      
-    d:
-    
       # Glide check
     
       enabled: true
@@ -234,7 +230,7 @@ checks:
       
       limiter: 7
       
-    e:
+    d:
     
       # Ground spoof fly check
     
@@ -248,7 +244,7 @@ checks:
       
       flags-to-kick: 5     
       
-    f:
+    e:
     
       # Second glide check
     
@@ -261,7 +257,7 @@ checks:
       
       limiter: 3
       
-    g:
+    f:
     
       # Velocity fly check
     
@@ -271,6 +267,18 @@ checks:
       velocity-max: 0.419
       
       flags-to-kick: 7
+    g:
+      
+      # High jump check (Also fly up)
+      
+      enabled: true
+      
+      # Maximum y increase from when on ground
+      limit: 2
+      
+      limiter: 5
+      
+      flags-to-kick: 5
       
       
   # Fast Place    

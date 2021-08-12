@@ -49,6 +49,7 @@ public class FlyB extends Check {
 				|| lastFallHeight < fhm
 				|| lastLastFallHeight < fhm
 				|| !PlayerUtil.isValid(p)
+				|| playerData.sinceSlimeTicks < 80
 		)return;
 	
 		

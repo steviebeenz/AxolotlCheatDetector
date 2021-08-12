@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
@@ -17,9 +18,9 @@ public class ACDMoveEvent {
 	private Block[] blocksBelow, blocksBelowFrom, blocksBelowUp, blocksBelowDown;
 	private PlayerData playerData;
 	private Location to,from;
-	private boolean groundFrom, groundTo, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom;
+	private boolean groundFrom, groundTo, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair;
 	private int fallHeight;
-	private double fallHeightDouble;
+	private double fallHeightDouble, afterJumpSpeed, velocityXZ;
 	
 	public ACDMoveEvent(PlayerMoveEvent e) {
 		this.player = e.getPlayer();
@@ -43,6 +44,9 @@ public class ACDMoveEvent {
 		this.isOnClimbableTo = PlayerUtil.isOnClimbable(to);
 		this.isOnHoneyFrom = PlayerUtil.isOnHoney(from);
 		this.isOnHoneyFrom = PlayerUtil.isOnHoney(to);
+		this.isNearStair = PlayerUtil.isNearStair(to);
+		this.afterJumpSpeed = 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED));
+		this.velocityXZ = player.getVelocity().getX() + player.getVelocity().getZ();
 	}
 	
 	public PlayerMoveEvent getEvent() {
@@ -118,6 +122,46 @@ public class ACDMoveEvent {
 	}
 	public boolean isOnHoneyFrom() {
 		return isOnHoneyFrom;
+	}
+
+	public int getGroundTicks() {
+		return getPlayerData().groundTicks;
+	}
+
+	public int getAirTicks() {
+		return getPlayerData().airTicks;
+	}
+
+	public boolean getIsNearStair() {
+		return isNearStair;
+	}
+
+	public int getSinceSlimeTicks() {
+		return getPlayerData().sinceSlimeTicks;
+	}
+	
+	public int getSinceIceTicks() {
+		return getPlayerData().sinceIceTicks;
+	}
+
+	public double getAfterJumpSpeed() {
+		return afterJumpSpeed;
+	}
+
+	public int getSinceBlocksNearHead() {
+		return getPlayerData().sinceBlocksNearHead;
+	}
+
+	public double getVelocityXZ() {
+		return velocityXZ;
+	}
+
+	public int getSinceTeleportTicks() {
+		return getPlayerData().sinceTeleportTicks;
+	}
+
+	public boolean isTakingVelocity() {
+		return velocityXZ != 0;
 	}
 	
 }
