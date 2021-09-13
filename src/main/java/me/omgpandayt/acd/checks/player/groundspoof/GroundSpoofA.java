@@ -53,7 +53,7 @@ public class GroundSpoofA extends Check {
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
-		if(p.isOnGround() && !playerData.isOnGround && !playerData.lastOnGround && p.isValid() && !p.isDead() && PlayerUtil.getFallHeight(p) > 1) {
+		if(p.isOnGround() && !e.isOnGround() && !e.isOnGroundFrom() && p.isValid() && !p.isDead() && PlayerUtil.getFallHeight(p) > 1) {
 			flag(p, "GroundSpoof (A)", "");
 			double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
 			p.damage((playerData.lastPacketFD + deltaY) - 3);

@@ -1,9 +1,5 @@
 package me.omgpandayt.acd;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,47 +8,71 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.omgpandayt.acd.checks.Check;
+import me.omgpandayt.acd.checks.CheckManager;
+import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.checks.combat.criticals.CriticalsA;
+import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackA;
+import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackB;
+import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackC;
+import me.omgpandayt.acd.checks.combat.reach.ReachA;
+import me.omgpandayt.acd.checks.combat.reach.ReachB;
+import me.omgpandayt.acd.checks.movement.aim.AimA;
+import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyA;
+import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyB;
+import me.omgpandayt.acd.checks.movement.fastladder.FastLadderA;
+import me.omgpandayt.acd.checks.movement.fly.FlyA;
+import me.omgpandayt.acd.checks.movement.fly.FlyB;
+import me.omgpandayt.acd.checks.movement.fly.FlyC;
+import me.omgpandayt.acd.checks.movement.fly.FlyD;
+import me.omgpandayt.acd.checks.movement.fly.FlyE;
+import me.omgpandayt.acd.checks.movement.fly.FlyF;
+import me.omgpandayt.acd.checks.movement.fly.FlyG;
+import me.omgpandayt.acd.checks.movement.jump.JumpA;
+import me.omgpandayt.acd.checks.movement.speed.SpeedA;
+import me.omgpandayt.acd.checks.movement.speed.SpeedB;
+import me.omgpandayt.acd.checks.movement.speed.SpeedC;
+import me.omgpandayt.acd.checks.movement.speed.SpeedD;
+import me.omgpandayt.acd.checks.movement.speed.SpeedE;
+import me.omgpandayt.acd.checks.movement.speed.SpeedF;
+import me.omgpandayt.acd.checks.movement.speed.SpeedG;
+import me.omgpandayt.acd.checks.movement.step.StepA;
+import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofA;
+import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofB;
+import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofC;
+import me.omgpandayt.acd.checks.player.invmove.InvMoveA;
+import me.omgpandayt.acd.checks.player.jesus.JesusA;
+import me.omgpandayt.acd.checks.player.jesus.JesusB;
+import me.omgpandayt.acd.checks.player.jesus.JesusC;
+import me.omgpandayt.acd.checks.player.jesus.JesusD;
+import me.omgpandayt.acd.checks.player.jesus.JesusE;
+import me.omgpandayt.acd.checks.player.jesus.JesusF;
+import me.omgpandayt.acd.checks.player.noslowdown.NoSlowdownA;
+import me.omgpandayt.acd.checks.player.noslowdown.NoSlowdownB;
+import me.omgpandayt.acd.checks.world.fastplace.FastPlaceA;
+import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsA;
+import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsB;
+import me.omgpandayt.acd.checks.world.timer.TimerA;
+import me.omgpandayt.acd.listeners.RegisterListeners;
+import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.util.PlayerUtil;
 /*import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.settings.PacketEventsSettings;
 import io.github.retrooper.packetevents.utils.server.ServerVersion;*/
-import me.omgpandayt.acd.checks.*;
-
-import me.omgpandayt.acd.checks.combat.criticals.*;
-import me.omgpandayt.acd.checks.combat.invalidattack.*;
-import me.omgpandayt.acd.checks.combat.reach.*;
-
-import me.omgpandayt.acd.checks.movement.elytrafly.*;
-import me.omgpandayt.acd.checks.movement.fastladder.*;
-import me.omgpandayt.acd.checks.movement.fly.*;
-import me.omgpandayt.acd.checks.movement.speed.*;
-
-import me.omgpandayt.acd.checks.player.groundspoof.*;
-import me.omgpandayt.acd.checks.player.invmove.*;
-import me.omgpandayt.acd.checks.player.jesus.*;
-import me.omgpandayt.acd.checks.player.noslowdown.*;
-
-import me.omgpandayt.acd.checks.world.fastplace.*;
-import me.omgpandayt.acd.checks.world.impossibleactions.*;
-import me.omgpandayt.acd.checks.world.timer.*;
-
-import me.omgpandayt.acd.listeners.RegisterListeners;
-
-import me.omgpandayt.acd.util.BlockUtils;
-import me.omgpandayt.acd.util.PlayerUtil;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class ACD extends JavaPlugin {
 	
-	private static ACD instance; // The plugins instance (Used for finding things in the plugin not static)
+	private static ACD instance;
 	
 	public static String prefix = "&7[&cACD&7]";
 	public static String version = "";
 
 	public String 
 	
-					startupMessage = "&cPreventing your baby axolotls from cheating!",
-					turnoffMessage = "&cNo longer preventing your baby axolotls from cheating!";
+					startupMessage = "&cNow preventing your axolotls from cheating!",
+					turnoffMessage = "&cNo longer preventing your axolotls from cheating!";
 	
 	public static void sendMessage(CommandSender sender, Object message) {
 		if(sender instanceof Player) {
@@ -62,17 +82,16 @@ public class ACD extends JavaPlugin {
 		}
 	}
 	
-    @Override
-    public void onLoad() {
-        /*PacketEvents.create(this);
+    /*@Override
+    public void onLoad(){
+        PacketEvents.create(this);
         PacketEventsSettings settings = PacketEvents.get().getSettings();
         settings
-                .fallbackServerVersion(ServerVersion.v_1_7_10)
+                .fallbackServerVersion(ServerVersion.v_1_17_1)
                 .compatInjector(false)
-                .checkForUpdates(false)
-                .bStats(true);
-        PacketEvents.get().loadAsyncNewThread();*/
-    }
+                .checkForUpdates(false);
+        PacketEvents.get().loadAsyncNewThread();
+    }*/
     
 	public void onEnable() {
 		log(startupMessage);
@@ -95,73 +114,11 @@ public class ACD extends JavaPlugin {
 		RegisterListeners.register(instance);
 		
 		
-		new SpeedA();
-		new SpeedB();
-		new SpeedC();
-		new SpeedE();
-		new SpeedF();
-		
-		new GroundSpoofA();
-		new GroundSpoofB();
-		new GroundSpoofC();
-		
-		new FlyA();
-		new FlyB();
-		new FlyC();
-		new FlyD();
-		new FlyE();
-		new FlyF();
-		new FlyG();
-		
-		new ReachA();
-		new ReachB();
-		
-		new CriticalsA();
-		
-		new NoSlowdownA();
-		new NoSlowdownB();
-		
-		new JesusA();
-		new JesusB();
-		new JesusC();
-		new JesusD();
-		new JesusE();
-		new JesusF();
-		
-		new TimerA();
-		
-		new ElytraFlyA();
-		new ElytraFlyB();
-		
-		new InvMoveA();
-		
-		new ImpossibleActionsA();
-		new ImpossibleActionsB();
-		
-		new FastLadderA();
-		
-		new FastPlaceA();
-		
-		new InvalidAttackA();
-		new InvalidAttackB();
-		new InvalidAttackC();
+		RegisterListeners.loadChecks();
 		
 		for(Player p : Bukkit.getOnlinePlayers()) {
 			PlayerDataManager.createPlayer(p);
 			PlayerDataManager.getPlayer(p).ticksLived = 170;
-		}
-		try {
-			URL url = new URL("https://pastebin.com/raw/Zh3qqGri");
-		    BufferedReader in = new BufferedReader(
-    	    new InputStreamReader(url.openStream()));
-		    
-		    String inputLine;
-		    while ((inputLine = in.readLine()) != null)
-		    	if(!inputLine.equalsIgnoreCase(ACD.version))
-		    		ACD.logPlayers("Hey! You are running ACD " + ACD.version + ", the latest is currently ACD " + inputLine + "! Download latest from Jxy#0001 on discord! (SPIGOT REMOVED)");
-		    in.close();
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 		
 		for(Object e : CheckManager.getRegisteredChecks()) {
@@ -182,17 +139,23 @@ public class ACD extends JavaPlugin {
                     playerData.lastFlight++;
                     playerData.lastAttack++;
                     playerData.sinceTeleportTicks++;
+                    playerData.sincePlacedBlock++;
+                    playerData.ticksNoMove++;
                     if(player.isFlying()) playerData.lastFlight = 0;
                     
-                    if(PlayerUtil.isOnGround(player.getLocation())) {
+                    if(PlayerUtil.isOnGround3(player.getLocation())) {
                     	playerData.airTicks = 0;
                     	playerData.groundTicks++;
                     	playerData.lastGroundY = player.getLocation().getY();
+                    	playerData.realisticFD = 0;
                     } else {
                     	playerData.groundTicks = 0;
                     	playerData.airTicks++;
+                    	playerData.airTicksBeforeGround = playerData.airTicks;
+                    	if(playerData.lastPacketY > player.getLocation().getY()) {
+                    		playerData.realisticFD += playerData.lastPacketY - player.getLocation().getY();
+                    	}
                     }
-                    
                     
                     double iceTicks = playerData.iceTicks,
                     		slimeTicks = playerData.slimeTicks,
@@ -240,6 +203,14 @@ public class ACD extends JavaPlugin {
                     		playerData.movementPackets-=amm;
                     	}
                     }
+                    if(playerData.ticksLived % 5 == 0) {
+                    	if(playerData.decreaseHops && playerData.lowHops > 1) {
+                    		playerData.lowHops = (playerData.lowHops - 1 < 0 ? 0 : playerData.lowHops - 1);
+                    	}
+                    	if(playerData.decreaseHops2 && playerData.highHops > 1) {
+                    		playerData.highHops = (playerData.highHops - 1 < 0 ? 0 : playerData.highHops - 1);
+                    	}
+                    }
                     if(playerData.ticksLived % Math.floor(config.getDouble("checks.invalidattack.b.decrease-time") * 20) == 0) {
                     	if(playerData.attacks.size() > 6) {
                     		playerData.attacks.remove(playerData.attacks.size()-1);
@@ -255,6 +226,9 @@ public class ACD extends JavaPlugin {
                     	}
                     	if(playerData.flyBLimiter > 0) {
                     		playerData.flyBLimiter--;
+                    	}
+                    	if(playerData.speedGLimiter > 0) {
+                    		playerData.speedGLimiter--;
                     	}
                     	if(playerData.flyBNFLimiter > 0) {
                     		playerData.flyBNFLimiter--;
@@ -295,8 +269,8 @@ public class ACD extends JavaPlugin {
                     	if(playerData.speedCLimiter > 0) {
                     		playerData.speedCLimiter--;
                     	}
-                    	if(playerData.flyFLimiter > 0) {
-                    		playerData.flyFLimiter--;
+                    	if(playerData.flyELimiter > 0) {
+                    		playerData.flyELimiter--;
                     	}
                     	if(playerData.flyGLimiter > 0) {
                     		playerData.flyGLimiter--;
@@ -315,7 +289,7 @@ public class ACD extends JavaPlugin {
             
         }, 1, 0);
         
-        
+        //PacketEvents.get().init();
 		
 	}
 	

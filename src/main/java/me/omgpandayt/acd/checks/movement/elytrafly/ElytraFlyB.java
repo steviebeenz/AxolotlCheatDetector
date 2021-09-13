@@ -2,7 +2,6 @@ package me.omgpandayt.acd.checks.movement.elytrafly;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
@@ -15,15 +14,13 @@ public class ElytraFlyB extends Check {
 		super("ElytraFlyB", false);
 	}
 	
-	private String path = "checks.elytrafly.b.";
-	
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		Player p = e.getPlayer();
 		
 		if(p.getInventory().getChestplate() != null && p.getInventory().getChestplate().getType() == Material.ELYTRA) {
 			
-			double deltaXZ = Math.abs(e.getTo().getX() - e.getFrom().getX()) + Math.abs(e.getTo().getZ() - e.getFrom().getZ());
+			double deltaXZ = e.getDeltaXZ();
 			
 			PlayerData playerData = e.getPlayerData();
 			if(playerData == null) return;
@@ -37,9 +34,7 @@ public class ElytraFlyB extends Check {
 					&& playerData.ticksSinceRocket >= config.getDouble(path + "ticks-since-rocket")
 			) {
 				flag(p, "ElytraFly (B)", "");
-				ItemStack chestplate = p.getInventory().getChestplate();
-				p.getInventory().setChestplate(new ItemStack(Material.AIR));
-				p.getInventory().setChestplate(chestplate);
+				noGlide(e);
 				lagBack(e);
 			}
 		}

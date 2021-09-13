@@ -18,9 +18,9 @@ public class ACDMoveEvent {
 	private Block[] blocksBelow, blocksBelowFrom, blocksBelowUp, blocksBelowDown;
 	private PlayerData playerData;
 	private Location to,from;
-	private boolean groundFrom, groundTo, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair;
+	private boolean groundFrom, groundTo, groundTo1, groundFrom1, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair;
 	private int fallHeight;
-	private double fallHeightDouble, afterJumpSpeed, velocityXZ;
+	private double fallHeightDouble, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ;
 	
 	public ACDMoveEvent(PlayerMoveEvent e) {
 		this.player = e.getPlayer();
@@ -32,8 +32,10 @@ public class ACDMoveEvent {
 		this.blocksBelowFrom = BlockUtils.getBlocksBelow(from);
 		this.blocksBelowUp = BlockUtils.getBlocksBelow(to.clone().add(0, 1, 0));
 		this.blocksBelowDown = BlockUtils.getBlocksBelow(to.clone().add(0, -1, 0));
-		this.groundFrom = PlayerUtil.isOnGround(from);
-		this.groundTo = PlayerUtil.isOnGround(to);
+		this.groundFrom = PlayerUtil.isOnGround3(from);
+		this.groundTo = PlayerUtil.isOnGround3(to);
+		this.groundTo1 = PlayerUtil.isOnGround(to);
+		this.groundFrom1 = PlayerUtil.isOnGround(from);
 		this.aboveLiquidsFrom = PlayerUtil.isAboveLiquids(from);
 		this.aboveLiquidsTo = PlayerUtil.isAboveLiquids(to);
 		this.fallHeight = PlayerUtil.getFallHeight(player);
@@ -47,6 +49,11 @@ public class ACDMoveEvent {
 		this.isNearStair = PlayerUtil.isNearStair(to);
 		this.afterJumpSpeed = 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED));
 		this.velocityXZ = player.getVelocity().getX() + player.getVelocity().getZ();
+		this.deltaX = Math.abs(to.getX() - from.getX());
+		this.deltaZ = Math.abs(to.getZ() - from.getZ());
+		this.deltaY = Math.abs(to.getY() - from.getY());
+		this.deltaXZ = deltaX + deltaZ;
+		this.deltaXYZ = deltaXZ + deltaY;
 	}
 	
 	public PlayerMoveEvent getEvent() {
@@ -86,6 +93,12 @@ public class ACDMoveEvent {
 	}
 	public boolean isOnGround() {
 		return groundTo;
+	}
+	public boolean isOnGroundFrom1() {
+		return groundFrom1;
+	}
+	public boolean isOnGround1() {
+		return groundTo1;
 	}
 
 	public boolean isAboveLiquidsFrom() {
@@ -162,6 +175,29 @@ public class ACDMoveEvent {
 
 	public boolean isTakingVelocity() {
 		return velocityXZ != 0;
+	}
+
+	public double getDeltaXZ() {
+		return deltaXZ;
+	}
+	
+	public double getDeltaXYZ() {
+		return deltaXYZ;
+	}
+
+	public double getDeltaX() {
+		return deltaX;
+	}
+	public double getDeltaZ() {
+		return deltaZ;
+	}
+
+	public double getDeltaY() {
+		return deltaY;
+	}
+
+	public int getAirTicksBeforeGround() {
+		return getPlayerData().airTicksBeforeGround;
 	}
 	
 }

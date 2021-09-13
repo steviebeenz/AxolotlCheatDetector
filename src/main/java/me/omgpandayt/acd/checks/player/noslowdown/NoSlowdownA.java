@@ -10,6 +10,7 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.movement.fly.FlyA;
 import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.util.NumberUtil;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class NoSlowdownA extends Check {
@@ -18,7 +19,6 @@ public class NoSlowdownA extends Check {
 		super("NoSlowdownA", false);
 	}
 	
-	private String path = "checks.noslowdown.a.";
 	
 	@Override
 	public void onMove(ACDMoveEvent ev) {
@@ -29,7 +29,7 @@ public class NoSlowdownA extends Check {
 		double distX = Math.abs(e.getTo().getX() - e.getFrom().getX());
 		double distZ = Math.abs(e.getTo().getZ() - e.getFrom().getZ());
 		
-		double dis = ((Math.floor((distX + distZ * 100)) / 100));
+		double dis = NumberUtil.decimals(distX + distZ, 2);
 		
 		float tooFast = (float) config.getDouble(path + "maxspeed");
 		

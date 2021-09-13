@@ -61,6 +61,8 @@ public class SpeedA extends Check implements Listener {
 			maxXZMove += 0.15f;
 		}
 		
+		if(maxXZMove < 0)return;
+		
 		double distance = Math.floor((distX + distZ) * 100);
 		double maxDistance = Math.floor(maxXZMove * 100);
 		

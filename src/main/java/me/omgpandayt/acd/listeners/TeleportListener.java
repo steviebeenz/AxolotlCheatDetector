@@ -16,6 +16,7 @@ public class TeleportListener implements Listener {
 		if(playerData == null)return;
 		
 		playerData.sinceTeleportTicks = 0;
+		playerData.lastGroundY = e.getTo().getY();
 		
 	}
 	

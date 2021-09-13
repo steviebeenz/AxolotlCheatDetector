@@ -1,27 +1,26 @@
 package me.omgpandayt.acd.checks;
 
-import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 
 public class PlayerDataManager {
 
-	private static LinkedList<PlayerData> playerData = new LinkedList<PlayerData>();
+	private static ConcurrentHashMap<Player, PlayerData> playerData = new ConcurrentHashMap<Player, PlayerData>();
 	
 	public static void createPlayer(Player p) {
-		playerData.add(new PlayerData(p));
+		playerData.put(p, new PlayerData(p));
 	}
+	
 	public static void deletePlayer(PlayerData pd) {
-		playerData.remove(pd);
+		playerData.remove(pd.getPlayer());
 	}
 	
 	public static PlayerData getPlayer(Player p) {
-		for(PlayerData pd : playerData) {
-			if(pd.getPlayer() == p) {
-				return pd;
-			}
-		}
-		return null;
+		PlayerData pd = playerData.get(p);
+		if(pd == null)
+			return null;
+		return pd;
 	}
 	
 }

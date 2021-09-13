@@ -37,9 +37,6 @@ main:
       # Determines if the player should get lag backed / cancel attack when flagged
       cancel-event: true
       
-      # Determines if it should summon an axolotl when punished
-      axolotl-on-punish: true
-      
    # Discord webhook
    discord:
    
@@ -132,7 +129,7 @@ checks:
       flags-to-kick: 5
       
          
-    e:
+    d:
     
       # On ground speed check
     
@@ -154,11 +151,39 @@ checks:
       
       limiter: 2
       
-    f:
+    e:
       
       enabled: true
       
       flags-to-kick: 5
+      
+    f:
+      
+      enabled: true
+      
+      flags-to-kick: 5  
+    
+    g:
+      
+      enabled: true
+      
+      flags-to-kick: 5
+     
+  jump:   
+  
+    a:
+    
+      enabled: true
+      
+      flags-to-kick: 4
+     
+  step:   
+     
+     a:
+     
+       enabled: true
+       
+       flags-to-kick: 4
      
   # Timer
   timer:
@@ -170,15 +195,15 @@ checks:
       enabled: true
       
       # Maximum movement packets
-      max-move: 3.5
+      max-move: 4
       
       # How many ticks for the packet limiter to decrease
       decrease-time: 1
       
       # How much decrease occurs
-      decrease-amount: 1.5
+      decrease-amount: 2.5
       
-      limiter: 4
+      limiter: 3
       
       flags-to-kick: 15
       
@@ -449,6 +474,10 @@ checks:
       enabled: true
       limiter: 3
       flags-to-kick: 5
+  aim:
+     a:
+        enabled: true
+        flags-to-kick: 5
   elytrafly:
     a:
       enabled: true

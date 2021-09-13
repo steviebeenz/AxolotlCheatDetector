@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.checks.movement.fly.FlyA;
 import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
@@ -30,15 +31,13 @@ public class GroundSpoofC extends Check {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null) return;
 		
-		if(!PlayerUtil.isOnGround3(p.getLocation()) && e.getTo().getY() < e.getFrom().getY()) playerData.realisticFD += e.getFrom().getY() - e.getTo().getY();
-        else playerData.realisticFD = 0;
 		
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
 			if(b.getType() != Material.AIR) {
 				return;
 			}
 		}
-		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && correctFall(p) && p.getVelocity().getY() < 0 && e.aboveAreAir()) {
+		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && correctFall(p) && p.getVelocity().getY() < FlyA.STILL && e.aboveAreAir() && !e.isAboveSlime() && playerData.sinceSlimeTicks > 80) {
 			playerData.groundSpoofCLimiter++;
 			if(playerData.groundSpoofCLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "GroundSpoof (C)", "");

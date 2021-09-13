@@ -8,6 +8,7 @@ import org.bukkit.util.BlockIterator;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.util.NumberUtil;
 
 public class InvalidAttackA extends Check {
 	
@@ -42,7 +43,7 @@ public class InvalidAttackA extends Check {
 		playerData.invalidAttackALimiter++;
 		
 		if(playerData.invalidAttackALimiter > config.getDouble(path + "limiter")) {
-			expand = ((Math.floor((double)expand * 1000))/1000);
+			expand = NumberUtil.decimals(expand, 3);
 			
 			flag(p, "InvalidAttack (A)", "(EXP " + expand + ")");
 			cancelDamage(e);

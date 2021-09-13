@@ -18,7 +18,7 @@ public class AlertsCommand implements CommandExecutor {
 			if(playerData == null) return false;
 			
 			playerData.alerts = !playerData.alerts;
-			ACD.sendMessage(sender, "The axolotl will " + (playerData.alerts ? "now" : "no longer") + " show you cheaters!");
+			ACD.sendMessage(sender, "The axolotl will " + (playerData.alerts ? "now" : "no longer") + " alert you about cheaters!");
 		} else {
 			ACD.log("You can not run this command!");
 		}

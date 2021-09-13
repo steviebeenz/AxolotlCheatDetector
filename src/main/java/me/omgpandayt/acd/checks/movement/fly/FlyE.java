@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyE extends Check implements Listener {
 
@@ -31,8 +30,8 @@ public class FlyE extends Check implements Listener {
         
         if(p.isFlying())return;
         if(p.isGliding())return;
-        if(PlayerUtil.isOnGround3(e.getFrom())) return;
-        if(PlayerUtil.isOnGround3(e.getTo())) return;
+        if(e.isOnGround()) return;
+        if(e.isOnGroundFrom()) return;
         if(e.isAboveLiquidsFrom()) return;
         if(e.isAboveLiquids()) return;
         if(e.isOnClimbableTo()) return;
@@ -40,6 +39,7 @@ public class FlyE extends Check implements Listener {
         if(e.isOnHoneyTo())return;
         if(e.isOnHoneyFrom())return;
         if(p.getLocation().getBlock().getType() == Material.WATER)return;
+        if(e.getTo().getBlock().getType() != Material.AIR || e.getFrom().getBlock().getType() != Material.AIR)return;
         if(playerData.realisticFD > 80)return;
         
         
@@ -73,11 +73,11 @@ public class FlyE extends Check implements Listener {
 	private void doFlag(Player p, Location from, PlayerData playerData) {
         if(playerData == null)return;
 		
-		playerData.flyFLimiter++;
-		if(playerData.flyFLimiter > config.getDouble(path + "limiter")) {
+		playerData.flyELimiter++;
+		if(playerData.flyELimiter > config.getDouble(path + "limiter")) {
 			flag(p, "Fly (E)", "");
 			lagBack(from, p);
-			playerData.flyFLimiter = 0;
+			playerData.flyELimiter = 0;
 		}
 	}
     

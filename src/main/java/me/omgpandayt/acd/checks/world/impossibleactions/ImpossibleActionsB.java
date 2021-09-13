@@ -1,6 +1,7 @@
 package me.omgpandayt.acd.checks.world.impossibleactions;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -21,6 +22,8 @@ public class ImpossibleActionsB extends Check {
 		
 		Location l = e.getBlock().getLocation();
 		
+		if(e.getBlockPlaced().getType() == Material.LILY_PAD) return;
+		
 		if(!BlockUtils.invalidPlace(l.clone().add(0,1,0))) return;
 		if(!BlockUtils.invalidPlace(l.clone().add(0,-1,0))) return;
 		
@@ -30,7 +33,7 @@ public class ImpossibleActionsB extends Check {
 		if(!BlockUtils.invalidPlace(l.clone().add(0,0,1))) return;
 		if(!BlockUtils.invalidPlace(l.clone().add(0,0,-1))) return;
 		
-		flag(p, "ImpossibleActions (B)", ")"); // Impossible to false (Maybe with client side blocks?)
+		flag(p, "ImpossibleActions (B)", ""); // Impossible to false (Maybe with client side blocks?)
 		cancelPlace(e);
 		
 	}

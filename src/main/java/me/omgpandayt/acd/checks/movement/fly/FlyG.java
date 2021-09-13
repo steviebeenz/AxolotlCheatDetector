@@ -25,7 +25,8 @@ public class FlyG extends Check {
 		
 	    if (!p.isFlying() && !p.isInsideVehicle() && 
 	      p.getLocation().getBlock().getType() != Material.WATER && !e.isOnGround() && playerData.velocityV == 0 && e.getTo().getY() > e.getFrom().getY()
-	    	&& !e.isAboveSlime() && playerData.sinceSlimeTicks > 80) {
+	    	&& !e.isAboveSlime() && playerData.sinceSlimeTicks > 80 && playerData.sincePlacedBlock > 30 && e.getTo().getBlock().getType() == Material.AIR
+	    	&& e.getFrom().getBlock().getType() == Material.AIR){
 	      double distance = e.getTo().getY() - playerData.lastGroundY;
 	      double limit = config.getDouble(path + "limit");
 	      if (p.hasPotionEffect(PotionEffectType.JUMP))

@@ -6,15 +6,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.events.ACDMoveEvent;
@@ -102,6 +98,10 @@ public class Check {
     	if(config.getBoolean("main.punish.cancel-event")) 
     		p.teleport(e);
     }
+    public void noGlide(ACDMoveEvent e) {
+    	if(config.getBoolean("main.punish.cancel-event")) 
+    		e.getPlayer().setGliding(false);
+    }
     public void cancelDamage(EntityDamageByEntityEvent e) {
     	if(config.getBoolean("main.punish.cancel-event")) 
     		e.setCancelled(true);
@@ -118,6 +118,15 @@ public class Check {
     public void onDamage(EntityDamageByEntityEvent e) {
     	
     }
+    
+    public boolean between(int[] flagV, int V) {
+    	for(int i : flagV) {
+    		if(i == V) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 
 	public void punish(Player p) {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
@@ -131,8 +140,6 @@ public class Check {
 			if(config.getBoolean("main.kick.kick-player")) {
 				ACD.logPlayers(p.getName() + " was kicked for cheating (" + getName() + ")");
 				
-				axolotl(p);
-				
 				p.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
 				
 			} else {
@@ -143,7 +150,6 @@ public class Check {
 			if(config.getBoolean("main.ban.ban-player")) {
 				ACD.logPlayers(p.getName() + " was banned for cheating (" + getName() + ")");
 				
-				axolotl(p);
 				
 				String banMessage = ACD.getInstance().getConfig().getString("main.ban.ban-command");
 				
@@ -174,22 +180,6 @@ public class Check {
 	}
 
 	public void onPlace(BlockPlaceEvent e) {
-		
-	}
-	
-	public void axolotl(Player p) {
-		
-		if(!config.getBoolean("main.punish.axolotl-on-punish"))return;
-		
-		Entity axolotl = p.getWorld().spawnEntity(p.getLocation().clone().add(0,1,0), EntityType.AXOLOTL);
-		axolotl.setInvulnerable(true);
-		
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				((LivingEntity)axolotl).setHealth(0);
-			}
-		}.runTaskLater(ACD.getInstance(), 20);
 		
 	}
 	

@@ -33,7 +33,7 @@ public class GroundSpoofB extends Check {
 			}
 		}
 		
-		if(playerData.lastPacketFD > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation())) {
+		if(playerData.lastPacketFD > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation()) && playerData.sinceSlimeTicks > 80) {
 			playerData.groundSpoofBLimiter++;
 			if(playerData.groundSpoofBLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "GroundSpoof (B)", "");
