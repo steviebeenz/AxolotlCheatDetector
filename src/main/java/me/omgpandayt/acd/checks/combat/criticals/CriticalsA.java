@@ -16,6 +16,8 @@ public class CriticalsA extends Check {
 		super("CriticalsA", false);
 	}
 	
+	// Stole from AntiCheatReloaded. Common criticals check. May as well remove as Jump (A) detects better.
+	
 	@Override
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if (!(e.getDamager() instanceof Player) || e.getCause() != DamageCause.ENTITY_ATTACK)
@@ -25,7 +27,7 @@ public class CriticalsA extends Check {
 			if (player.getLocation().getY() % 0.5 == 0
 					&& player.getLocation().clone().subtract(0, 1.0, 0).getBlock().getType().isSolid()) {
 				cancelDamage(e);
-				flag(player, "Criticals (A)", "");
+				flag(player, "");
 			}
 		}
 	}

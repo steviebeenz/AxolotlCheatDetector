@@ -38,7 +38,7 @@ public class InvMoveA extends Check {
 	
 	@Override
 	public void onMove(ACDMoveEvent e) {
-		PlayerData playerData = PlayerDataManager.getPlayer((Player) e.getPlayer());
+		PlayerData playerData = e.getPlayerData();
 		
 		if(playerData == null) return;
 		if(playerData.invMoveWaitTick) return;
@@ -46,7 +46,7 @@ public class InvMoveA extends Check {
 		
 		Player p = e.getPlayer();
 		
-		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && e.getFallHeightDouble() <= 1) { 
+		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && e.getFallHeightDouble() <= 1 && playerData.ticksInventoryOpen > 20) { 
 		
 			
 			for (Block b : e.getBlocksBelowUp()) {
@@ -57,8 +57,12 @@ public class InvMoveA extends Check {
 			double deltaXZ = (Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 			
 			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
-				flag(p, "InvMove (A)", "");
-				lagBack(e);
+				playerData.invMoveALimiter++;
+				if(playerData.invMoveALimiter > 2) {
+					flag(p, "");
+					lagBack(e);
+					playerData.invMoveALimiter = 0;
+				}
 			}
 			
 		}

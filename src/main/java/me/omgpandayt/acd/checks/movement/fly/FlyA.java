@@ -45,7 +45,7 @@ public class FlyA extends Check {
 			if(!PlayerUtil.isOnGround(p.getLocation())) {
 				playerData.flyALimiter++;
 				if(playerData.flyALimiter >= config.getDouble(path + "limiter")) {
-					flag(p, "Fly (A)", "");
+					flag(p, "");
 					lagBack(e);
 					playerData.flyALimiter = 0;
 				}

@@ -33,7 +33,7 @@ public class ElytraFlyB extends Check {
 					&& PlayerUtil.getFallHeight(p) > 3
 					&& playerData.ticksSinceRocket >= config.getDouble(path + "ticks-since-rocket")
 			) {
-				flag(p, "ElytraFly (B)", "");
+				flag(p, "");
 				noGlide(e);
 				lagBack(e);
 			}

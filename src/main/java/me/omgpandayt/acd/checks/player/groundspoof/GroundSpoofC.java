@@ -37,10 +37,10 @@ public class GroundSpoofC extends Check {
 				return;
 			}
 		}
-		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && correctFall(p) && p.getVelocity().getY() < FlyA.STILL && e.aboveAreAir() && !e.isAboveSlime() && playerData.sinceSlimeTicks > 80) {
+		if(playerData.realisticFD > 0 && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && correctFall(p) && p.getVelocity().getY() < FlyA.STILL && e.aboveAreAir() && !e.isAboveSlime() && playerData.sinceSlimeTicks > 80 && playerData.sinceLevitationTicks > 30 && playerData.sinceWaterTicks > 10) {
 			playerData.groundSpoofCLimiter++;
 			if(playerData.groundSpoofCLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "GroundSpoof (C)", "");
+				flag(p, "");
 				playerData.groundSpoofCLimiter = 0;
 				if(config.getBoolean("main.punish.cancel-event")) {
 					double deltaY = Math.abs(e.getTo().getY() - e.getFrom()	.getY());

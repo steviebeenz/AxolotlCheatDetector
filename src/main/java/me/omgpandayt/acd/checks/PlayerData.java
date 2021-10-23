@@ -25,24 +25,27 @@ public class PlayerData {
 	public Player p;
 	public int flyALimiter = 0,
 			   flyBLimiter = 0,
+			   ticksInventoryOpen = 0,
 			   flyBNFLimiter = 0,
 			   flyCLimiter = 0,
 			   flyDLimiter = 0,
-			   flyELimiter = 0,
-			   flyGLimiter = 0,
+			   invMoveALimiter = 0,
 			   ticksLived = 0,
 			   invalidAttackALimiter = 0,
 			   speedCLimiter = 0,
 			   speedBLimiter = 0,
 			   speedDLimiter = 0,
-			   speedELimiter = 0,
 			   jesusBLimiter = 0,
 			   jesusCLimiter = 0,
 			   jesusDLimiter = 0,
 			   jesusELimiter = 0,
 			   impactALimiter = 0,
-			   timerALimiter = 0,
-			   speedGLimiter = 0,
+			   badPacketsALimiter = 0,
+			   motionALimiter = 0,
+			   motionBLimiter = 0,
+			   motionCLimiter = 0,
+			   motionD2Limiter = 0,
+			   sinceLevitationTicks = M,
 			   groundSpoofBLimiter = 0,
 			   groundSpoofCLimiter = 0,
 			   ticksSinceHit = M,
@@ -63,17 +66,26 @@ public class PlayerData {
 			   ticksBlocksNearHead = 0,
 			   sinceTeleportTicks = M,
 			   sincePlacedBlock = M,
+			   sinceWaterTicks = M,
 			   fastTicks = 0,
 			   ticksNoMove = 0,
-			   airTicksBeforeGround;
+			   ticksSinceWaterBlock = M,
+			   ticksSinceClimbable = M,
+			   ticksItemInUse = 0,
+			   airTicksBeforeGround = 0,
+			   ticksSinceEnderDragon = M;
 	public ArrayList<ACDAttack> attacks = new ArrayList<ACDAttack>();
 	public float lastPacketFD = 0,
 				 lastPacketHP = 0,
 				 realisticFD = 0,
-				 velocityV = 0;
-	public boolean lastPacketNearBoat = false, alerts, invMoveWaitTick = false, speedFGround = true, decreaseHops = true, decreaseHops2 = true;
+				 velocityV = 0,
+				 aimALimiter = 0,
+				 motionDLimiter = 0,
+				 lastDeltaPitch = 0;
+	public boolean lastPacketNearBoat = false, alerts, invMoveWaitTick = false, speedEGround = true, decreaseHops = true, decreaseHops2 = true;
 	public int ticksSinceRocket = 0;
-	public double lastDeltaY, lastFallHeight, lastLastFallHeight, movementPackets, lastGroundY, lowHops, highHops, lastYaw, lastPitch;
+	public double lastDeltaY, lastFallHeight, lastLastFallHeight, movementPackets, lastGroundY = 1e+305, lastGroundX = 1e+305, lastGroundZ = 1e+305, lowHops, highHops, lastYaw, lastPitch;
+	public double prevDeltaXZ, prevDeltaX, prevDeltaZ;
 	public PlayerData(Player p) {
 		this.p = p;
 		alerts = p.hasPermission("acd.notify");

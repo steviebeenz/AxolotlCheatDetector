@@ -1,94 +1,100 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
-import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.checks.movement.fly.FlyA;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
-import me.omgpandayt.acd.violation.Violations;
 
-public class SpeedD extends Check implements Listener {
-	
+public class SpeedD extends Check {
+
 	public SpeedD() {
 		super("SpeedD", false);
 	}
 	
-	@Override
+	/*@Override
 	public void onMove(ACDMoveEvent e) {
-
+		
 		Player p = e.getPlayer();
+		
+		PlayerData playerData = e.getPlayerData();
+		if(playerData==null)return;
+		if(!PlayerUtil.isValid(p) || p.hasPotionEffect(PotionEffectType.LEVITATION) || e.isAboveIce() || p.isGliding() || playerData.ticksSinceEnderDragon < 170 || playerData.ticksSinceHit < 30)return;
+		
+		final double deltaXZ = Math.abs(e.getTo().getX() - e.getFrom().getX()) + Math.abs(e.getTo().getZ() - e.getFrom().getZ());
+        final double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
 
-		double distX = Math.abs(e.getFrom().getX() - e.getTo().getX());
-		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
-		double dist = distX + distZ;
+        final int groundTicks = e.getGroundTicks();
+        final int airTicks = e.getAirTicks();
 
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
-		
-		if(playerData == null) return;
-		
-		ItemStack boots = p.getInventory().getBoots();
-		
-		if(boots != null) {
-			if (boots.getItemMeta().getAttributeModifiers().containsValue(Attribute.GENERIC_MOVEMENT_SPEED)) {
-				return;
-			}
-		}
-		if(playerData.ticksSinceHit < 20)return;
-		
-		boolean onGround = e.isOnGround() && e.isOnGroundFrom();
-		
-		double lastDist = playerData.dist;
+        final float modifierJump = PlayerUtil.getPotionLevel(p, PotionEffectType.JUMP) * 0.1F;
+        final float jumpMotion = 0.42F + modifierJump;
 
-		float friction = 0.91F;
-		double shiftedLastDist = lastDist * friction;
-		double equalness = dist - shiftedLastDist;
-		double scaledEqualness = equalness;
-		
-		playerData.dist = dist;
-		
-		double tooFast = config.getDouble(path + "too-little-friction");
-		
-        PotionEffect effect = p.getPotionEffect( PotionEffectType.SPEED );
-        if ( effect != null )
-        {
-            tooFast += effect.getAmplifier() / (Math.PI * Math.PI);
+        double gSpeed = PlayerUtil.getBaseGroundSpeed(p);
+        double aSpeed = PlayerUtil.getBaseSpeed(p);
+
+        if (Math.abs(deltaY - jumpMotion) < 1.0E-4
+                && airTicks == 1) {
+            gSpeed = e.getAfterJumpSpeed();
+            aSpeed = e.getAfterJumpSpeed();
         }
-        
-        if(playerData.onHorseTicks < 10)return;
-		
-		for (Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, -0.2, 0))) {
-			if (BlockUtils.isIce(b)) {
-				tooFast += config.getDouble(path + "ice-increase");
-			} else if (b.getType() == Material.SLIME_BLOCK) {
-				tooFast += config.getDouble(path + "slime-increase");
-			} else if (BlockUtils.isSoil(b) && p.getInventory().getBoots() != null && p.getInventory().getBoots().containsEnchantment(Enchantment.SOUL_SPEED)) {
-				tooFast += config.getDouble(path + "soul-speed-increase");
-			}
-			
-		}
 
-		if (onGround && scaledEqualness > tooFast && PlayerUtil.isValid(p) && !p.isGliding() && p.getVelocity().getY() == FlyA.STILL) {
-			playerData.speedDLimiter++;
-			if(playerData.speedDLimiter > config.getDouble(path + "limiter")) {
-				double got = Math.floor(scaledEqualness * 100);
-				flag(p, "Speed (E)", "(EXP " + ((Math.floor(tooFast * 100)) / 100) + ") (GOT " + (got / 100) + " (VL" + (Violations.getViolations(this, p) + 1) + ")");
-				lagBack(e);
-				playerData.speedDLimiter = 0;
-			}
-		}
+        if (e.getIsNearStair()) {
+            aSpeed += 0.92F;
+            gSpeed += 0.92F;
+        }
 
+        if (e.getSinceIceTicks() < 20
+                || e.getSinceSlimeTicks() < 20) {
+            aSpeed += 0.37F;
+            gSpeed += 0.37F;
+        }
+
+        if (e.getSinceBlocksNearHead() < 6) {
+            aSpeed += 0.92F / Math.max(1, e.getSinceBlocksNearHead());
+            gSpeed += 0.92F / Math.max(1, e.getSinceBlocksNearHead());
+        }
+
+        if (groundTicks < 7) {
+            gSpeed += (0.26F / groundTicks);
+        }
+
+        if (e.isTakingVelocity()) {
+            gSpeed += e.getVelocityXZ() + 0.05;
+            aSpeed += e.getVelocityXZ() + 0.05;
+        }
+
+        if (e.getSinceTeleportTicks() < 15) {
+            aSpeed += 0.1;
+            gSpeed += 0.1;
+        }
+
+
+        if (airTicks > 0) {
+            if (deltaXZ > aSpeed) {
+            	playerData.speedDLimiter += 1f;
+                if (playerData.speedDLimiter > 3) {
+                    doFlag(p);
+                }
+            } else {
+                playerData.speedDLimiter -= 0.15f;
+            }
+        } else {
+            if (deltaXZ > gSpeed) {
+            	playerData.speedDLimiter += 1f;
+                if (playerData.speedDLimiter > 3) {
+                    doFlag(p);
+                }
+            } else {
+            	playerData.speedDLimiter -= 0.15f;
+            }
+        }
 	}
+	
+	public void doFlag(Player player) {
+		flag(player, "");
+	}*/
 
 }

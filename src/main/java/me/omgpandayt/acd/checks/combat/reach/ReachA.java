@@ -36,7 +36,7 @@ public class ReachA extends Check {
 			
 			if(r > config.getDouble(path + "max-reach") + (a.getGameMode() == GameMode.CREATIVE ? config.getDouble(path + "creative-increase") : 0)) {
 				
-				flag(a, "Reach (A)", "(REACH " + ((Math.floor(r * 100)) / 100) + ")");
+				flag(a, "(REACH " + ((Math.floor(r * 100)) / 100) + ")");
 				cancelDamage(e);
 				lagBack(a.getLocation(), a);
 				

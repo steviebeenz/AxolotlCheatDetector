@@ -8,6 +8,7 @@ import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class PlayerUtil {
@@ -16,7 +17,7 @@ public class PlayerUtil {
 		double expand = 0.3;
 		for(double x=-expand;x<=expand;x+=expand) {
 			for(double z=-expand;z<=expand;z+=expand) {
-				if (loc.clone().add(x, -0.02, z).getBlock().getType() != Material.AIR && loc.clone().add(x, 0.5001, z).getBlock().getType() == Material.AIR) {
+				if (loc.clone().add(x, -0.02, z).getBlock().getType().isSolid() && !loc.clone().add(x, 0.5001, z).getBlock().getType().isSolid()) {
 					return true;
 				}
 			}
@@ -28,7 +29,7 @@ public class PlayerUtil {
 		double expand = 0.3;
 		for(double x=-expand;x<=expand;x+=expand) {
 			for(double z=-expand;z<=expand;z+=expand) {
-				if (loc.clone().add(x, -0.5001, z).getBlock().getType() != Material.AIR && loc.clone().add(x, 0.5001, z).getBlock().getType() == Material.AIR) {
+				if (loc.clone().add(x, -0.5001, z).getBlock().getType().isSolid() || loc.clone().add(x, -0.5001, z).getBlock().getType() == Material.LADDER) {
 					return true;
 				}
 			}
@@ -43,7 +44,7 @@ public class PlayerUtil {
             for (int y = -radiusY; y < radiusY; y++) {
                 for (int z = -radius; z < radius; z++) {
                     Block block = loc.getWorld().getBlockAt(loc.clone().add(x, y, z));
-                    if (block.getType().isSolid() || block.getLocation().clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+                    if (block.getType().isSolid() || block.getLocation().clone().add(0, 1, 0).getBlock().getType().isSolid()) {
                         return true;
                     }
                 }
@@ -57,7 +58,7 @@ public class PlayerUtil {
             for (int y = -radiusY; y < radiusY; y++) {
                 for (int z = -radius; z < radius; z++) {
                     Block block = loc.getWorld().getBlockAt(loc.clone().add(x, y, z));
-                    if (block.getType().isSolid() || block.getLocation().clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+                    if (block.getType().isSolid() || block.getLocation().clone().add(0, 1, 0).getBlock().getType().isSolid()) {
                         return true;
                     }
                 }
@@ -67,33 +68,38 @@ public class PlayerUtil {
     }
 
 	public static int getFallHeight(Player p) {
+		double depth = 80;
 		int yHeight = (int) Math.floor(p.getPlayer().getLocation().getY());
 		Location loc = p.getLocation().clone();
 		loc.setY(yHeight);
 		int fallHeight = 0;
-		while(loc.getBlock().getType() == Material.AIR) {
+		while(!loc.getBlock().getType().isSolid() && depth != 0) {
 			yHeight--;
 			loc.setY(yHeight);
 			fallHeight++;
+			depth--;
 		}
 		return fallHeight;
 	}
 	
 	public static double getFallHeightDouble(Player p) {
+		double depth = 80;
 		double yHeight = Math.floor(p.getPlayer().getLocation().getY());
 		Location loc = p.getLocation().clone();
 		loc.setY(yHeight);
 		double fallHeight = 0;
-		while(loc.getBlock().getType() == Material.AIR || loc.getBlock().getType() == Material.CAVE_AIR) {
+		while(!loc.getBlock().getType().isSolid() && depth != 0) {
 			yHeight-=0.1;
 			loc.setY(yHeight);
 			fallHeight+=0.1;
+			depth--;
 		}
 		return fallHeight;
 	}
 
 	public static boolean isValid(Player p) {
-		return PlayerDataManager.getPlayer(p).lastFlight > 20 && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
+		PlayerData pd = PlayerDataManager.getPlayer(p);
+		return pd.lastFlight > 20 && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
 	}
 
 	public static boolean isAboveLiquids(Location location) {
@@ -146,7 +152,7 @@ public class PlayerUtil {
 
 	public static boolean aboveAreAir(Player p) {
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 3, 0))) {
-			if(b.getType() != Material.AIR) {
+			if(!b.getType().isAir()) {
 				return false;
 			}
 		}
@@ -198,5 +204,24 @@ public class PlayerUtil {
 	public static double getBaseSpeed(Player player) {
         return 1.22 + (getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
     }
+
+	public static boolean isInLiquid(Location l) {
+		for(Block b : BlockUtils.getBlocksBelow(l)) {
+			if(b.getLocation().clone().add(0, 1, 0).getBlock().isLiquid()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isAboveIce(Location to) {
+		for(Block b : BlockUtils.getBlocksBelow(to)) {
+			if(BlockUtils.isIce(b)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 }

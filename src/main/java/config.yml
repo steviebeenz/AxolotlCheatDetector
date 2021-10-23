@@ -63,7 +63,7 @@ checks:
 
   # Speed
   speed:
-  
+      
     a:
     
       # Speed check
@@ -79,25 +79,6 @@ checks:
       flags-to-kick: 5
       
     b:
-    
-      # Air friction check
-    
-      enabled: true
-      
-      # How much to add to friction if on ice
-      ice-increase: 0.00125
-      
-      # How much to add to the friction if on slime
-      slime-increase: 0.004
-      
-      # The friction
-      too-little-friction: 0.07
-      
-      flags-to-kick: 6
-      
-      limiter: 2
-      
-    c:
     
       # Backwards speed check
     
@@ -129,6 +110,26 @@ checks:
       flags-to-kick: 5
       
          
+      
+    c:
+    
+      # Air friction check
+    
+      enabled: true
+      
+      # How much to add to friction if on ice
+      ice-increase: 0.00125
+      
+      # How much to add to the friction if on slime
+      slime-increase: 0.004
+      
+      # The friction
+      too-little-friction: 0.07
+      
+      flags-to-kick: 6
+      
+      limiter: 2 
+        
     d:
     
       # On ground speed check
@@ -156,18 +157,7 @@ checks:
       enabled: true
       
       flags-to-kick: 5
-      
-    f:
-      
-      enabled: true
-      
-      flags-to-kick: 5  
     
-    g:
-      
-      enabled: true
-      
-      flags-to-kick: 5
      
   jump:   
   
@@ -185,8 +175,8 @@ checks:
        
        flags-to-kick: 4
      
-  # Timer
-  timer:
+  # Packets
+  badpackets:
   
     a:
     
@@ -195,18 +185,77 @@ checks:
       enabled: true
       
       # Maximum movement packets
-      max-move: 4
+      max-move: 6
       
       # How many ticks for the packet limiter to decrease
       decrease-time: 1
       
       # How much decrease occurs
-      decrease-amount: 2.5
+      decrease-amount: 3
       
-      limiter: 3
+      limiter: 4
       
       flags-to-kick: 15
       
+    b:
+    
+      enabled: true
+      
+      flags-to-kick: 1
+      
+  motion:    
+  
+     a:
+     
+         # Glide check
+    
+         enabled: true
+      
+         # Minimum y descend
+         descend-y: 0.124
+      
+         flags-to-kick: 5
+      
+         limiter: 3
+         
+     b:
+     
+        # Player velocity check
+     
+        enabled: true
+        
+        flags-to-kick: 5
+        
+     c:
+     
+         # Glide check
+    
+         enabled: true
+      
+         # Minimum y descend
+         y-drop: 0.25
+      
+         # How high up you must be to flag
+         height: 0.5
+      
+         flags-to-kick: 12
+      
+         limiter: 7
+     
+     d:
+     
+        # Gravity check
+     
+        enabled: true
+        
+        flags-to-kick: 5
+        
+     e:
+     
+        enabled: true
+        
+        flags-to-kick: 5
+  
   # Flight
   fly:
   
@@ -241,22 +290,6 @@ checks:
       
     c:
     
-      # Glide check
-    
-      enabled: true
-      
-      # Minimum y descend
-      y-drop: 0.25
-      
-      # How high up you must be to flag
-      height: 0.5
-      
-      flags-to-kick: 12
-      
-      limiter: 7
-      
-    d:
-    
       # Ground spoof fly check
     
       enabled: true
@@ -266,44 +299,6 @@ checks:
       
       # Max distance
       dist: 0.27
-      
-      flags-to-kick: 5     
-      
-    e:
-    
-      # Second glide check
-    
-      enabled: true
-      
-      # Minimum y descend
-      descend-y: 0.124
-      
-      flags-to-kick: 5
-      
-      limiter: 3
-      
-    f:
-    
-      # Velocity fly check
-    
-      enabled: true
-      
-      # Max velocity to flag
-      velocity-max: 0.419
-      
-      flags-to-kick: 7
-    g:
-      
-      # High jump check (Also fly up)
-      
-      enabled: true
-      
-      # Maximum y increase from when on ground
-      limit: 2
-      
-      limiter: 5
-      
-      flags-to-kick: 5
       
       
   # Fast Place    
@@ -465,6 +460,7 @@ checks:
     a:
       enabled: true
       nearby-boat-radius: 2
+      ghostblock-teleport: true
       flags-to-kick: 6
     b:
       enabled: true

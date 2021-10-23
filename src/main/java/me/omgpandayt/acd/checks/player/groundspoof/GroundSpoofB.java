@@ -18,14 +18,13 @@ public class GroundSpoofB extends Check {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
-		if(playerData == null) return;
+		if(playerData.sinceWaterTicks < 10 || playerData.ticksSinceEnderDragon < 170) return;
 		
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
 			if(b.getType() != Material.AIR) {
@@ -36,7 +35,7 @@ public class GroundSpoofB extends Check {
 		if(playerData.lastPacketFD > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation()) && playerData.sinceSlimeTicks > 80) {
 			playerData.groundSpoofBLimiter++;
 			if(playerData.groundSpoofBLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "GroundSpoof (B)", "");
+				flag(p, "");
 				playerData.groundSpoofBLimiter = 0;
 				if(config.getBoolean("main.punish.cancel-event")) {
 					double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());

@@ -31,7 +31,7 @@ public class InvalidAttackC extends Check {
 		
 		if(targetDis + config.getDouble(path + "block-distance-increase") < entityDis) {
 		
-			flag(p, "InvalidAttack (C)", "(DIST " + ((Math.floor(((entityDis - (targetDis + config.getDouble(path + "block-distance-increase")))) * 100))/100) + ")");
+			flag(p, "(DIST " + ((Math.floor(((entityDis - (targetDis + config.getDouble(path + "block-distance-increase")))) * 100))/100) + ")");
 			cancelDamage(e);
 		
 		}

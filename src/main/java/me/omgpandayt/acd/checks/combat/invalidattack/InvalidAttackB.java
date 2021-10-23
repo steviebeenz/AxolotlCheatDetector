@@ -37,7 +37,7 @@ public class InvalidAttackB extends Check {
 				}
 			}
 			if(attackLow > config.getDouble(path + "attack-low-to-flag")) {
-				flag(p, "InvalidAttackB", "(ATK " + attackLow + ")");
+				flag(p, "(ATK " + attackLow + ")");
 			}
 		}
 		

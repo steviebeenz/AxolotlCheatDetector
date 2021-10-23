@@ -1,6 +1,8 @@
 package me.omgpandayt.acd.checks.movement.fly;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
@@ -13,25 +15,44 @@ public class FlyC extends Check {
 		super("FlyC", false);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		Player p = e.getPlayer();
 		
 		
 		PlayerData playerData = e.getPlayerData();
-		if(playerData == null) return;
+		if(playerData == null || p.hasPotionEffect(PotionEffectType.LEVITATION) || playerData.airTicks < 4) return;
 		
-		double deltaY = Math.abs(e.getFrom().getY() - e.getTo().getY());
+		if(PlayerUtil.isOnGround3(p.getLocation()))
+			playerData.isOnGround = true;
+		else
+			playerData.isOnGround = false;
 		
-		if(deltaY < config.getDouble(path + "y-drop") && p.getFallDistance() > config.getDouble(path + "height") && !e.isOnGround() && PlayerUtil.isValid(p) && !p.isGliding()) {
-			playerData.flyDLimiter++;
-			if(playerData.flyDLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "Fly (C)", "");
-				playerData.flyDLimiter = 0;
-				lagBack(e);
-			}
-		}
+        if(!playerData.isOnGround
+                && !playerData.lastOnGround
+                && p.isOnGround()){
+            double dist = e.getTo().distance( e.getFrom() ) ;
+
+            Location f = e.getFrom();
+            Location t = e.getTo();
+            
+            if(
+            		dist > config.getDouble(path + "dist") && 
+            		(f.getY() == t.getY() ||
+            		f.getY() + 0.2f > t.getY() )
+            		&& p.getVelocity().getY() < config.getDouble(path + "velocity")
+            		&& e.getFallHeightDouble() > 0.2
+            ) {
+                
+            	flag(p, "");
+            	
+            }
+
+        }
 		
+        playerData.lastOnGround = playerData.isOnGround;
+        
 	}
 	
 }

@@ -33,7 +33,7 @@ public class ImpossibleActionsB extends Check {
 		if(!BlockUtils.invalidPlace(l.clone().add(0,0,1))) return;
 		if(!BlockUtils.invalidPlace(l.clone().add(0,0,-1))) return;
 		
-		flag(p, "ImpossibleActions (B)", ""); // Impossible to false (Maybe with client side blocks?)
+		flag(p, ""); // Impossible to false (Maybe with client side blocks?)
 		cancelPlace(e);
 		
 	}

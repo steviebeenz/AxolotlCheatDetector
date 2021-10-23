@@ -1,6 +1,7 @@
 package me.omgpandayt.acd.checks.player.jesus;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,8 +18,6 @@ public class JesusA extends Check {
 		super("JesusA", false);
 	}
 	
-	private String path = "checks.jesus.a.";
-
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		
@@ -26,6 +25,12 @@ public class JesusA extends Check {
 		
 		if(e.getFrom().getY() != e.getTo().getY()) return;
 		if(!e.isAboveLiquids() || !e.isAboveLiquidsFrom() || p.isSwimming())return;
+		
+		for(Block b : e.getBlocksBelowUp()) {
+			if(!b.getType().isAir()) {
+				return;
+			}
+		}
 		
 		double nbr = config.getDouble(path + "nearby-boat-radius");
 		
@@ -41,7 +46,7 @@ public class JesusA extends Check {
 		
 		if(!playerData.lastPacketNearBoat) {
 			if(PlayerUtil.isValid(p)) {
-				flag(p, "Jesus (A)", "");
+				flag(p, "");
 				lagBack(e.getFrom().add(0, 0.2, 0), p);
 			}
 		}

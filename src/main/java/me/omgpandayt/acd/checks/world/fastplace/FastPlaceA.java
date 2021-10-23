@@ -27,7 +27,7 @@ public class FastPlaceA extends Check {
 		playerData.placedBlocks++;
 		
 		if(playerData.placedBlocks >= config.getDouble(path + "maxplace")) {
-			flag(p, "FastPlace (A)", "");
+			flag(p, "");
 			playerData.placedBlocks = 0;
 			cancelPlace(e);
 		}

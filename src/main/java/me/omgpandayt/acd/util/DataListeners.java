@@ -4,20 +4,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 
 public class DataListeners implements Listener{
 
-	@EventHandler
-	public void onMove(PlayerMoveEvent e) {
+	public static void onMove(ACDMoveEvent e) {
 		
-		Player p = e.getPlayer();
-		
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+		PlayerData playerData = e.getPlayerData();
 		if(playerData == null)return;
+		
 		
 		if (e.getTo().getY() != e.getFrom().getY() && playerData.velocityV > 0) {
 			playerData.velocityV-=1;

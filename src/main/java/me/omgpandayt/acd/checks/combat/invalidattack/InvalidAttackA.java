@@ -45,7 +45,7 @@ public class InvalidAttackA extends Check {
 		if(playerData.invalidAttackALimiter > config.getDouble(path + "limiter")) {
 			expand = NumberUtil.decimals(expand, 3);
 			
-			flag(p, "InvalidAttack (A)", "(EXP " + expand + ")");
+			flag(p, "(EXP " + expand + ")");
 			cancelDamage(e);
 		}
 		

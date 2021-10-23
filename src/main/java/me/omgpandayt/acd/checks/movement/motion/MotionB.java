@@ -1,4 +1,4 @@
-package me.omgpandayt.acd.checks.movement.speed;
+package me.omgpandayt.acd.checks.movement.motion;
 
 import org.bukkit.entity.Player;
 
@@ -6,10 +6,10 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
 
-public class SpeedG extends Check {
+public class MotionB extends Check {
 
-	public SpeedG() {
-		super("SpeedG", false);
+	public MotionB() {
+		super("MotionB", false);
 	}
 	
 	@Override
@@ -20,11 +20,11 @@ public class SpeedG extends Check {
 		if(playerData == null)return;
 		
 		if(Math.abs(e.getVelocityXZ()) > 0.21 && e.getGroundTicks() == 2) {
-			playerData.speedGLimiter++;
-			if(playerData.speedGLimiter > 2) {
-				flag(p, "Speed (G)", "(VXZ " + Math.abs(Math.floor(e.getVelocityXZ() * 100)) / 100 + ")");
+			playerData.motionBLimiter++;
+			if(playerData.motionBLimiter > 2) {
+				flag(p, "(VXZ " + Math.abs(Math.floor(e.getVelocityXZ() * 100)) / 100 + ")");
 				lagBack(e);
-				playerData.speedGLimiter = 0;
+				playerData.motionBLimiter = 0;
 			}
 			
 		}

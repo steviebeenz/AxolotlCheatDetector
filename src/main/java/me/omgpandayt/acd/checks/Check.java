@@ -42,7 +42,7 @@ public class Check {
 		
 	}
 	
-    public void sync(final Runnable runnable) {
+    /*public void sync(final Runnable runnable) {
         final AtomicBoolean waiting = new AtomicBoolean(true);
         if (ACD.getInstance().isEnabled()) {
             Bukkit.getScheduler().runTask(ACD.getInstance(), () -> {
@@ -52,9 +52,11 @@ public class Check {
         }
         while (waiting.get()) {
         }
-    }
+    }*/
     
-    public void flag(Player player, String check, String debug) {
+    public void flag(Player player,String debug) {
+    	
+    	String check = this.check.substring(0, this.check.length()-1) + " (" + this.check.substring(this.check.length() - 1, this.check.length()) + ")";
     	
     	ACD.logPlayers(player.getName() + " failed " + check + " - (VL" + (Violations.getViolations(this, player)+1) + ") " + debug);
     	
@@ -91,12 +93,22 @@ public class Check {
     }
     
     public void lagBack(ACDMoveEvent e) {
-    	if(config.getBoolean("main.punish.cancel-event")) 
+    	if(config.getBoolean("main.punish.cancel-event")) {
     		e.getPlayer().teleport(e.getFrom());
+    		PlayerData pd = PlayerDataManager.getPlayer(e.getPlayer());
+    		if(pd == null)return;
+    		pd.sinceTeleportTicks = 0;
+    		pd.airTicks = 0;
+    	}
     }
     public void lagBack(Location e, Player p) {
-    	if(config.getBoolean("main.punish.cancel-event")) 
+    	if(config.getBoolean("main.punish.cancel-event")) {
     		p.teleport(e);
+    		PlayerData pd = PlayerDataManager.getPlayer(p);
+    		if(pd == null)return;
+    		pd.sinceTeleportTicks = 0;
+    		pd.airTicks = 0;
+    	}
     }
     public void noGlide(ACDMoveEvent e) {
     	if(config.getBoolean("main.punish.cancel-event")) 
@@ -172,10 +184,6 @@ public class Check {
 	}
 
 	public void onInventoryClose(InventoryCloseEvent e) {
-		
-	}
-
-	public void onTick(Player p) {
 		
 	}
 

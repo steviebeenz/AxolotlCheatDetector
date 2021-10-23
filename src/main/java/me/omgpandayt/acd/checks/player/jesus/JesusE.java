@@ -36,7 +36,7 @@ public class JesusE extends Check {
 			
 			if(playerData.jesusELimiter >= 8) {
 				playerData.jesusELimiter = 5;
-				flag(p, "Jesus (E)", "");
+				flag(p, "");
 			}
 		}
 		

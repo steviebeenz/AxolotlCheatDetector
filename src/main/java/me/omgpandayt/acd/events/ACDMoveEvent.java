@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.util.BlockUtils;
@@ -17,15 +18,16 @@ public class ACDMoveEvent {
 	private Player player;
 	private Block[] blocksBelow, blocksBelowFrom, blocksBelowUp, blocksBelowDown;
 	private PlayerData playerData;
-	private Location to,from;
-	private boolean groundFrom, groundTo, groundTo1, groundFrom1, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair;
+	private Location to, from;
+	private boolean groundFrom, groundTo, groundTo1, groundFrom1, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair, isInLiquid, aboveIce;
 	private int fallHeight;
-	private double fallHeightDouble, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ;
+	private double fallHeightDouble, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ, velocityX, velocityZ;
 	
 	public ACDMoveEvent(PlayerMoveEvent e) {
 		this.player = e.getPlayer();
+		//WrappedPacketInFlying packet = new WrappedPacketInFlying(event.getNMSPacket());
 		this.to = e.getTo();
-		this.from = e.getFrom();
+		this.from = e.getFrom(); // new Location(player.getWorld(), packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch())
 		this.playerData = PlayerDataManager.getPlayer(player);
 		this.event = e;
 		this.blocksBelow = BlockUtils.getBlocksBelow(to);
@@ -48,12 +50,16 @@ public class ACDMoveEvent {
 		this.isOnHoneyFrom = PlayerUtil.isOnHoney(to);
 		this.isNearStair = PlayerUtil.isNearStair(to);
 		this.afterJumpSpeed = 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED));
-		this.velocityXZ = player.getVelocity().getX() + player.getVelocity().getZ();
+		this.velocityX = player.getVelocity().getX();
+		this.velocityZ = player.getVelocity().getZ();
+		this.velocityXZ = this.velocityX + this.velocityZ;
 		this.deltaX = Math.abs(to.getX() - from.getX());
 		this.deltaZ = Math.abs(to.getZ() - from.getZ());
 		this.deltaY = Math.abs(to.getY() - from.getY());
 		this.deltaXZ = deltaX + deltaZ;
 		this.deltaXYZ = deltaXZ + deltaY;
+		this.isInLiquid = PlayerUtil.isInLiquid(to);
+		this.aboveIce = PlayerUtil.isAboveIce(to);
 	}
 	
 	public PlayerMoveEvent getEvent() {
@@ -198,6 +204,25 @@ public class ACDMoveEvent {
 
 	public int getAirTicksBeforeGround() {
 		return getPlayerData().airTicksBeforeGround;
+	}
+
+	public boolean isInLiquids() {
+		return isInLiquid;
+	}
+
+	public int getSinceWaterTicks() {
+		return getPlayerData().sinceWaterTicks;
+	}
+
+	public boolean isAboveIce() {
+		return aboveIce;
+	}
+
+	public double getVelocityX() {
+		return velocityX;
+	}
+	public double getVelocityZ() {
+		return velocityZ;
 	}
 	
 }

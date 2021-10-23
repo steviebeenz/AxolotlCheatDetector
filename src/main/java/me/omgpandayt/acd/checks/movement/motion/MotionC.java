@@ -1,4 +1,4 @@
-package me.omgpandayt.acd.checks.movement.fly;
+package me.omgpandayt.acd.checks.movement.motion;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -6,15 +6,16 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
 
-public class FlyE extends Check implements Listener {
+public class MotionC extends Check implements Listener {
 
-	public FlyE() {
-		super("FlyE", false);
+	public MotionC() {
+		super("MotionC", false);
 	}
 	
     public void onMove(ACDMoveEvent e) {
@@ -40,7 +41,7 @@ public class FlyE extends Check implements Listener {
         if(e.isOnHoneyFrom())return;
         if(p.getLocation().getBlock().getType() == Material.WATER)return;
         if(e.getTo().getBlock().getType() != Material.AIR || e.getFrom().getBlock().getType() != Material.AIR)return;
-        if(playerData.realisticFD > 80)return;
+        if(playerData.realisticFD > 80 || p.hasPotionEffect(PotionEffectType.LEVITATION))return;
         
         
         if( toY < fromY){
@@ -73,11 +74,11 @@ public class FlyE extends Check implements Listener {
 	private void doFlag(Player p, Location from, PlayerData playerData) {
         if(playerData == null)return;
 		
-		playerData.flyELimiter++;
-		if(playerData.flyELimiter > config.getDouble(path + "limiter")) {
-			flag(p, "Fly (E)", "");
+		playerData.motionCLimiter++;
+		if(playerData.motionCLimiter > config.getDouble(path + "limiter")) {
+			flag(p, "");
 			lagBack(from, p);
-			playerData.flyELimiter = 0;
+			playerData.motionCLimiter = 0;
 		}
 	}
     

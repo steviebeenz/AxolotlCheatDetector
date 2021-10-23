@@ -31,7 +31,7 @@ public class FastLadderA extends Check {
 				
 				lagBack(e);
 				
-				flag(p, "FastLadder (A)", "(SPD " + (((Math.floor((e.getTo().getY() - e.getFrom().getY()) * 100)))/100) + "/" + config.getDouble(path + "max-rise") + ")");
+				flag(p, "(SPD " + (((Math.floor((e.getTo().getY() - e.getFrom().getY()) * 100)))/100) + "/" + config.getDouble(path + "max-rise") + ")");
 				
 			}
 			

@@ -12,37 +12,33 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class SpeedA extends Check implements Listener {
-
-	private String path = "checks.speed.a.";
 	
 	public SpeedA() {
-		super("SpeedA", false);
+		super("SpeedE", false);
 	}
 	
-	@Override
+	/*@Override
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
-		
+		PlayerData playerData = e.getPlayerData();
+		if(p.isGliding() || playerData.ticksSinceEnderDragon < 170)return;
 		double distX = Math.abs(e.getFrom().getX() - e.getTo().getX());
 		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 		
 		double maxXZMove = config.getDouble(path + "maximum-speed");
 		
-		for (Block b : e.getBlocksBelow()) {
-			if (b != null && BlockUtils.isIce(b)) {
-				maxXZMove += config.getDouble(path + "ice-increase");
-			}
+		if(e.getPlayerData().sinceIceTicks < 10) {
+			maxXZMove += config.getDouble(path + "ice-increase");
 		}
 		
 		ItemStack boots = p.getInventory().getBoots();
 		
 		if(boots != null) {
-			if (boots.getItemMeta().getAttributeModifiers().containsValue(Attribute.GENERIC_MOVEMENT_SPEED)) {
+			if (boots.getItemMeta().getAttributeModifiers() != null && boots.getItemMeta().getAttributeModifiers().containsValue(Attribute.GENERIC_MOVEMENT_SPEED)) {
 				return;
 			}
 		}
@@ -74,17 +70,14 @@ public class SpeedA extends Check implements Listener {
 				break;
 			}
 		}
-				
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
-		if(playerData == null) return;
 		
 		if(playerData.onHorseTicks < 10 || playerData.ticksSinceHit < 30)return;
 		
-		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat) {
-			flag(p, "Speed (A)", "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ")");
+		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat && distance != 1.0D) { // If the distance is 1.0D it is probably a piston push.
+			flag(p, "(MOVE " + (distance / 100) + " > " + (maxDistance/100) + ")");
 			lagBack(e);
 		}
 		
-	}
+	}*/
 	
 }

@@ -22,14 +22,10 @@ public class FlyB extends Check {
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
-		
-		if(p.hasPotionEffect(PotionEffectType.JUMP))return;
+		PlayerData playerData = e.getPlayerData();
+		if(p.hasPotionEffect(PotionEffectType.JUMP) || e.isAboveSlime() || playerData.ticksSinceEnderDragon < 170 || p.hasPotionEffect(PotionEffectType.LEVITATION) || e.getPlayerData().ticksSinceClimbable < 15 || e.getPlayerData().sinceWaterTicks < 10)return;
 		
 		double y = e.getTo().getY();
-		PlayerData playerData = e.getPlayerData();
-		if(playerData == null) return;
-		
-		if(e.isAboveSlime())return;
 		
 		double lastY = playerData.lastPacketY,
 			   lastLastY = playerData.lastLastPacketY,
@@ -88,7 +84,7 @@ public class FlyB extends Check {
 		playerData.flyBLimiter += 1;
 		
 		if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
-			flag(p, "Fly (B)", "");
+			flag(p, "");
 			playerData.flyBLimiter = -1;
 			
 			Location loc = e.getFrom().clone();

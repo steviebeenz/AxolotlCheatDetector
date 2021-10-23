@@ -36,7 +36,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>io.github.retrooper.packetevents</pattern>
-                                    <shadedPattern>io.github.retrooper.customplugin.packetevents</shadedPattern>
+                                    <shadedPattern>me.omgpandayt.acd.customplugin.packetevents</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

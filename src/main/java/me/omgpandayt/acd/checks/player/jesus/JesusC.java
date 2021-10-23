@@ -6,8 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.util.BlockUtils;
+import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusC extends Check {
@@ -17,11 +16,13 @@ public class JesusC extends Check {
 	}
 	
 	@Override
-	public void onTick(Player p) {
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
+	public void onMove(ACDMoveEvent e) {
+		PlayerData playerData = e.getPlayerData();
 		if(playerData == null) return;
+
+		Player p = e.getPlayer();
 		
-		for(Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
+		for(Block b : e.getBlocksBelow()) {
 			if(b.getType() != Material.WATER) {
 				return;
 			} else if (b.getLocation().clone().add(0, 1, 0).getBlock().getType() != Material.WATER) {
@@ -40,10 +41,11 @@ public class JesusC extends Check {
 				&& p.getVelocity().getY() <= 0
 				&& p.getLocation().clone().add(0, -1 , 0).getBlock().getType() == Material.WATER
 				&& PlayerUtil.isValid(p)
+				&& !p.isSwimming()
 		) {
 			playerData.jesusCLimiter++;
 			if(playerData.jesusCLimiter >= config.getDouble(path + "limiter")) {
-				flag(p, "Jesus (C)", "");
+				flag(p, "");
 				playerData.jesusCLimiter = 0;
 			}
 		}

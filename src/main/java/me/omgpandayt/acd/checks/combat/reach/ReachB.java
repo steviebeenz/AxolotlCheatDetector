@@ -49,7 +49,7 @@ public class ReachB extends Check {
 		double range = Math.sqrt(Math.pow(LocationDamagerX - LocationDamageeX, 2) + Math.pow(LocationDamagerY - LocationDamageeY, 2)+ Math.pow(LocationDamagerZ - LocationDamageeZ, 2));
 		
 		if (range >= limit) {
-			flag(p, "Reach (B)", "(REACH " + ((Math.floor(range * 100))/100) + ")");
+			flag(p, "(REACH " + ((Math.floor(range * 100))/100) + ")");
 		}
 		
 	}

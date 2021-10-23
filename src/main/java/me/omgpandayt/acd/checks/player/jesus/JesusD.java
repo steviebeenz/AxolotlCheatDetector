@@ -2,7 +2,6 @@ package me.omgpandayt.acd.checks.player.jesus;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
@@ -17,16 +16,14 @@ public class JesusD extends Check {
 	private String path = "checks.jesus.d.";
 
 	@Override
-	public void onMove(ACDMoveEvent ev) {
+	public void onMove(ACDMoveEvent e) {
 		
-		Player p = ev.getPlayer();
+		Player p = e.getPlayer();
 		
-		PlayerMoveEvent e = ev.getEvent();
-		
-		if(!ev.isAboveLiquids() || !ev.isAboveLiquidsFrom())return;
+		if(!e.isAboveLiquids() || !e.isAboveLiquidsFrom())return;
 	
 		
-		PlayerData playerData = ev.getPlayerData();
+		PlayerData playerData = e.getPlayerData();
 		
 		double ma = config.getDouble(path + "max-ascend");
 		
@@ -39,7 +36,7 @@ public class JesusD extends Check {
 			
 			if(playerData.jesusDLimiter >= 3) {
 				playerData.jesusDLimiter = 0;
-				flag(p, "Jesus (D)", "");
+				flag(p, "");
 				if(config.getBoolean("main.cancel-event"))
 					p.teleport(e.getFrom().clone().add(0, 0.2, 0));
 			}

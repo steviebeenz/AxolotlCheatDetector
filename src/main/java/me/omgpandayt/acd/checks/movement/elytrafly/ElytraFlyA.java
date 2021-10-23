@@ -30,7 +30,7 @@ public class ElytraFlyA extends Check {
 			double tsr = config.getDouble(path + "ticks-since-rocket");
 			
 			if(fallY == 0 && PlayerUtil.isValid(p) && !e.isOnGround() && p.isGliding() && e.getFallHeight() > 3 && playerData.ticksSinceRocket >= tsr) {
-				flag(p, "ElytraFly (A)", "(FALL " + ((Math.floor(fallY * 100)) / 100) + ")");
+				flag(p, "(FALL " + ((Math.floor(fallY * 100)) / 100) + ")");
 				noGlide(e);
 				lagBack(e);
 			}

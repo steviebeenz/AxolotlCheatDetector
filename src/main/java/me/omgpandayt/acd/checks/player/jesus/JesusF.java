@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
@@ -47,7 +48,7 @@ public class JesusF extends Check {
 		if(p.getLocation().getBlock().getType() == Material.WATER)return;
 		
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
-		if(playerData == null) return;
+		if(playerData == null || p.hasPotionEffect(PotionEffectType.LEVITATION)) return;
 		
 		double f = f(e.getTo());
 		
@@ -57,7 +58,7 @@ public class JesusF extends Check {
 			if(playerData.jesusFtb > 30)
 			if(!playerData.lastPacketNearBoat) {
 				if(PlayerUtil.isValid(p)) {
-					flag(p, "Jesus (F)", "");
+					flag(p, "");
 					lagBack(e.getFrom().add(0, 0.2, 0), p);
 				}
 			}
