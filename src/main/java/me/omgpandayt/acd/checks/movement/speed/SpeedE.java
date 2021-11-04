@@ -1,6 +1,7 @@
 // This code is NOT made by Jxy(OMGPANDAYT)
 // I know Who made it. It's Mr.t0206.( He deleted his anti cheat and spigot mc account for his private reason. )
 // someone do not forgot this check is NOT made by Jxy. ( mr.t0206 almost allowed to use their code. but jxy call t0206 and t0206's ac for bad. so I cannot understand why he uses it.)
+// Latest SpeedE is skid. but older than it is not skid.
 package me.omgpandayt.acd.checks.movement.speed;
 
 import org.bukkit.entity.Player;
