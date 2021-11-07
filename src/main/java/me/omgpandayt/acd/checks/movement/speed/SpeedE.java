@@ -14,6 +14,15 @@ public class SpeedE extends Check{
 	public SpeedE() {
 		super("SpeedE", false);
 	}
+
+    /**
+    *
+    * @author Jxy
+    * @author t0206
+    *
+    * Thank you t0206 for this great check, I have tweaked some things to fix falses <3
+    *
+    */
 	
 	@Override
     public void onMove(ACDMoveEvent e){
@@ -22,6 +31,7 @@ public class SpeedE extends Check{
         PlayerData playerData = e.getPlayerData();
         if(playerData == null)return;
         
+
         if(PlayerUtil.isValid(p) && playerData.sinceIceTicks > 10 || playerData.sinceSlimeTicks > 10 && !p.isGliding() && playerData.ticksSinceHit > 40 && playerData.ticksSinceEnderDragon > 170){
             
         	if(p.hasPotionEffect(PotionEffectType.SPEED) || playerData.ticksSinceHit < 5)return;
