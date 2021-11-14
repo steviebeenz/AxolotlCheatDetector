@@ -2,7 +2,6 @@ package me.omgpandayt.acd.checks.player.jesus;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -12,7 +11,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusC extends Check {
 
-	public JesusC(FileConfiguration config) {
+	public JesusC() {
 		super("JesusC", false);
 	}
 	
@@ -45,7 +44,7 @@ public class JesusC extends Check {
 				&& !p.isSwimming()
 		) {
 			playerData.jesusCLimiter++;
-			if(playerData.jesusCLimiter >= limiter) {
+			if(playerData.jesusCLimiter >= config.getDouble(path + "limiter")) {
 				flag(p, "");
 				playerData.jesusCLimiter = 0;
 			}

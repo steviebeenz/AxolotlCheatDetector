@@ -1,6 +1,5 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -12,10 +11,10 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class SpeedE extends Check{
 
-	public SpeedE(FileConfiguration config) {
+	public SpeedE() {
 		super("SpeedE", false);
 	}
-	
+
     /**
     *
     * @author Jxy
@@ -32,7 +31,8 @@ public class SpeedE extends Check{
         PlayerData playerData = e.getPlayerData();
         if(playerData == null)return;
         
-        if(PlayerUtil.isValid(p) && playerData.sinceIceTicks > 40 && playerData.sinceSlimeTicks > 50 && !p.isGliding() && playerData.ticksSinceHit > 40 && playerData.ticksSinceEnderDragon > 170){
+
+        if(PlayerUtil.isValid(p) && playerData.sinceIceTicks > 10 || playerData.sinceSlimeTicks > 10 && !p.isGliding() && playerData.ticksSinceHit > 40 && playerData.ticksSinceEnderDragon > 170){
             
         	if(p.hasPotionEffect(PotionEffectType.SPEED) || playerData.ticksSinceHit < 5)return;
         	

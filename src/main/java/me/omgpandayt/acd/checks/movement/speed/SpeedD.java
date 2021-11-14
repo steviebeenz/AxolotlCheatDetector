@@ -1,6 +1,5 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -11,11 +10,11 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class SpeedD extends Check {
 
-	public SpeedD(FileConfiguration config) {
+	public SpeedD() {
 		super("SpeedD", false);
 	}
 	
-	@Override
+	/*@Override
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
@@ -96,6 +95,6 @@ public class SpeedD extends Check {
 	
 	public void doFlag(Player player) {
 		flag(player, "");
-	}
+	}*/
 
 }

@@ -2,7 +2,6 @@ package me.omgpandayt.acd.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
@@ -14,7 +13,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,13 +25,12 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.CheckManager;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.checks.combat.aimassist.AimAssistA;
-import me.omgpandayt.acd.checks.combat.aura.AuraA;
-import me.omgpandayt.acd.checks.combat.aura.AuraB;
-import me.omgpandayt.acd.checks.combat.aura.AuraC;
-import me.omgpandayt.acd.checks.combat.autoclicker.AutoClickerA;
 import me.omgpandayt.acd.checks.combat.criticals.CriticalsA;
+import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackA;
+import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackB;
+import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackC;
 import me.omgpandayt.acd.checks.combat.reach.ReachA;
+import me.omgpandayt.acd.checks.combat.reach.ReachB;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyB;
 import me.omgpandayt.acd.checks.movement.fastladder.FastLadderA;
@@ -65,6 +62,7 @@ import me.omgpandayt.acd.checks.player.jesus.JesusF;
 import me.omgpandayt.acd.checks.player.noslowdown.NoSlowdownA;
 import me.omgpandayt.acd.checks.world.badpackets.BadPacketsA;
 import me.omgpandayt.acd.checks.world.badpackets.BadPacketsB;
+import me.omgpandayt.acd.checks.world.fastplace.FastPlaceA;
 import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsA;
 import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsB;
 import me.omgpandayt.acd.command.AlertsCommand;
@@ -110,17 +108,14 @@ public class RegisterListeners implements Listener {
 		
 		if(!(e.getEntity() instanceof Player)) return;
 		
-		PlayerData pd = PlayerDataManager.getPlayer((Player)e.getEntity());
-		pd.ticksSinceHit = 0;
-		PlayerData pd2 = PlayerDataManager.getPlayer((Player)e.getDamager());
-		pd2.hitTicks = 0;
+		PlayerDataManager.getPlayer((Player)e.getEntity()).ticksSinceHit = 0;
 	}
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageEvent e) {
 		
 		if(!(e.getEntity() instanceof Player)) return;
 		
-		if(bypass((Player)e.getEntity()) || e.getCause() == DamageCause.FALL) return;
+		if(bypass((Player)e.getEntity())) return;
 		PlayerData pd = PlayerDataManager.getPlayer((Player)e.getEntity());
 		pd.ticksSinceHit = 0;
 		
@@ -150,17 +145,9 @@ public class RegisterListeners implements Listener {
 		PlayerData playerData = a.getPlayerData();
 		Player player = e.getPlayer();
 		if(playerData == null) return;
-		if(e.getFrom().getY() + 0.2919494141 == e.getTo().getY())
-			playerData.ticksLived = (int) ACD.getInstance().getConfig().getDouble("main.punish.join-bypass-ticks") - 100;
 		DataListeners.onMove(a);
-		playerData.ticksSinceHit++;
+		
 		playerData.ticksSinceWaterBlock++;
-		playerData.sinceTeleportTicks++;
-		if(!a.isOnGround()) {
-			playerData.airTicks++;
-		} else {
-			playerData.airTicks = 0;
-		}
         for(Block b : a.getBlocksBelowUp()) {
 			if(!b.getType().isAir()) {
 				playerData.ticksSinceWaterBlock = 0;
@@ -175,11 +162,6 @@ public class RegisterListeners implements Listener {
 			
 			check.onMove(a);
 		}
-		if(a.isOnGround()) {
-			playerData.lastFDR = 0;
-		} else {
-			playerData.lastFDR += a.getDeltaY();
-		}
 		
 
 		for(Entity entity : e.getPlayer().getNearbyEntities(2, 2, 2)) {
@@ -188,6 +170,7 @@ public class RegisterListeners implements Listener {
 			}
 		}
 		
+        playerData.ticksSinceHit++;
         playerData.ticksLived++;
         playerData.attackTicks++;
         playerData.lastFlight++;
@@ -206,7 +189,7 @@ public class RegisterListeners implements Listener {
         	if(!player.hasPotionEffect(PotionEffectType.LEVITATION)) {
         		playerData.groundTicks++;
         		playerData.lastGroundY = player.getLocation().getY();
-        		playerData.lastFD = 0;
+        		playerData.realisticFD = 0;
         	} else {
         		playerData.sinceLevitationTicks = 0;
         	}
@@ -214,9 +197,9 @@ public class RegisterListeners implements Listener {
         	playerData.groundTicks = 0;
         	playerData.airTicks++;
         	playerData.airTicksBeforeGround = playerData.airTicks;
-        	float c = playerData.lastFD;
-        	playerData.lastFD += playerData.lastPacketY - player.getLocation().getY();
-        	if(playerData.lastFD < c) playerData.lastFD = c;
+        	float c = playerData.realisticFD;
+        	playerData.realisticFD += playerData.lastPacketY - player.getLocation().getY();
+        	if(playerData.realisticFD < c) playerData.realisticFD = c;
         }
         
         double iceTicks = playerData.iceTicks,
@@ -341,18 +324,14 @@ public class RegisterListeners implements Listener {
         	if(playerData.motionD2Limiter > 0) {
         		playerData.motionD2Limiter--;
         	}
-        	if(playerData.reachALimiter > 0) {
-        		playerData.reachALimiter--;
+        } else if (playerData.ticksLived % ACD.getInstance().getConfig().getDouble("checks.fastplace.a.place-removal-rate-ticks") == 0) {
+        	if(playerData.placedBlocks > 0) {
+        		playerData.placedBlocks--;
         	}
         }
-        playerData.hitTicks++;
         playerData.prevDeltaX = a.getDeltaX();
         playerData.prevDeltaZ = a.getDeltaZ();
         playerData.lastDeltaY = a.getDeltaY();
-        playerData.prevDeltaXZ = a.getDeltaXZ();
-        playerData.ticksNoMove = 0;
-        playerData.lastFD = player.getFallDistance();
-        playerData.lastLastDeltaY = playerData.lastDeltaY;
     }
 	
 	@EventHandler
@@ -405,84 +384,62 @@ public class RegisterListeners implements Listener {
 
 	public static void loadChecks() {
 		
-		FileConfiguration config = ACD.getInstance().getConfig();		
-		// Bug fix
-		new MotionD(config);
-		new FlyA(config);
+		new SpeedA();
+		new SpeedB();
+		new SpeedC();
+		new SpeedD();
+		new SpeedE();
 		
-		// Fly
-		new FlyB(config);
-		new FlyC(config);
+		new MotionA();
+		new MotionB();
+		new MotionC();
+		new MotionD();
+		new MotionE();
 		
-		// Motion
-		new MotionA(config);
-		new MotionB(config);
-		new MotionC(config);
-		new MotionE(config);
+		new StepA();
 		
-		// Speed
-		new SpeedA(config);
-		new SpeedB(config);
-		new SpeedC(config);
-		new SpeedD(config);
-		new SpeedE(config);
+		new GroundSpoofA();
+		new GroundSpoofB();
+		new GroundSpoofC();
 		
-		// Aura
-		new AuraA(config);
-		new AuraB(config);
-		new AuraC(config);
+		new FlyA();
+		new FlyB();
+		new FlyC();
 		
-		// Step
-		new StepA(config);
+		new ReachA();
+		new ReachB();
 		
-		// GroundSpoof
-		new GroundSpoofA(config);
-		new GroundSpoofB(config);
-		new GroundSpoofC(config);
+		new CriticalsA();
 		
-		// Reach
-		new ReachA(config);
+		new NoSlowdownA();
 		
-		// Criticals
-		new CriticalsA(config);
+		new JesusA();
+		new JesusB();
+		new JesusC();
+		new JesusD();
+		new JesusE();
+		new JesusF();
 		
-		// AimAssist
-		new AimAssistA(config);
+		new JumpA();
 		
-		// NoSlowdown
-		new NoSlowdownA(config);
+		new BadPacketsA();
+		new BadPacketsB();
 		
-		// AutoClicker
-		new AutoClickerA(config);
+		new ElytraFlyA();
+		new ElytraFlyB();
 		
-		// Jesus
-		new JesusA(config);
-		new JesusB(config);
-		new JesusC(config);
-		new JesusD(config);
-		new JesusE(config);
-		new JesusF(config);
+		new InvMoveA();
 		
-		// Jump
-		new JumpA(config);
+		new ImpossibleActionsA();
+		new ImpossibleActionsB();
 		
-		// BadPackets
-		new BadPacketsA(config);
-		new BadPacketsB(config);
+		new FastLadderA();
 		
-		// ElytraFly
-		new ElytraFlyA(config);
-		new ElytraFlyB(config);
+		new FastPlaceA();
 		
-		// InvMove
-		new InvMoveA(config);
-		
-		// ImpossibleActions
-		new ImpossibleActionsA(config);
-		new ImpossibleActionsB(config);
-		
-		// FastLadder
-		new FastLadderA(config);
+		new InvalidAttackA();
+		new InvalidAttackB();
+		new InvalidAttackC();
 	}
 	
 }

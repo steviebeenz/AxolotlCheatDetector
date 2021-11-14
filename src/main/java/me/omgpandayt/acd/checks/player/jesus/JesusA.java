@@ -2,7 +2,6 @@ package me.omgpandayt.acd.checks.player.jesus;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,11 +14,8 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusA extends Check {
 
-	public double nearbyBoatRadius;
-	
-	public JesusA(FileConfiguration config) {
+	public JesusA() {
 		super("JesusA", false);
-		this.nearbyBoatRadius = config.getDouble(path + "nearby-boat-radius");
 	}
 	
 	@Override
@@ -36,7 +32,7 @@ public class JesusA extends Check {
 			}
 		}
 		
-		double nbr = nearbyBoatRadius;
+		double nbr = config.getDouble(path + "nearby-boat-radius");
 		
 		for(Entity entity : p.getNearbyEntities(nbr, nbr, nbr)) {
 			if(entity instanceof Boat) {

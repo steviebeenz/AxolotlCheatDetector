@@ -5,7 +5,7 @@ main:
    kick:
    
       # Determines if the anticheat should kick the player
-      kick-player: false
+      kick-player: true
       
       # The kick message
       kick-message: '[PREFIX][NEWLINE]Suspicious activity'
@@ -301,6 +301,22 @@ checks:
       dist: 0.27
       
       
+  # Fast Place    
+  fastplace:
+  
+    a:
+    
+      # Place too fast check
+    
+      enabled: true
+      
+      # Maximum blocks to place to flag
+      maxplace: 5
+      
+      # How many ticks to remove 1 from placed
+      place-removal-rate-ticks: 2
+      
+      flags-to-kick: 3
   
   # Impossible Actions
   impossibleactions:
@@ -323,6 +339,54 @@ checks:
       
       # Basically impossible to false
       flags-to-kick: 1
+    
+  # Invalid Attack  
+  invalidattack:
+  
+    a:
+    
+      # Hitboxes check
+    
+      enabled: true
+      
+      # Hitbox size
+      hitbox: 1.8
+      
+      flags-to-kick: 4
+      
+      limiter: 3
+      
+    b:
+    
+      # Fast hit check (multiaura)
+    
+      enabled: true
+      
+      # Amount of low time attacks to flag
+      attacks-size: 10
+      
+      # Amount of ticks the hit was since the last hit
+      low-attack-time: 0
+      
+      # How many low attacks to flag
+      attack-low-to-flag: 10
+      
+      # How many seconds to decrease attacks
+      decrease-time: 0.15
+      
+      # Somtimes can detect people normally clicking, you can change this but usually you won't want to flag people for clicking, especialyl on pvp servers
+      flags-to-kick: 1000
+      
+    c:
+    
+      # Hit through wall check
+    
+      enabled: true
+
+      # Distance between the block and entity hit to flag (I don't know but not having this falses)
+      block-distance-increase: 0.252
+      
+      flags-to-kick: 5
   
   # Fast Ladder  
   fastladder:
@@ -352,6 +416,14 @@ checks:
       
       # Maximum speed
       maxspeed: 0.2153
+      
+      flags-to-kick: 4
+    
+    b:
+    
+      # Sprint & eating check
+    
+      enabled: true
       
       flags-to-kick: 4
       
@@ -398,7 +470,7 @@ checks:
       enabled: true
       limiter: 3
       flags-to-kick: 5
-  aimassist:
+  aim:
      a:
         enabled: true
         flags-to-kick: 5
@@ -417,43 +489,12 @@ checks:
       max-reach: 4.65
       creative-increase: 2.6
       flags-to-kick: 8
+    b:
+      enabled: true
+      max-reach: 4.53
+      creative-increase: 2.2
+      flags-to-kick: 5
   criticals:
     a:
       flags-to-kick: 5
       enabled: true
-      
-  # Aura
-  aura:
-  
-    a:
-    
-      # Insane accuracy check
-    
-      enabled: true
-      
-      flags-to-kick: 10
-      
-      hover-ticks: 35
-      
-    b:
-    
-      # Keepsprint check
-    
-      enabled: true
-      
-      flags-to-kick: 5
-      
-      accel: 0.02
-      
-    c:
-    
-      # Massive yaw change and no move change (Server side aura will flag this)
-    
-      enabled: true
-      
-      flags-to-kick: 5
-      
-  autoclicker:
-    a:
-      enabled: true
-      flags-to-kick: 12

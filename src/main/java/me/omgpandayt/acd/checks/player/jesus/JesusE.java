@@ -1,6 +1,5 @@
 package me.omgpandayt.acd.checks.player.jesus;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -11,7 +10,7 @@ import me.omgpandayt.acd.util.BlockUtils;
 
 public class JesusE extends Check {
 
-	public JesusE(FileConfiguration config) {
+	public JesusE() {
 		super("JesusE", false);
 	}
 

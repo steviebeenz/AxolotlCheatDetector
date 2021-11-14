@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
-import me.omgpandayt.acd.util.ACDEntity;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
 
@@ -21,9 +21,7 @@ public class ACDMoveEvent {
 	private Location to, from;
 	private boolean groundFrom, groundTo, groundTo1, groundFrom1, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair, isInLiquid, aboveIce;
 	private int fallHeight;
-	private double fallHeightDouble, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ, velocityX, velocityZ, accel;
-	private float deltaYaw, deltaPitch;
-	private ACDEntity hoveredEntity;
+	private double fallHeightDouble, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ, velocityX, velocityZ;
 	
 	public ACDMoveEvent(PlayerMoveEvent e) {
 		this.player = e.getPlayer();
@@ -62,14 +60,6 @@ public class ACDMoveEvent {
 		this.deltaXYZ = deltaXZ + deltaY;
 		this.isInLiquid = PlayerUtil.isInLiquid(to);
 		this.aboveIce = PlayerUtil.isAboveIce(to);
-		this.hoveredEntity = PlayerUtil.getHoveredEntity(player);
-		this.deltaYaw = Math.abs(e.getFrom().getYaw() % 360F - e.getTo().getYaw() % 360);
-		this.deltaPitch = Math.abs(e.getFrom().getPitch() - e.getTo().getPitch());
-		this.accel = Math.abs(playerData.prevDeltaXZ - deltaXZ);
-	}
-	
-	public double getAccel() {
-		return accel;
 	}
 	
 	public PlayerMoveEvent getEvent() {
@@ -233,18 +223,6 @@ public class ACDMoveEvent {
 	}
 	public double getVelocityZ() {
 		return velocityZ;
-	}
-
-	public ACDEntity getHoveredEntity() {
-		return hoveredEntity;
-	}
-
-	public float getDeltaYaw() {
-		return deltaYaw;
-	}
-	
-	public float getDeltaPitch() {
-		return deltaPitch;
 	}
 	
 }

@@ -1,7 +1,6 @@
 package me.omgpandayt.acd.checks.combat.criticals;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -13,7 +12,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class CriticalsA extends Check {
 
-	public CriticalsA(FileConfiguration config) {
+	public CriticalsA() {
 		super("CriticalsA", false);
 	}
 	

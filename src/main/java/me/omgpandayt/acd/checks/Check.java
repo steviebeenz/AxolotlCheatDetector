@@ -23,6 +23,9 @@ public class Check {
 	public String check, path;
 	public boolean experimental;
 	public int flagsToKick;
+	
+	
+	public FileConfiguration config;
 
 	public String getName() {
 		return check;
@@ -50,10 +53,6 @@ public class Check {
         while (waiting.get()) {
         }
     }*/
-	
-	private FileConfiguration config = ACD.getInstance().getConfig();
-	
-	public double limiter;
     
     public void flag(Player player,String debug) {
     	

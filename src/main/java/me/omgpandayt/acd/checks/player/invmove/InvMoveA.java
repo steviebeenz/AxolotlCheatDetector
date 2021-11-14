@@ -2,7 +2,6 @@ package me.omgpandayt.acd.checks.player.invmove;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.CommandBlock;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -18,12 +17,8 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class InvMoveA extends Check {
 
-	public double ticksSinceDamage, maxSpeed;
-	
-	public InvMoveA(FileConfiguration config) {
+	public InvMoveA() {
 		super("InvMoveA", false);
-		this.ticksSinceDamage = config.getDouble(path + "ticks-since-damage");
-		this.maxSpeed = config.getDouble(path + "max-speed");
 	}
 	
 	@Override
@@ -61,7 +56,7 @@ public class InvMoveA extends Check {
 			
 			double deltaXZ = (Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 			
-			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= ticksSinceDamage && deltaXZ > maxSpeed) {
+			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
 				playerData.invMoveALimiter++;
 				if(playerData.invMoveALimiter > 2) {
 					flag(p, "");

@@ -2,7 +2,6 @@ package me.omgpandayt.acd.checks.movement.motion;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,11 +14,8 @@ import me.omgpandayt.acd.events.ACDMoveEvent;
 
 public class MotionC extends Check implements Listener {
 
-	public double descendY;
-	
-	public MotionC(FileConfiguration config) {
+	public MotionC() {
 		super("MotionC", false);
-		this.descendY = config.getDouble(path + "descend-y");
 	}
 	
     public void onMove(ACDMoveEvent e) {
@@ -28,28 +24,24 @@ public class MotionC extends Check implements Listener {
         PlayerData playerData = e.getPlayerData();
         if(playerData == null)return;
         
-        double descendY = this.descendY;
+        double descendY = config.getDouble(path + "descend-y");
         
         double fromY = e.getFrom().getY();
         double toY = e.getTo().getY();
         
-        if(p.isFlying() ||
-        		p.isGliding() ||
-        		e.isOnGround() ||
-        		e.isOnGroundFrom() ||
-        		e.isAboveLiquidsFrom() ||
-        		e.isAboveLiquids() || 
-        		e.isOnClimbableTo() ||
-        		e.isOnClimbableFrom() || 
-        		e.isOnHoneyTo() || 
-        		e.isOnHoneyFrom() || 
-        		p.getLocation().getBlock().getType() == Material.WATER || 
-        		e.getTo().getBlock().getType() != Material.AIR ||
-        		e.getFrom().getBlock().getType() != Material.AIR || 
-        		playerData.lastFDR > 80 ||
-        		p.hasPotionEffect(PotionEffectType.LEVITATION) || 
-        		p.hasPotionEffect(PotionEffectType.SLOW_FALLING)
-        )return;
+        if(p.isFlying())return;
+        if(p.isGliding())return;
+        if(e.isOnGround()) return;
+        if(e.isOnGroundFrom()) return;
+        if(e.isAboveLiquidsFrom()) return;
+        if(e.isAboveLiquids()) return;
+        if(e.isOnClimbableTo()) return;
+        if(e.isOnClimbableFrom()) return;
+        if(e.isOnHoneyTo())return;
+        if(e.isOnHoneyFrom())return;
+        if(p.getLocation().getBlock().getType() == Material.WATER)return;
+        if(e.getTo().getBlock().getType() != Material.AIR || e.getFrom().getBlock().getType() != Material.AIR)return;
+        if(playerData.realisticFD > 80 || p.hasPotionEffect(PotionEffectType.LEVITATION))return;
         
         
         if( toY < fromY){
@@ -73,6 +65,8 @@ public class MotionC extends Check implements Listener {
 
                 
             }
+            
+            playerData.lastDeltaY = deltaY;
 
         }
     }
@@ -81,7 +75,7 @@ public class MotionC extends Check implements Listener {
         if(playerData == null)return;
 		
 		playerData.motionCLimiter++;
-		if(playerData.motionCLimiter > limiter) {
+		if(playerData.motionCLimiter > config.getDouble(path + "limiter")) {
 			flag(p, "");
 			lagBack(from, p);
 			playerData.motionCLimiter = 0;

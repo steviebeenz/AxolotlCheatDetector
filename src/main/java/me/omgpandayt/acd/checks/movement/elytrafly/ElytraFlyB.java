@@ -1,7 +1,6 @@
 package me.omgpandayt.acd.checks.movement.elytrafly;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -11,14 +10,8 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class ElytraFlyB extends Check {
 
-	public double ticksSinceRocket;
-	
-	public ElytraFlyB(FileConfiguration config) {
-		
+	public ElytraFlyB() {
 		super("ElytraFlyB", false);
-		
-		this.ticksSinceRocket = config.getDouble(path + "ticks-since-rocket");
-		
 	}
 	
 	@Override
@@ -38,7 +31,7 @@ public class ElytraFlyB extends Check {
 					&& !e.isOnGround()
 					&& p.isGliding()
 					&& PlayerUtil.getFallHeight(p) > 3
-					&& playerData.ticksSinceRocket >= ticksSinceRocket
+					&& playerData.ticksSinceRocket >= config.getDouble(path + "ticks-since-rocket")
 			) {
 				flag(p, "");
 				noGlide(e);

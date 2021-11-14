@@ -3,7 +3,6 @@ package me.omgpandayt.acd.checks.movement.speed;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -20,22 +19,8 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class SpeedB extends Check implements Listener {
 	
-	public double tooFastX, tooFastZ, iceincrease, iceincreasemulti, slimeincrease, min, max;
-	
-	public SpeedB(FileConfiguration config) {
-		
+	public SpeedB() {
 		super("SpeedB", false);
-		
-		this.tooFastZ = config.getDouble(path + "too-fast.z");
-		this.tooFastX = config.getDouble(path + "too-fast.x");
-		
-		this.iceincrease = config.getDouble(path + "ice-increase");
-		this.iceincreasemulti = config.getDouble(path + "ice-increase-multi");
-		
-		this.slimeincrease = config.getDouble(path + "slime-increase");
-		
-		this.min = config.getDouble(path + "disable.min");
-		this.max = config.getDouble(path + "disable.max");
 	}
 	
 	@Override
@@ -46,16 +31,16 @@ public class SpeedB extends Check implements Listener {
 		double distX = e.getFrom().getX() - e.getTo().getX();
 		double distZ = e.getFrom().getZ() - e.getTo().getZ();
 
-		PlayerData playerData = e.getPlayerData();
+		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		
 		if(playerData == null || playerData.ticksSinceHit < 30 || playerData.onHorseTicks < 10) return;
 		
 		double y = p.getLocation().getYaw();
 		
-		if((e.isOnGround() && !e.isOnGroundFrom()) || !PlayerUtil.isValid(p))return;
+		if((playerData.isOnGround && !playerData.lastOnGround) || !PlayerUtil.isValid(p))return;
 		
-		double tooFastX = this.tooFastX;
-		double tooFastZ = this.tooFastZ;
+		double tooFastX = config.getDouble(path + "too-fast.x");
+		double tooFastZ = config.getDouble(path + "too-fast.z");
 		
 		if(!PlayerUtil.isOnGround(p.getLocation())) {
 			tooFastX += 0.1f;
@@ -78,8 +63,8 @@ public class SpeedB extends Check implements Listener {
             tooFastZ += effect.getAmplifier() / (Math.PI * Math.PI);
         }
         
-        double ii = iceincrease;
-        double iim = iceincreasemulti;
+        double ii = config.getDouble(path + "ice-increase");
+        double iim = config.getDouble(path + "ice-increase-multi");
         double it = (playerData.iceTicks * iim);
 		
         for (Block b : BlockUtils.getBlocksBelow(p.getLocation())) {
@@ -93,8 +78,8 @@ public class SpeedB extends Check implements Listener {
 				tooFastX += ii + it;
 				tooFastZ += ii + it;
 			} else if (b.getType() == Material.SLIME_BLOCK || b.getLocation().clone().add(0, 0.325, 0).getBlock().getType() == Material.SLIME_BLOCK) {
-				tooFastX += slimeincrease;
-				tooFastZ += slimeincrease;
+				tooFastX += config.getDouble(path + "slime-increase");
+				tooFastZ += config.getDouble(path + "slime-increase");
 			} else if (soil(b, p) || soil(b.getLocation().clone().add(0, 0.325, 0).getBlock(), p)) {
 				tooFastX += ssi;
 				tooFastZ += ssi;
@@ -106,10 +91,10 @@ public class SpeedB extends Check implements Listener {
 			tooFastZ += ssi;
 		}
 		
-		double min = this.min;
-		double max = this.max;
-		
 		if(y > -140 && y < -47)	{
+			
+			double min = config.getDouble(path + "disable.min");
+			double max = config.getDouble(path + "disable.min");
 			
 			if(distX + tooFastX >= min && distX + tooFastX <= max)return;
 			
@@ -117,6 +102,8 @@ public class SpeedB extends Check implements Listener {
 				doFlag(p, tooFastX, distX, e.getFrom());
 			}
 		} else if (y > -47 && y < 46) {
+			double min = config.getDouble(path + "disable.min");
+			double max = config.getDouble(path + "disable.min");
 			
 			if(distZ + tooFastZ >= min && distZ + tooFastZ <= max)return;
 			
@@ -124,6 +111,9 @@ public class SpeedB extends Check implements Listener {
 				doFlag(p, tooFastZ, distZ, e.getFrom());
 			}
 		} else if (y > 46 && y < 46 + 93) {
+			
+			double min = config.getDouble(path + "disable.min");
+			double max = config.getDouble(path + "disable.min");
 			
 			tooFastX = -tooFastX;
 			
@@ -133,6 +123,8 @@ public class SpeedB extends Check implements Listener {
 				doFlag(p, -tooFastX, -distX, e.getFrom());
 			}
 		} else {
+			double min = config.getDouble(path + "disable.min");
+			double max = config.getDouble(path + "disable.min");
 			
 			tooFastZ = -tooFastZ;
 			
@@ -148,7 +140,7 @@ public class SpeedB extends Check implements Listener {
 		PlayerData playerData = PlayerDataManager.getPlayer(p);
 		if(playerData == null)return;
 		playerData.speedBLimiter++;
-		if(playerData.speedBLimiter > limiter) {
+		if(playerData.speedBLimiter > config.getDouble(path + "limiter")) {
 			double l = Math.pow(10, (new String(tooFast+"").length() - 2));
 			flag(p, "(MAX " + tooFast + ") (GOT " + ((Math.floor(speed * l)) / l) + ")");
 			playerData.speedBLimiter = 0;

@@ -9,10 +9,6 @@ public class BlockUtils {
 	public static boolean isIce(Block block) {
 		return block.getType() == Material.ICE || block.getType() == Material.BLUE_ICE || block.getType() == Material.PACKED_ICE;
 	}
-	
-	public static boolean isAir(Material mat) {
-		return mat == Material.AIR || mat == Material.CAVE_AIR;
-	}
 
 	public static boolean isPiston(Block block) {
 		return block.getType() == Material.STICKY_PISTON || block.getType() == Material.PISTON;

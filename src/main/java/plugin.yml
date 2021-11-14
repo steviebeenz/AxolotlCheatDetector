@@ -1,6 +1,11 @@
 name: 'AxolotlCheatDetector'
+<<<<<<< HEAD
 version: 1.4.7
 description: 'Prevent your baby axolotls from cheating!'
+=======
+version: 1.4.6
+description: 'Prevent your axolotls from cheating!'
+>>>>>>> parent of d915f09 (b1.4.8)
 author: OMGPandaYT
 main: me.omgpandayt.acd.ACD
 api-version: 1.17

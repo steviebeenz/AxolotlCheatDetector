@@ -2,14 +2,12 @@ package me.omgpandayt.acd.checks.movement.speed;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
@@ -18,29 +16,23 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class SpeedA extends Check implements Listener {
 	
-	public float maxXZMove, iceincrease;
-	
-	public SpeedA(FileConfiguration config) {
-		
-		super("SpeedA", false);
-		
-		this.maxXZMove = (float) config.getDouble(path + "maximum-speed");
-		this.iceincrease = (float) config.getDouble(path + "ice-increase");
+	public SpeedA() {
+		super("SpeedE", false);
 	}
 	
-	@Override
+	/*@Override
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		PlayerData playerData = e.getPlayerData();
 		if(p.isGliding() || playerData.ticksSinceEnderDragon < 170)return;
-		float distX = (float) Math.abs(e.getFrom().getX() - e.getTo().getX());
-		float distZ = (float) Math.abs(e.getFrom().getZ() - e.getTo().getZ());
+		double distX = Math.abs(e.getFrom().getX() - e.getTo().getX());
+		double distZ = Math.abs(e.getFrom().getZ() - e.getTo().getZ());
 		
-		float maxXZMove = this.maxXZMove;
+		double maxXZMove = config.getDouble(path + "maximum-speed");
 		
 		if(e.getPlayerData().sinceIceTicks < 10) {
-			maxXZMove += iceincrease;
+			maxXZMove += config.getDouble(path + "ice-increase");
 		}
 		
 		ItemStack boots = p.getInventory().getBoots();
@@ -67,8 +59,8 @@ public class SpeedA extends Check implements Listener {
 		
 		if(maxXZMove < 0)return;
 		
-		float distance = (float) Math.floor((distX + distZ) * 100);
-		float maxDistance = (float) Math.floor(maxXZMove * 100);
+		double distance = Math.floor((distX + distZ) * 100);
+		double maxDistance = Math.floor(maxXZMove * 100);
 		
 		boolean dontFlag = false;
 		
@@ -78,6 +70,7 @@ public class SpeedA extends Check implements Listener {
 				break;
 			}
 		}
+		
 		if(playerData.onHorseTicks < 10 || playerData.ticksSinceHit < 30)return;
 		
 		if(distance > maxDistance && PlayerUtil.isValid(p) && !dontFlag && !p.isGliding() && !playerData.lastPacketNearBoat && distance != 1.0D) { // If the distance is 1.0D it is probably a piston push.
@@ -85,6 +78,6 @@ public class SpeedA extends Check implements Listener {
 			lagBack(e);
 		}
 		
-	}
+	}*/
 	
 }

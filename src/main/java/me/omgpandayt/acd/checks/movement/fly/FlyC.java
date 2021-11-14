@@ -1,27 +1,21 @@
 package me.omgpandayt.acd.checks.movement.fly;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
+import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyC extends Check {
 
-	public double velo, dist;
-	
-	public FlyC(FileConfiguration config) {
-		
+	public FlyC() {
 		super("FlyC", false);
-		
-		this.velo = config.getDouble(path + "velocity");
-		this.dist = config.getDouble(path + "dist");
-		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		Player p = e.getPlayer();
@@ -30,8 +24,13 @@ public class FlyC extends Check {
 		PlayerData playerData = e.getPlayerData();
 		if(playerData == null || p.hasPotionEffect(PotionEffectType.LEVITATION) || playerData.airTicks < 4) return;
 		
-        if(!e.isOnGround()
-                && !e.isOnGroundFrom()
+		if(PlayerUtil.isOnGround3(p.getLocation()))
+			playerData.isOnGround = true;
+		else
+			playerData.isOnGround = false;
+		
+        if(!playerData.isOnGround
+                && !playerData.lastOnGround
                 && p.isOnGround()){
             double dist = e.getTo().distance( e.getFrom() ) ;
 
@@ -39,10 +38,10 @@ public class FlyC extends Check {
             Location t = e.getTo();
             
             if(
-            		dist > this.dist && 
+            		dist > config.getDouble(path + "dist") && 
             		(f.getY() == t.getY() ||
             		f.getY() + 0.2f > t.getY() )
-            		&& p.getVelocity().getY() < velo
+            		&& p.getVelocity().getY() < config.getDouble(path + "velocity")
             		&& e.getFallHeightDouble() > 0.2
             ) {
                 
@@ -51,6 +50,8 @@ public class FlyC extends Check {
             }
 
         }
+		
+        playerData.lastOnGround = playerData.isOnGround;
         
 	}
 	
