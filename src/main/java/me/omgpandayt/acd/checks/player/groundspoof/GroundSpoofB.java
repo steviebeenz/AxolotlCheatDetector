@@ -2,6 +2,7 @@ package me.omgpandayt.acd.checks.player.groundspoof;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -13,7 +14,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class GroundSpoofB extends Check {
 
-	public GroundSpoofB() {
+	public GroundSpoofB(FileConfiguration config) {
 		super("GroundSpoofB", false);
 	}
 	
@@ -23,8 +24,8 @@ public class GroundSpoofB extends Check {
 		
 		Player p = e.getPlayer();
 		
-		PlayerData playerData = PlayerDataManager.getPlayer(p);
-		if(playerData.sinceWaterTicks < 10 || playerData.ticksSinceEnderDragon < 170) return;
+		PlayerData playerData = e.getPlayerData();
+		if(playerData.sinceWaterTicks < 10 || playerData.ticksSinceEnderDragon < 170 || e.getTo().getY() > e.getFrom().getY()) return;
 		
 		for(Block b : BlockUtils.getBlocksBelow(p.getLocation().clone().add(0, 1, 0))) {
 			if(b.getType() != Material.AIR) {
@@ -32,20 +33,15 @@ public class GroundSpoofB extends Check {
 			}
 		}
 		
-		if(playerData.lastPacketFD > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation()) && playerData.sinceSlimeTicks > 80) {
+		if(playerData.lastFDR > 3 && playerData.lastPacketHP == p.getHealth() && PlayerUtil.isValid(p) && p.getFallDistance() == 0 && !PlayerUtil.isAboveSlimeUnsafe(p.getLocation()) && playerData.sinceSlimeTicks > 80) {
 			playerData.groundSpoofBLimiter++;
-			if(playerData.groundSpoofBLimiter >= config.getDouble(path + "limiter")) {
+			if(playerData.groundSpoofBLimiter >= limiter) {
 				flag(p, "");
 				playerData.groundSpoofBLimiter = 0;
-				if(config.getBoolean("main.punish.cancel-event")) {
-					double deltaY = Math.abs(e.getTo().getY() - e.getFrom().getY());
-					p.setFallDistance((float) (playerData.lastPacketFD + deltaY));
-					p.teleport(p.getLocation());
-				}
+				lagBack(e);
 			}
 		}
 		
-		playerData.lastPacketFD = (float) playerData.realisticFD;
 		playerData.lastPacketHP = (float) p.getHealth();
 		
 	}

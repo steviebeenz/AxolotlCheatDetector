@@ -1,5 +1,6 @@
 package me.omgpandayt.acd.checks.movement.motion;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -9,8 +10,14 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class MotionA extends Check {
 
-	public MotionA() {
+	public double ydrop, height;
+	
+	public MotionA(FileConfiguration config) {
+		
 		super("MotionA", false);
+	
+		this.ydrop = config.getDouble(path + "y-drop");
+		this.height = config.getDouble(path + "height");
 	}
 
 	@Override
@@ -23,10 +30,10 @@ public class MotionA extends Check {
 
 		double deltaY = Math.abs(e.getFrom().getY() - e.getTo().getY());
 
-		if (deltaY < config.getDouble(path + "y-drop") && p.getFallDistance() > config.getDouble(path + "height")
+		if (deltaY < ydrop && p.getFallDistance() > height
 				&& !e.isOnGround() && PlayerUtil.isValid(p) && !p.isGliding()) {
 			playerData.motionALimiter++;
-			if (playerData.motionALimiter >= config.getDouble(path + "limiter")) {
+			if (playerData.motionALimiter >= limiter) {
 				flag(p, "");
 				playerData.motionALimiter = 0;
 				lagBack(e);

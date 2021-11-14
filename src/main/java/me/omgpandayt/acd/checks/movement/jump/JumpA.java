@@ -2,6 +2,7 @@ package me.omgpandayt.acd.checks.movement.jump;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -13,7 +14,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JumpA extends Check {
 
-	public JumpA() {
+	public JumpA(FileConfiguration config) {
 		super("JumpA", false);
 	}
 	
@@ -26,7 +27,7 @@ public class JumpA extends Check {
 		
 		double y = p.getVelocity().getY();
 		
-		if(p.isInWater() || e.isAboveSlime() || playerData.sinceSlimeTicks < 30 || p.hasPotionEffect(PotionEffectType.LEVITATION) || !PlayerUtil.isValid(p))return;
+		if(p.isInWater() || e.isAboveSlime() || playerData.sinceSlimeTicks < 30 || p.hasPotionEffect(PotionEffectType.LEVITATION) || !PlayerUtil.isValid(p) || playerData.ticksSinceHit < 20)return;
 		
 		for(Block b : e.getBlocksBelowUp()) {
 			if(b.getType().isSolid() || b.getType() == Material.SWEET_BERRY_BUSH) {

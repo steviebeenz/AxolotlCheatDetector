@@ -1,21 +1,29 @@
 package me.omgpandayt.acd.checks.movement.fastladder;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
+import me.omgpandayt.acd.util.NumberUtil;
 
 public class FastLadderA extends Check {
 
-	public FastLadderA() {
+	public double maxRise;
+	
+	public FastLadderA(FileConfiguration config) {
+		
 		super("FastLadderA", false);
+	
+		this.maxRise = config.getDouble(path + "max-rise");
+		
 	}
 	
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		
-		double spd = (e.getTo().getY() - e.getFrom().getY());
+		double spd = e.getDeltaY();
 		
 		Player p = e.getPlayer();
 		
@@ -23,15 +31,15 @@ public class FastLadderA extends Check {
 		if(playerData == null)return;
 		
 		if(spd < 0)return;
-		if(playerData.isOnGround || playerData.lastOnGround || playerData.lastLastOnGround) return;
+		if(e.isOnGround() || e.isOnGroundFrom() || playerData.groundTicks == 3) return;
 		
 		if(e.isOnClimbableFrom() && e.isOnClimbableTo()) {
 			
-			if(spd > config.getDouble(path + "max-rise")) {
+			if(spd > maxRise) {
 				
 				lagBack(e);
 				
-				flag(p, "(SPD " + (((Math.floor((e.getTo().getY() - e.getFrom().getY()) * 100)))/100) + "/" + config.getDouble(path + "max-rise") + ")");
+				flag(p, "(SPD " + NumberUtil.decimals(spd, 2) + "/" + maxRise + ")");
 				
 			}
 			

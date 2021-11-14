@@ -1,5 +1,6 @@
 package me.omgpandayt.acd.checks.world.badpackets; 
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -9,8 +10,11 @@ import me.omgpandayt.acd.violation.Violations;
 
 public class BadPacketsA extends Check {
 
-	public BadPacketsA() {
+	public double maxMove;
+	
+	public BadPacketsA(FileConfiguration config) {
 		super("BadPacketsA", false);
+		this.maxMove = config.getDouble(path + "max-move");
 	}
 	
 	@Override
@@ -22,23 +26,24 @@ public class BadPacketsA extends Check {
 		if(playerData == null)return;
 		
 		double ticksNoMove = playerData.ticksNoMove;
-		playerData.ticksNoMove = 0;
 		
 		playerData.movementPackets++;
 		
-		if(playerData.movementPackets > config.getDouble(path + "max-move") + ticksNoMove) {
+		if(playerData.movementPackets > maxMove + ticksNoMove) {
 			
 			playerData.badPacketsALimiter++;
-			if(playerData.badPacketsALimiter > config.getDouble(path + "limiter")) {
-				flag(p, "(MOVE " + (playerData.movementPackets) + "/" + (config.getDouble(path + "max-move") + ticksNoMove + ")"));
+			if(playerData.badPacketsALimiter > limiter) {
+				flag(p, "(MOVE " + (playerData.movementPackets) + "/" + (maxMove + ticksNoMove + ")"));
 				playerData.movementPackets = 0;
-				if(Violations.getViolations(this, p) > config.getDouble(path + "flags-to-kick")) {
-					playerData.movementPackets = (int)Math.floorDiv((int) config.getDouble(path + "max-move"), 2);
+				if(Violations.getViolations(this, p) > flagsToKick) {
+					playerData.movementPackets = (int)Math.floorDiv((int) maxMove, 2);
 				}
 				if(Violations.getViolations(this, p) % 3 == 0)
 					lagBack(e);
 			}
-		}
+		}	
+		
+		playerData.ticksNoMove = 0;
 		
 	}
 	

@@ -2,6 +2,7 @@ package me.omgpandayt.acd.checks.world.impossibleactions;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -10,7 +11,7 @@ import me.omgpandayt.acd.util.BlockUtils;
 
 public class ImpossibleActionsB extends Check {
 	
-	public ImpossibleActionsB() {
+	public ImpossibleActionsB(FileConfiguration config) {
 		super("ImpossibleActionsB", false);
 	}
 	
