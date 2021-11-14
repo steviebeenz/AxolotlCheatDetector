@@ -2,6 +2,7 @@ package me.omgpandayt.acd.checks.movement.step;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Piston;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -10,7 +11,7 @@ import me.omgpandayt.acd.events.ACDMoveEvent;
 
 public class StepA extends Check {
 
-	public StepA() {
+	public StepA(FileConfiguration config) {
 		super("StepA", false);
 	}
 	

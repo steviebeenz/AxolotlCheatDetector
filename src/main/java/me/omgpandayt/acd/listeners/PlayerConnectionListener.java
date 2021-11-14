@@ -14,7 +14,6 @@ public class PlayerConnectionListener implements Listener {
 		
 		PlayerDataManager.createPlayer(event.getPlayer());
 		
-		
 	}
 	
 	@EventHandler

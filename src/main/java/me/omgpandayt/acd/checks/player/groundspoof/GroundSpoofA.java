@@ -3,6 +3,7 @@ package me.omgpandayt.acd.checks.player.groundspoof;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,8 +18,13 @@ import net.md_5.bungee.api.ChatColor;
 
 public class GroundSpoofA extends Check {
 
-	public GroundSpoofA() {
+	public static boolean ghostblock;
+	public double nbr;
+	
+	public GroundSpoofA(FileConfiguration config) {
 		super("GroundSpoofA", false);
+		ghostblock = config.getBoolean(path + "ghostblock-teleport");
+		nbr = config.getDouble(path + "nearby-boat-radius");
 	}
 	
 	
@@ -43,7 +49,7 @@ public class GroundSpoofA extends Check {
 			}
 		}
 		
-		double nbr = config.getDouble(path + "nearby-boat-radius");
+		double nbr = this.nbr;
 		
 		for (Entity entity : p.getNearbyEntities(nbr, nbr, nbr)) {
 			if(entity instanceof Boat) {
@@ -63,10 +69,9 @@ public class GroundSpoofA extends Check {
 		}
 		
 		if(p.isOnGround() && e.getAirTicks() > 10 && p.isValid() && !p.isDead() && PlayerUtil.getFallHeight(p) > 1) {
-			if(!config.getBoolean(path + "ghostblock-teleport")) {
+			if(!ghostblock) {
 				flag(p, "");
 				double deltaY = e.getDeltaY();
-				p.damage((playerData.lastPacketFD + deltaY) - 3);
 			} else {
 				p.sendMessage(ChatColor.RED + "You were walking on a ghost block! You have been pushed back!");
 				if(playerData.lastGroundX != 1e+305 && playerData.lastGroundY != 1e+305 && playerData.lastGroundZ != 1e+305)

@@ -1,5 +1,6 @@
 package me.omgpandayt.acd.checks.movement.speed;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -11,7 +12,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class SpeedC extends Check implements Listener {
 	
-	public SpeedC() {
+	public SpeedC(FileConfiguration config) {
 		super("SpeedC", false);
 	}
 	

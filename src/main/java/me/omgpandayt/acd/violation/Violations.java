@@ -15,7 +15,7 @@ public class Violations {
 	/**
 	 * 
 	 * @author JustDoom
-	 * @author Jxydev
+	 * @author Jxy
 	 * 
 	 */
 	

@@ -1,11 +1,13 @@
 package me.omgpandayt.acd.checks.movement.fly;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
@@ -14,8 +16,17 @@ import me.omgpandayt.acd.violation.Violations;
 
 public class FlyB extends Check {
 
-	public FlyB() {
+	public double velo, yincrease, fallHeight;
+	
+	public FlyB(FileConfiguration config) {
+		
 		super("FlyB", true);
+		
+		this.fallHeight = config.getDouble(path + "fall-height");
+		
+		this.velo = config.getDouble(path + "velocity");
+		this.yincrease =  config.getDouble(path + "y-increase");
+		
 	}
 	
 	@Override
@@ -39,35 +50,31 @@ public class FlyB extends Check {
 		playerData.lastFallHeight = fallHeight;
 		
 		
-		double fhm = config.getDouble(path + "fall-height");
+		double fhm = fallHeight;
 		
 		if(fallHeight < fhm
 				|| lastFallHeight < fhm
 				|| lastLastFallHeight < fhm
 				|| !PlayerUtil.isValid(p)
 				|| playerData.sinceSlimeTicks < 80
+				|| playerData.lastPacketNearBoat
 		)return;
-	
 		
 		if(playerData.lastLastPacketY != -1 && playerData.lastPacketY != -1 && lastFallHeight != -1 && lastLastFallHeight != -1) {
 			
-			if(playerData.isOnGround ||
-					playerData.lastOnGround
-			)return;
+			if(e.isOnGround() || e.isOnGroundFrom())return;
 			
-			if(PlayerUtil.isAboveSlime(p.getLocation()))
-				return;
-			
-			for(Entity entity : p.getNearbyEntities(2, 2, 2)) {
-				if(entity instanceof Boat) {
-					return;
-				}
-			}
-			
-			if(y > lastY && lastY - config.getDouble(path + "y-increase") > lastLastY && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
+			if(y > lastY &&
+					lastY - yincrease > lastLastY &&
+					p.getVelocity().getY() < velo &&
+					PlayerUtil.aboveAreAir(p)) {
 				doFlag(p, playerData, e);
 			} else {
-				if(y > lastY && lastY > lastLastY && lastY - config.getDouble(path + "y-increase") < lastLastY  && p.getVelocity().getY() < config.getDouble(path + "velocity") && PlayerUtil.aboveAreAir(p)) {
+				if(y > lastY &&
+						lastY > lastLastY &&
+						lastY - yincrease < lastLastY && 
+						p.getVelocity().getY() < velo &&
+						PlayerUtil.aboveAreAir(p)) {
 					
 					playerData.flyBNFLimiter++;
 					if(playerData.flyBNFLimiter > 4) {
@@ -83,7 +90,7 @@ public class FlyB extends Check {
 	public void doFlag(Player p, PlayerData playerData, ACDMoveEvent e) {
 		playerData.flyBLimiter += 1;
 		
-		if(playerData.flyBLimiter >= config.getDouble(path + "limiter")) {
+		if(playerData.flyBLimiter >= limiter) {
 			flag(p, "");
 			playerData.flyBLimiter = -1;
 			

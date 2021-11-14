@@ -1,6 +1,7 @@
 package me.omgpandayt.acd.checks.world.impossibleactions;
 
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -10,7 +11,7 @@ import me.omgpandayt.acd.checks.PlayerDataManager;
 
 public class ImpossibleActionsA extends Check {
 
-	public ImpossibleActionsA() {
+	public ImpossibleActionsA(FileConfiguration config) {
 		super("ImpossibleActionsA", false);
 	}
 	
@@ -32,7 +33,7 @@ public class ImpossibleActionsA extends Check {
 				&& targetBlock.getZ() != placedBlock.getZ())
 		) {
 			playerData.impactALimiter++;
-			if(playerData.impactALimiter >= config.getDouble(path + "limiter")) {
+			if(playerData.impactALimiter >= limiter) {
 				playerData.impactALimiter = 0;
 				flag(p, "");
 				cancelPlace(e);

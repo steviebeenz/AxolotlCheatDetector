@@ -73,8 +73,9 @@ public class ACD extends JavaPlugin {
 		
 		for(Object e : CheckManager.getRegisteredChecks()) {
 			Check c = ((Check)e);
-			c.config = config;
-			c.flagsToKick = (int) c.config.getDouble("checks." + c.getName().substring(0, c.getName().length() - 1).toLowerCase() + "." + c.getName().substring(c.getName().length() - 1, c.getName().length()).toLowerCase() + ".flags-to-kick");
+			String checkLoc = "checks." + c.getName().substring(0, c.getName().length() - 1).toLowerCase() + "." + c.getName().substring(c.getName().length() - 1, c.getName().length()).toLowerCase() + ".";
+			c.flagsToKick = (int) config.getDouble(checkLoc + "flags-to-kick");
+			c.limiter = config.getDouble(checkLoc + "limiter");
 		}
 		
 		  Bukkit.getServer().getScheduler().runTaskTimer(this, new Runnable() {
