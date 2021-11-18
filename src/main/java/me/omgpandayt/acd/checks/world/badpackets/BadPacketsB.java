@@ -1,6 +1,7 @@
 package me.omgpandayt.acd.checks.world.badpackets;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
@@ -8,7 +9,7 @@ import me.omgpandayt.acd.events.ACDMoveEvent;
 
 public class BadPacketsB extends Check {
 
-	public BadPacketsB() {
+	public BadPacketsB(FileConfiguration config) {
 		super("BadPacketsB", false);
 	}
 	

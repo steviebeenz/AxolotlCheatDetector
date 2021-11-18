@@ -3,6 +3,7 @@ package me.omgpandayt.acd.checks.player.jesus;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -15,7 +16,7 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class JesusF extends Check {
 
-	public JesusF() {
+	public JesusF(FileConfiguration config) {
 		super("JesusF", false);
 	}
 

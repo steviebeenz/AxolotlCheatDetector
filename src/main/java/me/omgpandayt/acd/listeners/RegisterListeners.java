@@ -2,6 +2,7 @@ package me.omgpandayt.acd.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
@@ -13,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,12 +27,14 @@ import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.CheckManager;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
+import me.omgpandayt.acd.checks.combat.aimassist.AimAssistA;
+import me.omgpandayt.acd.checks.combat.aura.AuraA;
+import me.omgpandayt.acd.checks.combat.aura.AuraB;
+import me.omgpandayt.acd.checks.combat.aura.AuraC;
+import me.omgpandayt.acd.checks.combat.autoclicker.AutoClickerA;
 import me.omgpandayt.acd.checks.combat.criticals.CriticalsA;
-import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackA;
-import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackB;
-import me.omgpandayt.acd.checks.combat.invalidattack.InvalidAttackC;
 import me.omgpandayt.acd.checks.combat.reach.ReachA;
-import me.omgpandayt.acd.checks.combat.reach.ReachB;
+import me.omgpandayt.acd.checks.combat.velocity.VelocityA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyB;
 import me.omgpandayt.acd.checks.movement.fastladder.FastLadderA;
@@ -43,6 +47,7 @@ import me.omgpandayt.acd.checks.movement.motion.MotionB;
 import me.omgpandayt.acd.checks.movement.motion.MotionC;
 import me.omgpandayt.acd.checks.movement.motion.MotionD;
 import me.omgpandayt.acd.checks.movement.motion.MotionE;
+import me.omgpandayt.acd.checks.movement.motion.MotionF;
 import me.omgpandayt.acd.checks.movement.speed.SpeedA;
 import me.omgpandayt.acd.checks.movement.speed.SpeedB;
 import me.omgpandayt.acd.checks.movement.speed.SpeedC;
@@ -62,7 +67,7 @@ import me.omgpandayt.acd.checks.player.jesus.JesusF;
 import me.omgpandayt.acd.checks.player.noslowdown.NoSlowdownA;
 import me.omgpandayt.acd.checks.world.badpackets.BadPacketsA;
 import me.omgpandayt.acd.checks.world.badpackets.BadPacketsB;
-import me.omgpandayt.acd.checks.world.fastplace.FastPlaceA;
+import me.omgpandayt.acd.checks.world.badpackets.BadPacketsC;
 import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsA;
 import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsB;
 import me.omgpandayt.acd.command.AlertsCommand;
@@ -108,14 +113,31 @@ public class RegisterListeners implements Listener {
 		
 		if(!(e.getEntity() instanceof Player)) return;
 		
-		PlayerDataManager.getPlayer((Player)e.getEntity()).ticksSinceHit = 0;
+		PlayerData pd = PlayerDataManager.getPlayer((Player)e.getEntity());
+		pd.ticksSinceHit = 0;
+		PlayerData pd2 = PlayerDataManager.getPlayer((Player)e.getDamager());
+		pd2.hitTicks = 0;
 	}
+	
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDamage2(EntityDamageByEntityEvent e) {
+		
+		for (Object obj : CheckManager.getRegisteredChecks()) {
+			
+			Check check = (Check)obj;
+			
+			check.onDamage2(e);
+			
+		}
+		
+	}
+	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageEvent e) {
 		
 		if(!(e.getEntity() instanceof Player)) return;
 		
-		if(bypass((Player)e.getEntity())) return;
+		if(bypass((Player)e.getEntity()) || e.getCause() == DamageCause.FALL) return;
 		PlayerData pd = PlayerDataManager.getPlayer((Player)e.getEntity());
 		pd.ticksSinceHit = 0;
 		
@@ -145,9 +167,17 @@ public class RegisterListeners implements Listener {
 		PlayerData playerData = a.getPlayerData();
 		Player player = e.getPlayer();
 		if(playerData == null) return;
+		if(e.getFrom().getY() + 0.2919494141 == e.getTo().getY())
+			BadPacketsC.getRefer().parseData(0, true, a);
 		DataListeners.onMove(a);
-		
+		playerData.ticksSinceHit++;
 		playerData.ticksSinceWaterBlock++;
+		playerData.sinceTeleportTicks++;
+		if(!a.isOnGround()) {
+			playerData.airTicks++;
+		} else {
+			playerData.airTicks = 0;
+		}
         for(Block b : a.getBlocksBelowUp()) {
 			if(!b.getType().isAir()) {
 				playerData.ticksSinceWaterBlock = 0;
@@ -162,6 +192,11 @@ public class RegisterListeners implements Listener {
 			
 			check.onMove(a);
 		}
+		if(a.isOnGround()) {
+			playerData.lastFDR = 0;
+		} else {
+			playerData.lastFDR += a.getDeltaY();
+		}
 		
 
 		for(Entity entity : e.getPlayer().getNearbyEntities(2, 2, 2)) {
@@ -170,8 +205,13 @@ public class RegisterListeners implements Listener {
 			}
 		}
 		
-        playerData.ticksSinceHit++;
-        playerData.ticksLived++;
+		if(a.isAboveFarmland()) {
+			playerData.sinceFarmLand = 0;
+		} else {
+			playerData.sinceFarmLand++;
+		}
+		
+		playerData.sinceEntityHit++;
         playerData.attackTicks++;
         playerData.lastFlight++;
         playerData.lastAttack++;
@@ -188,8 +228,8 @@ public class RegisterListeners implements Listener {
         	playerData.airTicks = 0;
         	if(!player.hasPotionEffect(PotionEffectType.LEVITATION)) {
         		playerData.groundTicks++;
-        		playerData.lastGroundY = player.getLocation().getY();
-        		playerData.realisticFD = 0;
+        		playerData.lastGroundY = (float)player.getLocation().getY();
+        		playerData.lastFD = 0;
         	} else {
         		playerData.sinceLevitationTicks = 0;
         	}
@@ -197,14 +237,12 @@ public class RegisterListeners implements Listener {
         	playerData.groundTicks = 0;
         	playerData.airTicks++;
         	playerData.airTicksBeforeGround = playerData.airTicks;
-        	float c = playerData.realisticFD;
-        	playerData.realisticFD += playerData.lastPacketY - player.getLocation().getY();
-        	if(playerData.realisticFD < c) playerData.realisticFD = c;
+        	float c = playerData.lastFD;
+        	playerData.lastFD += playerData.lastPacketY - player.getLocation().getY();
+        	if(playerData.lastFD < c) playerData.lastFD = c;
         }
         
-        double iceTicks = playerData.iceTicks,
-        		slimeTicks = playerData.slimeTicks,
-        		blocksNearHead = playerData.ticksBlocksNearHead;
+        double blocksNearHead = playerData.ticksBlocksNearHead;
         
         if(a.isAboveIce()) {
         	playerData.sinceIceTicks = 0;
@@ -239,13 +277,6 @@ public class RegisterListeners implements Listener {
         playerData.onHorseTicks++;
         if(player.isInsideVehicle())playerData.onHorseTicks = 0;
         
-        
-        if(playerData.ticksLived % ACD.getInstance().getConfig().getDouble("checks.badpackets.a.decrease-time") == 0) {
-        	double amm = ACD.getInstance().getConfig().getDouble("checks.badpackets.a.decrease-amount");
-        	if(playerData.movementPackets > amm-1) {
-        		playerData.movementPackets-=amm;
-        	}
-        }
         if(playerData.ticksLived % 5 == 0) {
         	if(playerData.decreaseHops && playerData.lowHops > 1) {
         		playerData.lowHops = (playerData.lowHops - 1 < 0 ? 0 : playerData.lowHops - 1);
@@ -291,12 +322,6 @@ public class RegisterListeners implements Listener {
         	if(playerData.jesusCLimiter > 0) {
         		playerData.jesusCLimiter--;
         	}
-        	if(playerData.badPacketsALimiter > 0) {
-        		playerData.badPacketsALimiter--;
-        	}
-        	if(playerData.invalidAttackALimiter > 0) {
-        		playerData.invalidAttackALimiter--;
-        	}
         	if(playerData.speedBLimiter > 0) {
         		playerData.speedBLimiter--;
         	}
@@ -324,14 +349,18 @@ public class RegisterListeners implements Listener {
         	if(playerData.motionD2Limiter > 0) {
         		playerData.motionD2Limiter--;
         	}
-        } else if (playerData.ticksLived % ACD.getInstance().getConfig().getDouble("checks.fastplace.a.place-removal-rate-ticks") == 0) {
-        	if(playerData.placedBlocks > 0) {
-        		playerData.placedBlocks--;
+        	if(playerData.reachALimiter > 0) {
+        		playerData.reachALimiter--;
         	}
         }
+        playerData.hitTicks++;
         playerData.prevDeltaX = a.getDeltaX();
         playerData.prevDeltaZ = a.getDeltaZ();
         playerData.lastDeltaY = a.getDeltaY();
+        playerData.prevDeltaXZ = a.getDeltaXZ();
+        playerData.ticksNoMove = 0;
+        playerData.lastFD = player.getFallDistance();
+        playerData.lastLastDeltaY = playerData.lastDeltaY;
     }
 	
 	@EventHandler
@@ -384,62 +413,89 @@ public class RegisterListeners implements Listener {
 
 	public static void loadChecks() {
 		
-		new SpeedA();
-		new SpeedB();
-		new SpeedC();
-		new SpeedD();
-		new SpeedE();
+		FileConfiguration config = ACD.getInstance().getConfig();		
+		// Bug fix
+		new MotionD(config);
+		new FlyA(config);
 		
-		new MotionA();
-		new MotionB();
-		new MotionC();
-		new MotionD();
-		new MotionE();
+		// Fly
+		new FlyB(config);
+		new FlyC(config);
 		
-		new StepA();
+		// Motion
+		new MotionA(config);
+		new MotionB(config);
+		new MotionC(config);
+		new MotionE(config);
+		new MotionF(config);
 		
-		new GroundSpoofA();
-		new GroundSpoofB();
-		new GroundSpoofC();
+		// Speed
+		new SpeedA(config);
+		new SpeedB(config);
+		new SpeedC(config);
+		new SpeedD(config);
+		new SpeedE(config);
 		
-		new FlyA();
-		new FlyB();
-		new FlyC();
+		// Aura
+		new AuraA(config);
+		new AuraB(config);
+		new AuraC(config);
 		
-		new ReachA();
-		new ReachB();
+		// Step
+		new StepA(config);
 		
-		new CriticalsA();
+		// GroundSpoof
+		new GroundSpoofA(config);
+		new GroundSpoofB(config);
+		new GroundSpoofC(config);
 		
-		new NoSlowdownA();
+		// Reach
+		new ReachA(config);
 		
-		new JesusA();
-		new JesusB();
-		new JesusC();
-		new JesusD();
-		new JesusE();
-		new JesusF();
+		// Criticals
+		new CriticalsA(config);
 		
-		new JumpA();
+		// AimAssist
+		new AimAssistA(config);
 		
-		new BadPacketsA();
-		new BadPacketsB();
+		// NoSlowdown
+		new NoSlowdownA(config);
 		
-		new ElytraFlyA();
-		new ElytraFlyB();
+		// AutoClicker
+		new AutoClickerA(config);
 		
-		new InvMoveA();
+		// Jesus
+		new JesusA(config);
+		new JesusB(config);
+		new JesusC(config);
+		new JesusD(config);
+		new JesusE(config);
+		new JesusF(config);
 		
-		new ImpossibleActionsA();
-		new ImpossibleActionsB();
+		// Jump
+		new JumpA(config);
 		
-		new FastLadderA();
+		// BadPackets
+		new BadPacketsA(config);
+		new BadPacketsB(config);
+		new BadPacketsC(config);
 		
-		new FastPlaceA();
+		// ElytraFly
+		new ElytraFlyA(config);
+		new ElytraFlyB(config);
 		
-		new InvalidAttackA();
-		new InvalidAttackB();
-		new InvalidAttackC();
+		// InvMove
+		new InvMoveA(config);
+		
+		// ImpossibleActions
+		new ImpossibleActionsA(config);
+		new ImpossibleActionsB(config);
+		
+		// FastLadder
+		new FastLadderA(config);
+		
+		// Velocity
+		new VelocityA(config);
 	}
 	
 }

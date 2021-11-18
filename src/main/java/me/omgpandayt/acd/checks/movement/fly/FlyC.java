@@ -1,18 +1,25 @@
 package me.omgpandayt.acd.checks.movement.fly;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.PlayerUtil;
 
 public class FlyC extends Check {
 
-	public FlyC() {
+	public double velo, dist;
+	
+	public FlyC(FileConfiguration config) {
+		
 		super("FlyC", false);
+		
+		this.velo = config.getDouble(path + "velocity");
+		this.dist = config.getDouble(path + "dist");
+		
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -24,25 +31,20 @@ public class FlyC extends Check {
 		PlayerData playerData = e.getPlayerData();
 		if(playerData == null || p.hasPotionEffect(PotionEffectType.LEVITATION) || playerData.airTicks < 4) return;
 		
-		if(PlayerUtil.isOnGround3(p.getLocation()))
-			playerData.isOnGround = true;
-		else
-			playerData.isOnGround = false;
-		
-        if(!playerData.isOnGround
-                && !playerData.lastOnGround
+        if(!e.isOnGround()
+                && !e.isOnGroundFrom()
                 && p.isOnGround()){
-            double dist = e.getTo().distance( e.getFrom() ) ;
+            float dist = (float)e.getTo().distance( e.getFrom() ) ;
 
             Location f = e.getFrom();
             Location t = e.getTo();
             
             if(
-            		dist > config.getDouble(path + "dist") && 
+            		dist > this.dist && 
             		(f.getY() == t.getY() ||
             		f.getY() + 0.2f > t.getY() )
-            		&& p.getVelocity().getY() < config.getDouble(path + "velocity")
-            		&& e.getFallHeightDouble() > 0.2
+            		&& p.getVelocity().getY() < velo
+            		&& e.getFallHeightFloat() > 0.2f
             ) {
                 
             	flag(p, "");
@@ -50,8 +52,6 @@ public class FlyC extends Check {
             }
 
         }
-		
-        playerData.lastOnGround = playerData.isOnGround;
         
 	}
 	

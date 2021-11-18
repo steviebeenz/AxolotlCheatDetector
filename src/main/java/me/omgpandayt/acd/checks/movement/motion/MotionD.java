@@ -1,69 +1,65 @@
 package me.omgpandayt.acd.checks.movement.motion;
 
-import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
+import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofA;
 import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.NumberUtil;
 import me.omgpandayt.acd.util.PlayerUtil;
 
 public class MotionD extends Check {
 
-	public MotionD() {
+	public MotionD(FileConfiguration config) {
+		
 		super("MotionD", false);
+		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
-		
 		PlayerData playerData = e.getPlayerData();
+		
 		if(
-				playerData == null ||
 				e.isInLiquids() ||
 				e.isAboveLiquids() ||
 				e.getSinceWaterTicks() < 20 ||
 				e.getSinceTeleportTicks() < 2 ||
 				!PlayerUtil.isValid(p) ||
-				(p.isOnGround() && config.getBoolean("checks.groundspoof.a.ghostblock-teport")) ||
 				e.isOnClimbableTo() ||
 				e.isOnClimbableFrom() ||
-				playerData.ticksSinceHit < 30 ||
-				playerData.ticksNoMove > 5 ||
+				playerData.ticksSinceHit < 20 ||
 				playerData.ticksSinceWaterBlock < 15 ||
 				playerData.sinceWaterTicks < 15 ||
 				p.isGliding() ||
 				p.getLocation().getY() > 256 ||
 				playerData.ticksSinceEnderDragon < 170
-		)return;
-		
-		for(Block b : e.getBlocksBelowUp()) {
-			if(!b.getType().isAir()) {
-				return;
-			}
-		}
-		
-        final double deltaY = Math.abs(e.getDeltaY());
-        final double prevDeltaY = Math.abs(playerData.lastDeltaY);
-
-        final float airDrag = 0.98F;
-        final float gravity = 0.08F;
-
-        final double expectedDeltaY = Math.abs((prevDeltaY - gravity) * airDrag) + 0.1;
-
-        final boolean midAir = e.getAirTicks() > 9 && !e.isOnGround()
-                && !e.isOnGroundFrom();
+		) return;
         
-        if(!midAir) {
+        if((p.isOnGround() && GroundSpoofA.ghostblock))return;
+		
+		double Y = Math.abs(e.getTo().getY());
+        double lastY = Math.abs(playerData.lastPacketY);
+        
+        float lastDeltaY = Math.abs(playerData.lastDeltaY);
+        float deltaY = (float)Math.abs(e.getDeltaY());
+        
+        float expectedY = (float)(Y + Math.abs((deltaY - 0.08) * 0.98));
+
+        boolean isInAir = e.getAirTicks() > 9 && !e.isOnGround() && !e.isOnGroundFrom();
+        
+        if(!isInAir) {
         	playerData.motionD2Limiter = 0;
         }
 
-        final double difference = Math.abs(deltaY - expectedDeltaY);
-        if(prevDeltaY == deltaY && deltaY != 0 && deltaY < 1.64809570615011) {
+        final float difference = (float)Math.abs(lastY - expectedY);
+        
+        if((lastDeltaY == deltaY || difference == playerData.motionDlastLastDifference) && deltaY != 0 && deltaY < 1.64809570615011) {
 			if(++playerData.motionD2Limiter > 22) {
 				flag(p, "");
 				lagBack(e);
@@ -73,11 +69,11 @@ public class MotionD extends Check {
         		playerData.motionD2Limiter-= 4;
         }
         
-		if((difference > 0.038 && midAir) && expectedDeltaY < 2.5) {
+		if((difference > 0.038 && isInAir) && expectedY < 2.5) {
 			
 			if(++playerData.motionDLimiter > 3) {
 				
-				flag(p, "(EXP " + NumberUtil.decimals(expectedDeltaY, 3) + ") (GOT " + NumberUtil.decimals(deltaY, 3) + ")");
+				flag(p, "(EXP " + NumberUtil.decimals(expectedY, 3) + ") (GOT " + NumberUtil.decimals(Y, 3) + ")");
 				lagBack(e);
 			}
 			
@@ -87,7 +83,8 @@ public class MotionD extends Check {
 			}
 		}
 		
-		
+		playerData.motionDlastLastDifference = playerData.motionDlastDifference;
+		playerData.motionDlastDifference = difference;
 		
 	}
 	

@@ -2,6 +2,7 @@ package me.omgpandayt.acd.checks.player.invmove;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.CommandBlock;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -17,8 +18,12 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class InvMoveA extends Check {
 
-	public InvMoveA() {
+	public float ticksSinceDamage, maxSpeed;
+	
+	public InvMoveA(FileConfiguration config) {
 		super("InvMoveA", false);
+		this.ticksSinceDamage = (float)config.getDouble(path + "ticks-since-damage");
+		this.maxSpeed = (float)config.getDouble(path + "max-speed");
 	}
 	
 	@Override
@@ -46,7 +51,7 @@ public class InvMoveA extends Check {
 		
 		Player p = e.getPlayer();
 		
-		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && e.getFallHeightDouble() <= 1 && playerData.ticksInventoryOpen > 20) { 
+		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && e.getFallHeightFloat() <= 1 && playerData.ticksInventoryOpen > 20) { 
 		
 			
 			for (Block b : e.getBlocksBelowUp()) {
@@ -54,9 +59,9 @@ public class InvMoveA extends Check {
 					return;
 			}
 			
-			double deltaXZ = (Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ());
+			float deltaXZ = (float)((Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ()));
 			
-			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= config.getDouble(path + "ticks-since-damage") && deltaXZ > config.getDouble(path + "max-speed")) {
+			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= ticksSinceDamage && deltaXZ > maxSpeed) {
 				playerData.invMoveALimiter++;
 				if(playerData.invMoveALimiter > 2) {
 					flag(p, "");

@@ -1,9 +1,7 @@
 package me.omgpandayt.acd.checks;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -23,9 +21,6 @@ public class Check {
 	public String check, path;
 	public boolean experimental;
 	public int flagsToKick;
-	
-	
-	public FileConfiguration config;
 
 	public String getName() {
 		return check;
@@ -53,6 +48,10 @@ public class Check {
         while (waiting.get()) {
         }
     }*/
+	
+	private FileConfiguration config = ACD.getInstance().getConfig();
+	
+	public double limiter;
     
     public void flag(Player player,String debug) {
     	
@@ -95,6 +94,15 @@ public class Check {
     public void lagBack(ACDMoveEvent e) {
     	if(config.getBoolean("main.punish.cancel-event")) {
     		e.getPlayer().teleport(e.getFrom());
+    		PlayerData pd = PlayerDataManager.getPlayer(e.getPlayer());
+    		if(pd == null)return;
+    		pd.sinceTeleportTicks = 0;
+    		pd.airTicks = 0;
+    	}
+    }
+    public void lagBack(ACDMoveEvent e, double y) {
+    	if(config.getBoolean("main.punish.cancel-event")) {
+    		e.getPlayer().teleport(e.getFrom().clone().add(0, y, 0));
     		PlayerData pd = PlayerDataManager.getPlayer(e.getPlayer());
     		if(pd == null)return;
     		pd.sinceTeleportTicks = 0;
@@ -188,6 +196,10 @@ public class Check {
 	}
 
 	public void onPlace(BlockPlaceEvent e) {
+		
+	}
+
+	public void onDamage2(EntityDamageByEntityEvent e) {
 		
 	}
 	
