@@ -34,6 +34,7 @@ import me.omgpandayt.acd.checks.combat.aura.AuraC;
 import me.omgpandayt.acd.checks.combat.autoclicker.AutoClickerA;
 import me.omgpandayt.acd.checks.combat.criticals.CriticalsA;
 import me.omgpandayt.acd.checks.combat.reach.ReachA;
+import me.omgpandayt.acd.checks.combat.velocity.VelocityA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyA;
 import me.omgpandayt.acd.checks.movement.elytrafly.ElytraFlyB;
 import me.omgpandayt.acd.checks.movement.fastladder.FastLadderA;
@@ -46,6 +47,7 @@ import me.omgpandayt.acd.checks.movement.motion.MotionB;
 import me.omgpandayt.acd.checks.movement.motion.MotionC;
 import me.omgpandayt.acd.checks.movement.motion.MotionD;
 import me.omgpandayt.acd.checks.movement.motion.MotionE;
+import me.omgpandayt.acd.checks.movement.motion.MotionF;
 import me.omgpandayt.acd.checks.movement.speed.SpeedA;
 import me.omgpandayt.acd.checks.movement.speed.SpeedB;
 import me.omgpandayt.acd.checks.movement.speed.SpeedC;
@@ -65,6 +67,7 @@ import me.omgpandayt.acd.checks.player.jesus.JesusF;
 import me.omgpandayt.acd.checks.player.noslowdown.NoSlowdownA;
 import me.omgpandayt.acd.checks.world.badpackets.BadPacketsA;
 import me.omgpandayt.acd.checks.world.badpackets.BadPacketsB;
+import me.omgpandayt.acd.checks.world.badpackets.BadPacketsC;
 import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsA;
 import me.omgpandayt.acd.checks.world.impossibleactions.ImpossibleActionsB;
 import me.omgpandayt.acd.command.AlertsCommand;
@@ -115,6 +118,20 @@ public class RegisterListeners implements Listener {
 		PlayerData pd2 = PlayerDataManager.getPlayer((Player)e.getDamager());
 		pd2.hitTicks = 0;
 	}
+	
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDamage2(EntityDamageByEntityEvent e) {
+		
+		for (Object obj : CheckManager.getRegisteredChecks()) {
+			
+			Check check = (Check)obj;
+			
+			check.onDamage2(e);
+			
+		}
+		
+	}
+	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageEvent e) {
 		
@@ -151,7 +168,7 @@ public class RegisterListeners implements Listener {
 		Player player = e.getPlayer();
 		if(playerData == null) return;
 		if(e.getFrom().getY() + 0.2919494141 == e.getTo().getY())
-			playerData.ticksLived = (int) ACD.getInstance().getConfig().getDouble("main.punish.join-bypass-ticks") - 100;
+			BadPacketsC.getRefer().parseData(0, true, a);
 		DataListeners.onMove(a);
 		playerData.ticksSinceHit++;
 		playerData.ticksSinceWaterBlock++;
@@ -188,7 +205,13 @@ public class RegisterListeners implements Listener {
 			}
 		}
 		
-        playerData.ticksLived++;
+		if(a.isAboveFarmland()) {
+			playerData.sinceFarmLand = 0;
+		} else {
+			playerData.sinceFarmLand++;
+		}
+		
+		playerData.sinceEntityHit++;
         playerData.attackTicks++;
         playerData.lastFlight++;
         playerData.lastAttack++;
@@ -205,7 +228,7 @@ public class RegisterListeners implements Listener {
         	playerData.airTicks = 0;
         	if(!player.hasPotionEffect(PotionEffectType.LEVITATION)) {
         		playerData.groundTicks++;
-        		playerData.lastGroundY = player.getLocation().getY();
+        		playerData.lastGroundY = (float)player.getLocation().getY();
         		playerData.lastFD = 0;
         	} else {
         		playerData.sinceLevitationTicks = 0;
@@ -219,9 +242,7 @@ public class RegisterListeners implements Listener {
         	if(playerData.lastFD < c) playerData.lastFD = c;
         }
         
-        double iceTicks = playerData.iceTicks,
-        		slimeTicks = playerData.slimeTicks,
-        		blocksNearHead = playerData.ticksBlocksNearHead;
+        double blocksNearHead = playerData.ticksBlocksNearHead;
         
         if(a.isAboveIce()) {
         	playerData.sinceIceTicks = 0;
@@ -256,13 +277,6 @@ public class RegisterListeners implements Listener {
         playerData.onHorseTicks++;
         if(player.isInsideVehicle())playerData.onHorseTicks = 0;
         
-        
-        if(playerData.ticksLived % ACD.getInstance().getConfig().getDouble("checks.badpackets.a.decrease-time") == 0) {
-        	double amm = ACD.getInstance().getConfig().getDouble("checks.badpackets.a.decrease-amount");
-        	if(playerData.movementPackets > amm-1) {
-        		playerData.movementPackets-=amm;
-        	}
-        }
         if(playerData.ticksLived % 5 == 0) {
         	if(playerData.decreaseHops && playerData.lowHops > 1) {
         		playerData.lowHops = (playerData.lowHops - 1 < 0 ? 0 : playerData.lowHops - 1);
@@ -307,12 +321,6 @@ public class RegisterListeners implements Listener {
         	}
         	if(playerData.jesusCLimiter > 0) {
         		playerData.jesusCLimiter--;
-        	}
-        	if(playerData.badPacketsALimiter > 0) {
-        		playerData.badPacketsALimiter--;
-        	}
-        	if(playerData.invalidAttackALimiter > 0) {
-        		playerData.invalidAttackALimiter--;
         	}
         	if(playerData.speedBLimiter > 0) {
         		playerData.speedBLimiter--;
@@ -419,6 +427,7 @@ public class RegisterListeners implements Listener {
 		new MotionB(config);
 		new MotionC(config);
 		new MotionE(config);
+		new MotionF(config);
 		
 		// Speed
 		new SpeedA(config);
@@ -469,6 +478,7 @@ public class RegisterListeners implements Listener {
 		// BadPackets
 		new BadPacketsA(config);
 		new BadPacketsB(config);
+		new BadPacketsC(config);
 		
 		// ElytraFly
 		new ElytraFlyA(config);
@@ -483,6 +493,9 @@ public class RegisterListeners implements Listener {
 		
 		// FastLadder
 		new FastLadderA(config);
+		
+		// Velocity
+		new VelocityA(config);
 	}
 	
 }

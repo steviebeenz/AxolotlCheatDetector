@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.violation.Violations;
 
 public class BadPacketsA extends Check {
 
@@ -14,7 +13,6 @@ public class BadPacketsA extends Check {
 	
 	public BadPacketsA(FileConfiguration config) {
 		super("BadPacketsA", false);
-		this.maxMove = config.getDouble(path + "max-move");
 	}
 	
 	@Override
@@ -25,25 +23,46 @@ public class BadPacketsA extends Check {
 		PlayerData playerData = e.getPlayerData();
 		if(playerData == null)return;
 		
-		double ticksNoMove = playerData.ticksNoMove;
+		playerData.moves++;
+		playerData.movesLong++;
 		
-		playerData.movementPackets++;
+		long timeElapsed = System.currentTimeMillis() - playerData.lastTime;
+		long timeElapsedLong = System.currentTimeMillis() - playerData.lastTimeLong;
 		
-		if(playerData.movementPackets > maxMove + ticksNoMove) {
+		long maxTime = 25;
+		long longTime = 1000;
+		
+		if(timeElapsed >= maxTime) {
 			
-			playerData.badPacketsALimiter++;
-			if(playerData.badPacketsALimiter > limiter) {
-				flag(p, "(MOVE " + (playerData.movementPackets) + "/" + (maxMove + ticksNoMove + ")"));
-				playerData.movementPackets = 0;
-				if(Violations.getViolations(this, p) > flagsToKick) {
-					playerData.movementPackets = (int)Math.floorDiv((int) maxMove, 2);
-				}
-				if(Violations.getViolations(this, p) % 3 == 0)
-					lagBack(e);
-			}
-		}	
+			playerData.lastTime = System.currentTimeMillis();
 		
-		playerData.ticksNoMove = 0;
+			if(playerData.moves > 1 + Math.floor((timeElapsed - maxTime) / 50)) {
+				playerData.badPacketsALimiter += 1;
+				if(playerData.badPacketsALimiter > 2) {
+					flag(p, "(SHORT)");
+					lagBack(e);
+				}
+			} else {
+				playerData.badPacketsALimiter -= playerData.badPacketsALimiter >= 0.01 ? 0.01 : 0;
+			}
+		
+			playerData.moves = 0;
+		}
+		
+		if(timeElapsedLong >= longTime) {
+			
+			playerData.lastTime = System.currentTimeMillis();
+			
+			if(playerData.movesLong > 21 + Math.floor((timeElapsed - longTime) / 50)) {
+				flag(p, "(LONG)");
+				lagBack(e);
+			} else {
+				playerData.badPacketsALimiter2 -= playerData.badPacketsALimiter2 >= 0.49 ? 0.49 : 0;
+			}
+		
+			playerData.movesLong = 0;
+			
+		}
 		
 	}
 	

@@ -3,9 +3,6 @@ package me.omgpandayt.acd.util;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
-import me.omgpandayt.acd.checks.PlayerData;
 
 public class ACDEntityManager {
 

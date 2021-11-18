@@ -201,7 +201,15 @@ checks:
     
       enabled: true
       
-      flags-to-kick: 1
+      flags-to-kick: 5
+      
+    c:
+    
+       # Client flaw detections
+       
+       enabled: true
+       
+       flags-to-kick: 10 # Should go EXTREMELY fast at detecting em tho
       
   motion:    
   
@@ -251,6 +259,16 @@ checks:
         flags-to-kick: 5
         
      e:
+     
+        # Jump prediction
+     
+        enabled: true
+        
+        flags-to-kick: 5
+        
+     f:
+     
+        # Acceleration prediction
      
         enabled: true
         
@@ -457,3 +475,7 @@ checks:
     a:
       enabled: true
       flags-to-kick: 12
+  velocity:
+    a:
+      enabled: true
+      flags-to-kick: 7

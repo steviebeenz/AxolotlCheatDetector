@@ -44,7 +44,7 @@ public class JumpA extends Check {
 		}
 		
 		if(y < 0.165) {
-			if(y > FlyA.STILL && e.getFallHeightDouble() <= 0.3) {
+			if(y > FlyA.STILL && e.getFallHeightFloat() <= 0.3) {
 				playerData.decreaseHops = false;
 				playerData.lowHops++;
 				if(playerData.lowHops > l) {
@@ -56,7 +56,7 @@ public class JumpA extends Check {
 				playerData.decreaseHops = true;
 			}
 		} else if (y > 0.24) {
-			if(y > FlyA.STILL && e.getFallHeightDouble() >= 0.5 && e.getAirTicks() == 2 && !e.isOnGround() && !e.isOnGroundFrom()) {
+			if(y > FlyA.STILL && e.getFallHeightFloat() >= 0.5 && e.getAirTicks() == 2 && !e.isOnGround() && !e.isOnGroundFrom()) {
 				playerData.decreaseHops2 = false;
 				playerData.highHops++;
 				if(playerData.highHops > h) {

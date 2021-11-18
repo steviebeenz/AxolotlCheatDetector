@@ -4,7 +4,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.PlayerDataManager;
@@ -25,7 +24,6 @@ public class AuraA extends Check {
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		
-		Player p = e.getPlayer();
 		PlayerData pd = e.getPlayerData();
 		if(e.getHoveredEntity()==null)return;
 		if(e.getHoveredEntity().e instanceof Player && e.getTo().distance(e.getFrom()) > 0.1) {

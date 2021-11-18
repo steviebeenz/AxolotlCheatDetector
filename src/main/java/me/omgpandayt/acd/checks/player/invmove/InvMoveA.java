@@ -18,12 +18,12 @@ import me.omgpandayt.acd.util.PlayerUtil;
 
 public class InvMoveA extends Check {
 
-	public double ticksSinceDamage, maxSpeed;
+	public float ticksSinceDamage, maxSpeed;
 	
 	public InvMoveA(FileConfiguration config) {
 		super("InvMoveA", false);
-		this.ticksSinceDamage = config.getDouble(path + "ticks-since-damage");
-		this.maxSpeed = config.getDouble(path + "max-speed");
+		this.ticksSinceDamage = (float)config.getDouble(path + "ticks-since-damage");
+		this.maxSpeed = (float)config.getDouble(path + "max-speed");
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class InvMoveA extends Check {
 		
 		Player p = e.getPlayer();
 		
-		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && e.getFallHeightDouble() <= 1 && playerData.ticksInventoryOpen > 20) { 
+		if(playerData.invOpen && PlayerUtil.isValid(p) && !p.isGliding() && e.getFallHeightFloat() <= 1 && playerData.ticksInventoryOpen > 20) { 
 		
 			
 			for (Block b : e.getBlocksBelowUp()) {
@@ -59,7 +59,7 @@ public class InvMoveA extends Check {
 					return;
 			}
 			
-			double deltaXZ = (Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ());
+			float deltaXZ = (float)((Math.abs(e.getFrom().getX() - e.getTo().getX())) + Math.abs(e.getFrom().getZ() - e.getTo().getZ()));
 			
 			if(p.getVelocity().getY() == FlyA.STILL && playerData.ticksSinceHit >= ticksSinceDamage && deltaXZ > maxSpeed) {
 				playerData.invMoveALimiter++;

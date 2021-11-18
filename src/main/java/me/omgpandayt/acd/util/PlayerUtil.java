@@ -90,12 +90,12 @@ public class PlayerUtil {
 		return fallHeight;
 	}
 	
-	public static double getFallHeightDouble(Player p) {
-		double depth = 80;
-		double yHeight = Math.floor(p.getPlayer().getLocation().getY());
+	public static float getFallHeightFloat(Player p) {
+		float depth = 80;
+		float yHeight = (float)Math.floor(p.getPlayer().getLocation().getY());
 		Location loc = p.getLocation().clone();
 		loc.setY(yHeight);
-		double fallHeight = 0;
+		float fallHeight = 0;
 		while(!loc.getBlock().getType().isSolid() && depth != 0) {
 			yHeight-=0.1;
 			loc.setY(yHeight);
@@ -107,6 +107,7 @@ public class PlayerUtil {
 
 	public static boolean isValid(Player p) {
 		PlayerData pd = PlayerDataManager.getPlayer(p);
+		if(pd == null) return false;
 		return pd.lastFlight > 20 && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE) && !p.isDead();
 	}
 
@@ -267,7 +268,23 @@ public class PlayerUtil {
 		return null;
 
         }
-	
 
+	public static boolean isAboveBlock(Material b, Location location) {
+		for(Block block : BlockUtils.getBlocksBelow(location)) {
+			if(block.getType().equals(b)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isInBlock(Material b, Location location) {
+		for(Block block : BlockUtils.getBlocksBelow(location)) {
+			if(block.getLocation().clone().add(0, 1, 0).getBlock().getType().equals(b)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

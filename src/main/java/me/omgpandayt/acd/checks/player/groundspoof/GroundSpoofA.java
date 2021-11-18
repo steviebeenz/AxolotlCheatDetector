@@ -63,15 +63,14 @@ public class GroundSpoofA extends Check {
 		if(playerData == null) return;
 		
 		if(e.isOnGround()) {
-			playerData.lastGroundX = p.getLocation().getX();
-			playerData.lastGroundY = p.getLocation().getY();
-			playerData.lastGroundZ = p.getLocation().getZ();
+			playerData.lastGroundX = (float)p.getLocation().getX();
+			playerData.lastGroundY = (float)p.getLocation().getY();
+			playerData.lastGroundZ = (float)p.getLocation().getZ();
 		}
 		
 		if(p.isOnGround() && e.getAirTicks() > 10 && p.isValid() && !p.isDead() && PlayerUtil.getFallHeight(p) > 1) {
 			if(!ghostblock) {
 				flag(p, "");
-				double deltaY = e.getDeltaY();
 			} else {
 				p.sendMessage(ChatColor.RED + "You were walking on a ghost block! You have been pushed back!");
 				if(playerData.lastGroundX != 1e+305 && playerData.lastGroundY != 1e+305 && playerData.lastGroundZ != 1e+305)

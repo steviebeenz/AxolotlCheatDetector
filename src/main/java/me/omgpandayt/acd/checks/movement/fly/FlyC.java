@@ -22,6 +22,7 @@ public class FlyC extends Check {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		Player p = e.getPlayer();
@@ -33,7 +34,7 @@ public class FlyC extends Check {
         if(!e.isOnGround()
                 && !e.isOnGroundFrom()
                 && p.isOnGround()){
-            double dist = e.getTo().distance( e.getFrom() ) ;
+            float dist = (float)e.getTo().distance( e.getFrom() ) ;
 
             Location f = e.getFrom();
             Location t = e.getTo();
@@ -43,7 +44,7 @@ public class FlyC extends Check {
             		(f.getY() == t.getY() ||
             		f.getY() + 0.2f > t.getY() )
             		&& p.getVelocity().getY() < velo
-            		&& e.getFallHeightDouble() > 0.2
+            		&& e.getFallHeightFloat() > 0.2f
             ) {
                 
             	flag(p, "");

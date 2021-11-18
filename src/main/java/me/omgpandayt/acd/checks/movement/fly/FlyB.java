@@ -2,12 +2,9 @@ package me.omgpandayt.acd.checks.movement.fly;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Boat;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
@@ -36,11 +33,11 @@ public class FlyB extends Check {
 		PlayerData playerData = e.getPlayerData();
 		if(p.hasPotionEffect(PotionEffectType.JUMP) || e.isAboveSlime() || playerData.ticksSinceEnderDragon < 170 || p.hasPotionEffect(PotionEffectType.LEVITATION) || e.getPlayerData().ticksSinceClimbable < 15 || e.getPlayerData().sinceWaterTicks < 10)return;
 		
-		double y = e.getTo().getY();
+		float y = (float)e.getTo().getY();
 		
-		double lastY = playerData.lastPacketY,
+		float lastY = playerData.lastPacketY,
 			   lastLastY = playerData.lastLastPacketY,
-			   fallHeight = PlayerUtil.getFallHeightDouble(p),
+			   fallHeight = PlayerUtil.getFallHeightFloat(p),
 			   lastFallHeight = playerData.lastFallHeight,
 			   lastLastFallHeight = playerData.lastLastFallHeight;
 
@@ -50,7 +47,7 @@ public class FlyB extends Check {
 		playerData.lastFallHeight = fallHeight;
 		
 		
-		double fhm = fallHeight;
+		float fhm = fallHeight;
 		
 		if(fallHeight < fhm
 				|| lastFallHeight < fhm

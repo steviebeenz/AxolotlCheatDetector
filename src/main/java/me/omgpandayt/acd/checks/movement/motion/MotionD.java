@@ -3,7 +3,6 @@ package me.omgpandayt.acd.checks.movement.motion;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.omgpandayt.acd.ACD;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.checks.player.groundspoof.GroundSpoofA;
@@ -19,19 +18,19 @@ public class MotionD extends Check {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		
 		Player p = e.getPlayer();
 		PlayerData playerData = e.getPlayerData();
+		
 		if(
-				playerData == null ||
 				e.isInLiquids() ||
 				e.isAboveLiquids() ||
 				e.getSinceWaterTicks() < 20 ||
 				e.getSinceTeleportTicks() < 2 ||
 				!PlayerUtil.isValid(p) ||
-				(p.isOnGround() && GroundSpoofA.ghostblock) ||
 				e.isOnClimbableTo() ||
 				e.isOnClimbableFrom() ||
 				playerData.ticksSinceHit < 20 ||
@@ -40,16 +39,17 @@ public class MotionD extends Check {
 				p.isGliding() ||
 				p.getLocation().getY() > 256 ||
 				playerData.ticksSinceEnderDragon < 170
-		)return;
+		) return;
+        
+        if((p.isOnGround() && GroundSpoofA.ghostblock))return;
 		
 		double Y = Math.abs(e.getTo().getY());
         double lastY = Math.abs(playerData.lastPacketY);
         
-        double lastLastDeltaY = Math.abs(playerData.lastLastDeltaY);
-        double lastDeltaY = Math.abs(playerData.lastDeltaY);
-        double deltaY = Math.abs(e.getDeltaY());
-
-        double expectedY = Y + Math.abs((deltaY - 0.08) * 0.98);
+        float lastDeltaY = Math.abs(playerData.lastDeltaY);
+        float deltaY = (float)Math.abs(e.getDeltaY());
+        
+        float expectedY = (float)(Y + Math.abs((deltaY - 0.08) * 0.98));
 
         boolean isInAir = e.getAirTicks() > 9 && !e.isOnGround() && !e.isOnGroundFrom();
         
@@ -57,7 +57,7 @@ public class MotionD extends Check {
         	playerData.motionD2Limiter = 0;
         }
 
-        final double difference = Math.abs(lastY - expectedY);
+        final float difference = (float)Math.abs(lastY - expectedY);
         
         if((lastDeltaY == deltaY || difference == playerData.motionDlastLastDifference) && deltaY != 0 && deltaY < 1.64809570615011) {
 			if(++playerData.motionD2Limiter > 22) {

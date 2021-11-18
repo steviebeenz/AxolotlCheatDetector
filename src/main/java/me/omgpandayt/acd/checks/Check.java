@@ -1,9 +1,7 @@
 package me.omgpandayt.acd.checks;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -102,6 +100,15 @@ public class Check {
     		pd.airTicks = 0;
     	}
     }
+    public void lagBack(ACDMoveEvent e, double y) {
+    	if(config.getBoolean("main.punish.cancel-event")) {
+    		e.getPlayer().teleport(e.getFrom().clone().add(0, y, 0));
+    		PlayerData pd = PlayerDataManager.getPlayer(e.getPlayer());
+    		if(pd == null)return;
+    		pd.sinceTeleportTicks = 0;
+    		pd.airTicks = 0;
+    	}
+    }
     public void lagBack(Location e, Player p) {
     	if(config.getBoolean("main.punish.cancel-event")) {
     		p.teleport(e);
@@ -189,6 +196,10 @@ public class Check {
 	}
 
 	public void onPlace(BlockPlaceEvent e) {
+		
+	}
+
+	public void onDamage2(EntityDamageByEntityEvent e) {
 		
 	}
 	

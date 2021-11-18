@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
-import me.omgpandayt.acd.checks.PlayerDataManager;
 import me.omgpandayt.acd.events.ACDMoveEvent;
 import me.omgpandayt.acd.util.BlockUtils;
 import me.omgpandayt.acd.util.PlayerUtil;
@@ -19,6 +18,7 @@ public class GroundSpoofB extends Check {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onMove(ACDMoveEvent e) {
 		

@@ -1,6 +1,7 @@
 package me.omgpandayt.acd.events;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -19,9 +20,9 @@ public class ACDMoveEvent {
 	private Block[] blocksBelow, blocksBelowFrom, blocksBelowUp, blocksBelowDown;
 	private PlayerData playerData;
 	private Location to, from;
-	private boolean groundFrom, groundTo, groundTo1, groundFrom1, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair, isInLiquid, aboveIce;
+	private boolean aboveFarmland, inWeb, groundFrom, groundTo, groundTo1, groundFrom1, aboveLiquidsFrom, aboveLiquidsTo, aboveAreAir, isAboveSlime, isOnClimbableTo, isOnClimbableFrom, isOnHoneyTo, isOnHoneyFrom, isNearStair, isInLiquid, aboveIce;
 	private int fallHeight;
-	private double fallHeightDouble, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ, velocityX, velocityZ, accel;
+	private float fallHeightFloat, afterJumpSpeed, velocityXZ, deltaX, deltaZ, deltaY, deltaXZ, deltaXYZ, velocityX, velocityY, velocityZ, accel;
 	private float deltaYaw, deltaPitch;
 	private ACDEntity hoveredEntity;
 	
@@ -43,7 +44,7 @@ public class ACDMoveEvent {
 		this.aboveLiquidsFrom = PlayerUtil.isAboveLiquids(from);
 		this.aboveLiquidsTo = PlayerUtil.isAboveLiquids(to);
 		this.fallHeight = PlayerUtil.getFallHeight(player);
-		this.fallHeightDouble = PlayerUtil.getFallHeightDouble(player);
+		this.fallHeightFloat = PlayerUtil.getFallHeightFloat(player);
 		this.aboveAreAir = PlayerUtil.aboveAreAir(player);
 		this.isAboveSlime = PlayerUtil.isAboveSlime(to);
 		this.isOnClimbableFrom = PlayerUtil.isOnClimbable(from);
@@ -51,13 +52,14 @@ public class ACDMoveEvent {
 		this.isOnHoneyFrom = PlayerUtil.isOnHoney(from);
 		this.isOnHoneyFrom = PlayerUtil.isOnHoney(to);
 		this.isNearStair = PlayerUtil.isNearStair(to);
-		this.afterJumpSpeed = 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED));
-		this.velocityX = player.getVelocity().getX();
-		this.velocityZ = player.getVelocity().getZ();
+		this.afterJumpSpeed = (float)(0.62 + 0.033 * (float) (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED)));
+		this.velocityX = (float)player.getVelocity().getX();
+		this.velocityY = (float)player.getVelocity().getY();
+		this.velocityZ = (float)player.getVelocity().getZ();
 		this.velocityXZ = this.velocityX + this.velocityZ;
-		this.deltaX = Math.abs(to.getX() - from.getX());
-		this.deltaZ = Math.abs(to.getZ() - from.getZ());
-		this.deltaY = Math.abs(to.getY() - from.getY());
+		this.deltaX = (float)Math.abs(to.getX() - from.getX());
+		this.deltaZ = (float)Math.abs(to.getZ() - from.getZ());
+		this.deltaY = (float)Math.abs(to.getY() - from.getY());
 		this.deltaXZ = deltaX + deltaZ;
 		this.deltaXYZ = deltaXZ + deltaY;
 		this.isInLiquid = PlayerUtil.isInLiquid(to);
@@ -65,10 +67,12 @@ public class ACDMoveEvent {
 		this.hoveredEntity = PlayerUtil.getHoveredEntity(player);
 		this.deltaYaw = Math.abs(e.getFrom().getYaw() % 360F - e.getTo().getYaw() % 360);
 		this.deltaPitch = Math.abs(e.getFrom().getPitch() - e.getTo().getPitch());
-		this.accel = Math.abs(playerData.prevDeltaXZ - deltaXZ);
+		this.accel = deltaXZ - playerData.prevDeltaXZ; // Not abs() since that would mean when you slow down it will be positive accel rather than negative accel
+		this.aboveFarmland = PlayerUtil.isAboveBlock(Material.FARMLAND, to);
+		this.inWeb = PlayerUtil.isInBlock(Material.COBWEB, to);
 	}
 	
-	public double getAccel() {
+	public float getAccel() {
 		return accel;
 	}
 	
@@ -124,8 +128,8 @@ public class ACDMoveEvent {
 		return aboveLiquidsTo;
 	}
 
-	public double getFallHeightDouble() {
-		return fallHeightDouble;
+	public float getFallHeightFloat() {
+		return fallHeightFloat;
 	}
 	public int getFallHeight() {
 		return fallHeight;
@@ -173,7 +177,7 @@ public class ACDMoveEvent {
 		return getPlayerData().sinceIceTicks;
 	}
 
-	public double getAfterJumpSpeed() {
+	public float getAfterJumpSpeed() {
 		return afterJumpSpeed;
 	}
 
@@ -181,7 +185,7 @@ public class ACDMoveEvent {
 		return getPlayerData().sinceBlocksNearHead;
 	}
 
-	public double getVelocityXZ() {
+	public float getVelocityXZ() {
 		return velocityXZ;
 	}
 
@@ -193,22 +197,22 @@ public class ACDMoveEvent {
 		return velocityXZ != 0;
 	}
 
-	public double getDeltaXZ() {
+	public float getDeltaXZ() {
 		return deltaXZ;
 	}
 	
-	public double getDeltaXYZ() {
+	public float getDeltaXYZ() {
 		return deltaXYZ;
 	}
 
-	public double getDeltaX() {
+	public float getDeltaX() {
 		return deltaX;
 	}
-	public double getDeltaZ() {
+	public float getDeltaZ() {
 		return deltaZ;
 	}
 
-	public double getDeltaY() {
+	public float getDeltaY() {
 		return deltaY;
 	}
 
@@ -228,10 +232,10 @@ public class ACDMoveEvent {
 		return aboveIce;
 	}
 
-	public double getVelocityX() {
+	public float getVelocityX() {
 		return velocityX;
 	}
-	public double getVelocityZ() {
+	public float getVelocityZ() {
 		return velocityZ;
 	}
 
@@ -245,6 +249,18 @@ public class ACDMoveEvent {
 	
 	public float getDeltaPitch() {
 		return deltaPitch;
+	}
+
+	public boolean isAboveFarmland() {
+		return aboveFarmland;
+	}
+
+	public boolean isInWeb() {
+		return inWeb;
+	}
+
+	public float getVelocityY() {
+		return velocityY;
 	}
 	
 }

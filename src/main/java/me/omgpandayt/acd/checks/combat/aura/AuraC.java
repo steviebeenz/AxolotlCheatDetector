@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import me.omgpandayt.acd.checks.Check;
 import me.omgpandayt.acd.checks.PlayerData;
 import me.omgpandayt.acd.events.ACDMoveEvent;
-import me.omgpandayt.acd.util.NumberUtil;
 
 public class AuraC extends Check {
 

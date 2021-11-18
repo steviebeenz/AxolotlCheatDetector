@@ -1,7 +1,5 @@
 package me.omgpandayt.acd.checks.combat.aimassist;
 
-import java.util.function.Predicate;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
